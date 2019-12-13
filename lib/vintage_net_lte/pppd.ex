@@ -15,16 +15,17 @@ defmodule VintageNetLTE.PPPD do
   end
 
   def handle_continue(:start_pppd, state) do
-    chatscript_path = Keyword.fetch!(state, :cs_path)
-    pppd = Keyword.fetch!(state, :pppd)
+    chatscript_path = Keyword.fetch!(state, :chatscript)
+    pppd_bin = Keyword.fetch!(state, :pppd)
+    chat_bin = Keyword.fetch!(state, :chat)
 
     {_, 0} = System.cmd("mknod", ["/dev/ppp", "c", "108", "0"])
 
     MuonTrap.Daemon.start_link(
-      pppd,
+      pppd_bin,
       [
         "connect",
-        "/usr/sbin/chat -v -f #{chatscript_path}",
+        "#{chat_bin} -v -f #{chatscript_path}",
         "/dev/ttyUSB1",
         "115200",
         "noipdefault",
