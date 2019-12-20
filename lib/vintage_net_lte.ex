@@ -17,15 +17,17 @@ defmodule VintageNetLTE do
     files = [{chatscript_path, twillio_chatscript()}]
 
     child_specs = [
-      {VintageNetLTE.PPPD, [chatscript: chatscript_path, pppd: pppd, cat: chat, ifname: ifname]}
+      {VintageNetLTE.PPPD, [chatscript: chatscript_path, pppd: pppd, chat: chat, ifname: ifname]}
     ]
+
+    :ok = File.write(chatscript_path, twillio_chatscript())
 
     %RawConfig{
       ifname: ifname,
       type: __MODULE__,
       source_config: config,
-      files: files,
-      child_specs: child_specs
+      files: files
+      #    child_specs: child_specs
     }
   end
 

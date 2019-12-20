@@ -1,11 +1,6 @@
-# VintageNetLte
+# VintageNetLTE
 
-**TODO: Add description**
-
-## Installation
-
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `vintage_net_lte` to your list of dependencies in `mix.exs`:
+`VintageNetLTE` makes it easy to add cellular support to your device.
 
 ```elixir
 def deps do
@@ -15,7 +10,16 @@ def deps do
 end
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/vintage_net_lte](https://hexdocs.pm/vintage_net_lte).
+
+```elixir
+config :vintage_net,
+  config: [
+    {"ppp0",
+     %{
+       type: VintageNetLTE,
+       modem: {VintageNetLTE.Huawei, [speed: 115200, serial: "/dev/ttyUSB0"]},
+       chatscript: VintageNetLTE.Twillio
+      }
+     }
+```
 
