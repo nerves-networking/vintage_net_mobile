@@ -18,7 +18,7 @@ config :vintage_net,
      %{
        type: VintageNetLTE,
        modem: {VintageNetLTE.Huawei, [speed: 115200, serial: "/dev/ttyUSB0"]},
-       chatscript: VintageNetLTE.Twillio
+       chatscript: VintageNetLTE.ChatScript.Twillio
       }
      }
 ```

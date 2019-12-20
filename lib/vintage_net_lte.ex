@@ -12,12 +12,25 @@ defmodule VintageNetLTE do
     chat = Keyword.fetch!(opts, :bin_chat)
     tmpdir = Keyword.fetch!(opts, :tmpdir)
 
+    {_modem, modem_opts} = config.modem
+
+    serial_port = Keyword.fetch!(modem_opts, :serial_port)
+    serial_speed = Keyword.fetch!(modem_opts, :speed)
+
     chatscript_path = Path.join(tmpdir, "ppp.#{ifname}")
 
-    files = [{chatscript_path, twillio_chatscript()}]
+    files = [{chatscript_path, config.chatscript.contents()}]
 
     child_specs = [
-      {VintageNetLTE.PPPD, [chatscript: chatscript_path, pppd: pppd, chat: chat, ifname: ifname]}
+      {VintageNetLTE.PPPD,
+       [
+         chatscript: chatscript_path,
+         pppd: pppd,
+         chat: chat,
+         ifname: ifname,
+         speed: serial_speed,
+         serial: serial_port
+       ]}
     ]
 
     :ok = File.write(chatscript_path, twillio_chatscript())
@@ -26,8 +39,8 @@ defmodule VintageNetLTE do
       ifname: ifname,
       type: __MODULE__,
       source_config: config,
-      files: files
-      #    child_specs: child_specs
+      files: files,
+      child_specs: child_specs
     }
   end
 
@@ -36,42 +49,4 @@ defmodule VintageNetLTE do
 
   @impl true
   def check_system(_), do: :ok
-
-  defp twillio_chatscript() do
-    """
-    # See http://consumer.huawei.com/solutions/m2m-solutions/en/products/support/application-guides/detail/mu509-65-en.htm?id=82047
-
-    # Exit execution if module receives any of the following strings:
-    ABORT 'BUSY'
-    ABORT 'NO CARRIER'
-    ABORT 'NO DIALTONE'
-    ABORT 'NO DIAL TONE'
-    ABORT 'NO ANSWER'
-    ABORT 'DELAYED'
-    TIMEOUT 10
-    REPORT CONNECT
-
-    # Module will send the string AT regardless of the string it receives
-    "" AT
-
-    # Instructs the modem to disconnect from the line, terminating any call in progress. All of the functions of the command shall be completed before the modem returns a result code.
-    OK ATH
-
-    # Instructs the modem to set all parameters to the factory defaults.
-    OK ATZ
-
-    # Result codes are sent to the Data Terminal Equipment (DTE).
-    OK ATQ0
-
-    # Define PDP context
-    OK AT+CGDCONT=1,"IP","wireless.twilio.com"
-
-    # ATDT = Attention Dial Tone
-    OK ATDT*99***1#
-
-    # Don't send any more strings when it receives the string CONNECT. Module considers the data links as having been set up.
-    CONNECT ''
-
-    """
-  end
 end

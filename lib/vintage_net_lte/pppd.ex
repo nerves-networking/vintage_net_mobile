@@ -18,6 +18,8 @@ defmodule VintageNetLTE.PPPD do
     chatscript_path = Keyword.fetch!(state, :chatscript)
     pppd_bin = Keyword.fetch!(state, :pppd)
     chat_bin = Keyword.fetch!(state, :chat)
+    speed = Keyword.fetch!(state, :speed)
+    serial_port = Keyword.fetch!(state, :serial)
 
     {_, 0} = System.cmd("mknod", ["/dev/ppp", "c", "108", "0"])
 
@@ -26,8 +28,8 @@ defmodule VintageNetLTE.PPPD do
       [
         "connect",
         "#{chat_bin} -v -f #{chatscript_path}",
-        "/dev/ttyUSB1",
-        "115200",
+        serial_port,
+        speed,
         "noipdefault",
         "usepeerdns",
         "defaultroute",
