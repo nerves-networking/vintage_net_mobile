@@ -1,7 +1,7 @@
 defmodule VintageNetLTE do
   @behaviour VintageNet.Technology
 
-  alias VintageNet.Interface.RawConfig
+  #  alias VintageNet.Interface.RawConfig
 
   @impl true
   def normalize(config), do: config
@@ -35,13 +35,13 @@ defmodule VintageNetLTE do
 
     # :ok = File.write(chatscript_path, twillio_chatscript())
 
-    %RawConfig{
-      ifname: ifname,
-      type: __MODULE__,
-      source_config: config,
-      files: files,
-      child_specs: child_specs
-    }
+    #    %RawConfig{
+    #      ifname: ifname,
+    #      type: __MODULE__,
+    #      source_config: config,
+    #      files: files,
+    #      child_specs: child_specs
+    #    }
   end
 
   @impl true
@@ -51,7 +51,7 @@ defmodule VintageNetLTE do
   def check_system(_), do: :ok
 
   def chat_script_path() do
-    Path.join(System.tmp_dir!(), "twillio")
+    Path.join(System.tmp_dir!(), "twilio")
   end
 
   def write_chat_script() do
@@ -68,9 +68,11 @@ defmodule VintageNetLTE do
     :ok
   end
 
-  def run_pppd(serial_port, speed \\ "115200") do
-    MuonTrap.Daemon.start_link(
-      "pppd",
+  def run_pppd(serial_port, opts \\ []) do
+    speed = Keyword.get(opts, :speed, "115200")
+    debug = Keyword.get(opts, :debug, false)
+
+    pppd_opts =
       [
         "connect",
         "chat -v -f #{chat_script_path()}",
@@ -79,9 +81,14 @@ defmodule VintageNetLTE do
         "noipdefault",
         "usepeerdns",
         "defaultroute",
-        "persist",
-        "noauth"
+        "noauth",
+        "persist"
       ]
-    )
+      |> add_debug_to_opts(debug)
+
+    MuonTrap.Daemon.start_link("pppd", pppd_opts)
   end
+
+  defp add_debug_to_opts(pppd_opts, true), do: pppd_opts ++ ["debug"]
+  defp add_debug_to_opts(pppd_opts, false), do: pppd_opts
 end
