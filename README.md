@@ -1,5 +1,18 @@
 # VintageNetLTE
 
+## Dev Notes
+
+Manually setting up an LTE connection with a Huawei module
+
+
+```
+:ok = VintageNetLTE.write_chat_script()
+:ok = VintageNetLTE.run_mknod()
+:ok = VintageNetLTE.run_usbmodeswitch()
+VintageNetLTE.run_pppd
+```
+
+
 `VintageNetLTE` makes it easy to add cellular support to your device.
 
 ```elixir
@@ -10,16 +23,4 @@ def deps do
 end
 ```
 
-
-```elixir
-config :vintage_net,
-  config: [
-    {"ppp0",
-     %{
-       type: VintageNetLTE,
-       modem: {VintageNetLTE.Huawei, [speed: 115200, serial: "/dev/ttyUSB0"]},
-       chatscript: VintageNetLTE.ChatScript.Twillio
-      }
-     }
-```
 

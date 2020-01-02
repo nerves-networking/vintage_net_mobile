@@ -33,7 +33,7 @@ defmodule VintageNetLTE do
        ]}
     ]
 
-    :ok = File.write(chatscript_path, twillio_chatscript())
+    # :ok = File.write(chatscript_path, twillio_chatscript())
 
     %RawConfig{
       ifname: ifname,
@@ -49,4 +49,39 @@ defmodule VintageNetLTE do
 
   @impl true
   def check_system(_), do: :ok
+
+  def chat_script_path() do
+    Path.join(System.tmp_dir!(), "twillio")
+  end
+
+  def write_chat_script() do
+    :ok = File.write(chat_script_path(), VintageNetLTE.ChatScript.Twillio.contents())
+  end
+
+  def run_mknod() do
+    {_, 0} = System.cmd("mknod", ["/dev/ppp", "c", "108", "0"])
+    :ok
+  end
+
+  def run_usbmodeswitch() do
+    {_, 0} = System.cmd("usb_modeswitch", ["-v", "12d1", "-p", "14fe", "-J"])
+    :ok
+  end
+
+  def run_pppd(serial_port, speed \\ "115200") do
+    MuonTrap.Daemon.start_link(
+      "pppd",
+      [
+        "connect",
+        "chat -v -f #{chat_script_path()}",
+        serial_port,
+        speed,
+        "noipdefault",
+        "usepeerdns",
+        "defaultroute",
+        "persist",
+        "noauth"
+      ]
+    )
+  end
 end

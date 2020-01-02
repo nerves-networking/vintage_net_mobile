@@ -1,7 +1,4 @@
 defmodule VintageNetLTE.ChatScript.Twillio do
-  @behaviour VintageNetLTE.ChatScript
-
-  @impl true
   def contents() do
     """
     # See http://consumer.huawei.com/solutions/m2m-solutions/en/products/support/application-guides/detail/mu509-65-en.htm?id=82047
