@@ -2,14 +2,13 @@
 
 ## Dev Notes
 
-Manually setting up an LTE connection with a Huawei module
-
+Manually setting up an LTE connection with a Huawei module:
 
 ```
 :ok = VintageNetLTE.write_chat_script()
 :ok = VintageNetLTE.run_mknod()
 :ok = VintageNetLTE.run_usbmodeswitch()
-VintageNetLTE.run_pppd
+VintageNetLTE.run_pppd("/dev/ttyUSB0")
 ```
 
 
