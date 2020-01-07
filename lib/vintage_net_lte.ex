@@ -33,7 +33,7 @@ defmodule VintageNetLTE do
        ]}
     ]
 
-    # :ok = File.write(chatscript_path, twillio_chatscript())
+    # :ok = File.write(chatscript_path, twilio_chatscript())
 
     #    %RawConfig{
     #      ifname: ifname,
@@ -55,17 +55,23 @@ defmodule VintageNetLTE do
   end
 
   def write_chat_script() do
-    :ok = File.write(chat_script_path(), VintageNetLTE.ChatScript.Twillio.contents())
+    :ok = File.write(chat_script_path(), VintageNetLTE.ChatScript.Twilio.contents())
   end
 
   def run_mknod() do
-    {_, 0} = System.cmd("mknod", ["/dev/ppp", "c", "108", "0"])
+    System.cmd("mknod", ["/dev/ppp", "c", "108", "0"])
     :ok
   end
 
   def run_usbmodeswitch() do
     {_, 0} = System.cmd("usb_modeswitch", ["-v", "12d1", "-p", "14fe", "-J"])
     :ok
+  end
+
+  def setup() do
+    :ok = write_chat_script()
+    :ok = run_mknod()
+    :ok = run_usbmodeswitch()
   end
 
   def run_pppd(serial_port, opts \\ []) do
