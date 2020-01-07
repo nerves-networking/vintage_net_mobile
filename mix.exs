@@ -21,7 +21,7 @@ defmodule VintageNetLTE.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-#      {:vintage_net, "~> 0.7"},
+      {:vintage_net, "~> 0.7"},
       {:muontrap, "~> 0.5.0"}
     ]
   end

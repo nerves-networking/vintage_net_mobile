@@ -1,7 +1,9 @@
 defmodule VintageNetLTE.PPPD do
   use GenServer
+  require Logger
 
   def start_link(opts) do
+    Logger.error("Starting PPPD!!!!!!!!!!!!!!!!!!!!")
     ifname = Keyword.fetch!(opts, :ifname)
     GenServer.start_link(__MODULE__, opts, name: via_name(ifname))
   end
@@ -21,8 +23,11 @@ defmodule VintageNetLTE.PPPD do
     speed = Keyword.fetch!(state, :speed)
     serial_port = Keyword.fetch!(state, :serial)
 
-    {_, 0} = System.cmd("mknod", ["/dev/ppp", "c", "108", "0"])
+    Logger.error(
+      "#{pppd_bin} connect #{chat_bin} -v -f #{chatscript_path} #{serial_port} #{speed}"
+    )
 
+    # TODO: make pppd options config item
     MuonTrap.Daemon.start_link(
       pppd_bin,
       [
@@ -34,7 +39,8 @@ defmodule VintageNetLTE.PPPD do
         "usepeerdns",
         "defaultroute",
         "persist",
-        "noauth"
+        "noauth",
+        "debug"
       ]
     )
 

@@ -1,25 +1,41 @@
 defmodule VintageNetLTE do
   @behaviour VintageNet.Technology
 
-  #  alias VintageNet.Interface.RawConfig
+  alias VintageNet.Interface.RawConfig
+  alias VintageNetLTE.ServiceProvider.Twilio
+
+  require Logger
 
   @impl true
   def normalize(config), do: config
 
   @impl true
   def to_raw_config(ifname, %{type: __MOUDLE__} = config, opts) do
+    Logger.error("PPP0!!!!!!!!!!!")
     pppd = Keyword.fetch!(opts, :bin_pppd)
     chat = Keyword.fetch!(opts, :bin_chat)
     tmpdir = Keyword.fetch!(opts, :tmpdir)
 
-    {_modem, modem_opts} = config.modem
+    # TODO: make this a config item
+    serial_port = "/dev/ttyUSB0"
 
-    serial_port = Keyword.fetch!(modem_opts, :serial_port)
-    serial_speed = Keyword.fetch!(modem_opts, :speed)
+    # TODO: make this a config item
+    # should be allowed to pass in integer
+    # we can normalize the integer into a
+    # string
+    serial_speed = "115200"
 
-    chatscript_path = Path.join(tmpdir, "ppp.#{ifname}")
+    # TODO: make service provider configurable
+    chatscript_path = Path.join(tmpdir, "#{Twilio.name()}")
 
-    files = [{chatscript_path, config.chatscript.contents()}]
+    files = [{chatscript_path, Twilio.chatscript()}]
+
+    # TODO: up command may differ between modems
+    # should make this configurable
+    up_cmds = [
+      {:run_ignore_errors, "mknod", ["/dev/ppp", "c", "108", "0"]},
+      {:run_ignore_errors, "usb_modeswitch", ["-v", "12d1", "-p", "-J"]}
+    ]
 
     child_specs = [
       {VintageNetLTE.PPPD,
@@ -33,20 +49,21 @@ defmodule VintageNetLTE do
        ]}
     ]
 
-    # :ok = File.write(chatscript_path, twilio_chatscript())
-
-    #    %RawConfig{
-    #      ifname: ifname,
-    #      type: __MODULE__,
-    #      source_config: config,
-    #      files: files,
-    #      child_specs: child_specs
-    #    }
+    %RawConfig{
+      ifname: ifname,
+      type: __MODULE__,
+      source_config: config,
+      files: files,
+      up_cmds: up_cmds,
+      require_interface: false,
+      child_specs: child_specs
+    }
   end
 
   @impl true
   def ioctl(_ifname, _command, _args), do: {:error, :unsupported}
 
+  # TODO: implement
   @impl true
   def check_system(_), do: :ok
 
@@ -55,7 +72,7 @@ defmodule VintageNetLTE do
   end
 
   def write_chat_script() do
-    :ok = File.write(chat_script_path(), VintageNetLTE.ChatScript.Twilio.contents())
+    :ok = File.write(chat_script_path(), Twilio.chatscript())
   end
 
   def run_mknod() do

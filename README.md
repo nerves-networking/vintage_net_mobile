@@ -2,20 +2,22 @@
 
 This has only been tested with Huawei and Twilio connections.
 
-## Dev Notes
-
-Manually setting up an LTE connection with a Huawei module:
+To get this technology running with VintageNet run the following:
 
 ```
-:ok = VintageNetLTE.setup() 
-VintageNetLTE.run_pppd("/dev/ttyUSB0")
+VintageNetLTE.setup()
+VintageNet.configure("ppp0", %{type: VintageNetLTE})
 ```
 
-If you need some extra debug information about the PPP packets that are being
-sent you can run `run_pppd/2` like so:
+## Current status
 
-`VintageNetLTE.run_pppd("/dev/ttyUSB0", debug: true)`
+Figuring out how to ensure up commands are ran before
+`pppd`. There seems to be an issue if the interface is not present.
 
+Right now the `VintageNetLTE.setup` call does what the `up_cmds` configuration
+should be doing.
+
+Still have to get routing working through VintageNet.
 
 ### Setting routes
 

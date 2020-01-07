@@ -1,5 +1,7 @@
-defmodule VintageNetLTE.ChatScript.Twilio do
-  def contents() do
+defmodule VintageNetLTE.ServiceProvider.Twilio do
+  def name(), do: "twilio"
+
+  def chatscript() do
     """
     # See http://consumer.huawei.com/solutions/m2m-solutions/en/products/support/application-guides/detail/mu509-65-en.htm?id=82047
 
