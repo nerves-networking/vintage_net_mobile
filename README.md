@@ -37,6 +37,8 @@ Then to check if everything is working you can try to run the above `ping` comma
 again.
 
 
+## Serial AT command debugging
+
 If you are running this on a nerves device and have [elixircom](https://github.com/mattludwigs/elixircom) installed:
 
 ```
@@ -51,6 +53,13 @@ iex> Elixircom.run("/dev/ttyUSB2", speed: 115200)
 
 OK
 ```
+
+Command    | Description
+-----------|-----------------------
+at+csq     | Signal Strength
+at+csq=?   | Query supported signal strength format
+at+cfun?   | Level of functionality 
+at+cfun=?  | Query supported functionality levels
 
 
 `VintageNetLTE` makes it easy to add cellular support to your device.
