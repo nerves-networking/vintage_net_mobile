@@ -1,6 +1,13 @@
 # VintageNetLTE
 
-This has only been tested with Huawei and Twilio connections.
+This has only been tested with Huawei and Twilio connections and is not fully
+functioning yet.
+
+System requirements:
+
+* `pppd`
+* `ip`
+* `usb_modeswitch` (At least for the Huawei)
 
 To get this technology running with VintageNet run the following:
 
