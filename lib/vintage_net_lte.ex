@@ -34,7 +34,7 @@ defmodule VintageNetLTE do
     # should make this configurable
     up_cmds = [
       {:run_ignore_errors, "mknod", ["/dev/ppp", "c", "108", "0"]},
-      {:run_ignore_errors, "usb_modeswitch", ["-v", "12d1", "-p", "-J"]}
+      {:run, "usb_modeswitch", ["-v", "12d1", "-p", "14fe", "-J"]}
     ]
 
     child_specs = [
