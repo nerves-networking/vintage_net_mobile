@@ -69,6 +69,8 @@ at+csq     | Signal Strength
 at+csq=?   | Query supported signal strength format
 at+cfun?   | Level of functionality 
 at+cfun=?  | Query supported functionality levels
+at+creg?   | Check if the modem has registered to a provider.
+at+cgreg?  | Same as above for some modems
 
 
 `VintageNetLTE` makes it easy to add cellular support to your device.
