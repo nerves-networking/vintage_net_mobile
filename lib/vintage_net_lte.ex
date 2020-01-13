@@ -33,8 +33,8 @@ defmodule VintageNetLTE do
     # TODO: up command may differ between modems
     # should make this configurable
     up_cmds = [
-      {:run_ignore_errors, "mknod", ["/dev/ppp", "c", "108", "0"]},
-      {:run, "usb_modeswitch", ["-v", "12d1", "-p", "14fe", "-J"]}
+      {:fun, __MODULE__, :run_usbmodeswitch, []},
+      {:fun, __MODULE__, :run_mknod, []}
     ]
 
     child_specs = [
@@ -77,11 +77,13 @@ defmodule VintageNetLTE do
 
   def run_mknod() do
     System.cmd("mknod", ["/dev/ppp", "c", "108", "0"])
+    :timer.sleep(1_000)
     :ok
   end
 
   def run_usbmodeswitch() do
     {_, 0} = System.cmd("usb_modeswitch", ["-v", "12d1", "-p", "14fe", "-J"])
+    :timer.sleep(1_000)
     :ok
   end
 
