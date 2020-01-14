@@ -37,7 +37,7 @@ defmodule VintageNetLTE.PPPD do
         speed,
         "noipdefault",
         "usepeerdns",
-        "defaultroute",
+        #        "defaultroute",
         "persist",
         "noauth",
         "debug"
