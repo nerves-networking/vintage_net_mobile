@@ -1,6 +1,8 @@
-defmodule VintageNetLTE.PPPToElixir.Server do
+defmodule VintageNetLTE.ToElixir.Server do
   use GenServer
   require Logger
+
+  alias VintageNetLTE.ToElixir.PPPDHandler
 
   @moduledoc """
   This GenServer routes messages from C and shell scripts to the appropriate
@@ -45,6 +47,12 @@ defmodule VintageNetLTE.PPPToElixir.Server do
 
   defp normalize_argv0({[argv0 | args], env}) do
     {[Path.basename(argv0) | args], env}
+  end
+
+  # For Matt: add other callbacks here and their symlinks in src/etc/ppp
+  defp dispatch({["ip-up", ifname, _tty, _baud, _our_ip, _their_ip], env}) do
+    PPPDHandler.dispatch(:ip_up, ifname, env)
+    :ok
   end
 
   defp dispatch({["ppp_to_elixir" | args], env}) do

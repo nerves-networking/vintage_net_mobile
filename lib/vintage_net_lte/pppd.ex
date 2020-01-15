@@ -23,6 +23,11 @@ defmodule VintageNetLTE.PPPD do
     speed = Keyword.fetch!(state, :speed)
     serial_port = Keyword.fetch!(state, :serial)
 
+    # The purpose of the pppd_shim is to redirect hardcoded calls to helper scripts
+    # in pppd to programs in our priv directory.
+    priv_dir = Application.app_dir(:vintage_net_lte, "priv")
+    pppd_shim_path = Path.join(priv_dir, "pppd_shim.so")
+
     _ =
       Logger.error(
         "#{pppd_bin} connect #{chat_bin} -v -f #{chatscript_path} #{serial_port} #{speed}"
@@ -42,7 +47,8 @@ defmodule VintageNetLTE.PPPD do
         "persist",
         "noauth",
         "debug"
-      ]
+      ],
+      env: [{"PRIV_DIR", priv_dir}, {"LD_PRELOAD", pppd_shim_path}]
     )
 
     {:noreply, state}

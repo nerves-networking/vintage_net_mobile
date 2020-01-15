@@ -5,7 +5,7 @@ defmodule VintageNetLTE.Application do
 
   def start(_type, _args) do
     children = [
-      {VintageNetLTE.PPPToElixir.Server, "/tmp/vintage_net/pppd_comms"}
+      {VintageNetLTE.ToElixir.Server, "/tmp/vintage_net/pppd_comms"}
     ]
 
     opts = [strategy: :rest_for_one, name: VintageNetLTE.Supervisor]

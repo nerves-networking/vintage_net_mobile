@@ -63,7 +63,7 @@ static void encode_kv_list(ei_x_buff *buff, const char *key, const char *str)
     ei_x_encode_empty_list(buff);
 }
 
-static int count_items(const char **p)
+static int count_items(char *const* p)
 {
     int n = 0;
     while (*p != NULL) {
