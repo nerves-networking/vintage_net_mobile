@@ -3,7 +3,7 @@ defmodule VintageNetLTE.PPPD do
   require Logger
 
   def start_link(opts) do
-    Logger.error("Starting PPPD!!!!!!!!!!!!!!!!!!!!")
+    _ = Logger.error("Starting PPPD!!!!!!!!!!!!!!!!!!!!")
     ifname = Keyword.fetch!(opts, :ifname)
     GenServer.start_link(__MODULE__, opts, name: via_name(ifname))
   end
@@ -23,9 +23,10 @@ defmodule VintageNetLTE.PPPD do
     speed = Keyword.fetch!(state, :speed)
     serial_port = Keyword.fetch!(state, :serial)
 
-    Logger.error(
-      "#{pppd_bin} connect #{chat_bin} -v -f #{chatscript_path} #{serial_port} #{speed}"
-    )
+    _ =
+      Logger.error(
+        "#{pppd_bin} connect #{chat_bin} -v -f #{chatscript_path} #{serial_port} #{speed}"
+      )
 
     # TODO: make pppd options config item
     MuonTrap.Daemon.start_link(
