@@ -11,8 +11,7 @@ functioning yet.
 To get this technology running with VintageNet run the following:
 
 ```elixir
-VintageNetLTE.setup()
-VintageNet.configure("ppp0", %{type: VintageNetLTE})
+VintageNet.configure("ppp0", %{type: VintageNetLTE}, persist: false)
 ```
 
 ## System requirements
