@@ -1,4 +1,4 @@
-defmodule VintageNetKLTE.PPPToElixir.Server do
+defmodule VintageNetLTE.PPPToElixir.Server do
   use GenServer
   require Logger
 
@@ -47,14 +47,13 @@ defmodule VintageNetKLTE.PPPToElixir.Server do
     {[Path.basename(argv0) | args], env}
   end
 
-  defp dispatch({["to_elixir" | args], _env}) do
-    message = Enum.join(args, " ")
-    _ = Logger.debug("Got a generic message: #{message}")
+  defp dispatch({["ppp_to_elixir" | args], env}) do
+    _ = Logger.debug("ppp_to_elixir: Args=#{inspect(args)}, Env=#{inspect(env)}")
     :ok
   end
 
   defp dispatch(unknown) do
-    _ = Logger.error("to_elixir: dropping unknown report '#{inspect(unknown)}''")
+    _ = Logger.error("ppp_to_elixir: dropping unknown report '#{inspect(unknown)}''")
     :ok
   end
 end

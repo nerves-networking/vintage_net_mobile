@@ -11,7 +11,7 @@
 
 extern char **environ;
 
-#define SOCKET_PATH "/tmp/vintage_net/pppcomms"
+#define SOCKET_PATH "/tmp/vintage_net/pppd_comms"
 
 static void encode_string(ei_x_buff *buff, const char *str)
 {
