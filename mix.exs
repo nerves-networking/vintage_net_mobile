@@ -25,6 +25,9 @@ defmodule VintageNetLTE.MixProject do
 
   def application do
     [
+      env: [
+        pppd_handler: VintageNetLTE.PPPDNotifications,
+      ],
       extra_applications: [:logger],
       mod: {VintageNetLTE.Application, []}
     ]
