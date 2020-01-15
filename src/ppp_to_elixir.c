@@ -63,43 +63,11 @@ static void encode_kv_list(ei_x_buff *buff, const char *key, const char *str)
     ei_x_encode_empty_list(buff);
 }
 
-/*
- * Example udhcpc variables:
- *
- *  subnet=255.255.255.0
- *  router=192.168.9.1
- *  opt58=0000a8c0
- *  opt59=00012750
- *  domain=example.net
- *  interface=eth0
- *  siaddr=192.168.9.1
- *  dns=192.168.9.1
- *  serverid=192.168.9.1
- *  broadcast=192.168.9.255
- *  ip=192.168.9.131
- *  mask=24
- *  lease=86400
- *  opt53=05
- *
- * See https://git.busybox.net/busybox/tree/networking/udhcp/common.c for more.
- */
-
-static int should_encode(const char *kv)
+static int count_items(const char **p)
 {
-    // We want to encode all lower case environment variables. Those are the ones from udhcpc.
-    // Just check the first character.
-    return islower(kv[0]);
-}
-
-static int count_environ_to_encode()
-{
-    char **p = environ;
     int n = 0;
-
     while (*p != NULL) {
-        if (should_encode(*p))
-            n++;
-
+        n++;
         p++;
     }
 
@@ -122,30 +90,18 @@ static void encode_env_kv(ei_x_buff *buff, const char *kv)
 
     const char *value = equal + 1;
 
-    // Some parameters are lists, so encode those as lists so that Elixir
-    // doesn't have to figure it out.
-    if (strcmp(key, "dns") == 0 ||
-            strcmp(key, "router") == 0)
-        encode_kv_list(buff, key, value);
-    else
-        encode_kv_string(buff, key, value);
+    encode_kv_string(buff, key, value);
 }
 
 static void encode_environ(ei_x_buff *buff)
 {
-    int kv_to_encode = count_environ_to_encode();
+    int kv_to_encode = count_items(environ);
     ei_x_encode_map_header(buff, kv_to_encode);
 
-    char **p = environ;
-
-    // We want to encode all lower case environment variables. Those are the ones from udhcpc.
-    while (*p != NULL) {
-        const char *kv = *p;
-
-        if (should_encode(kv))
-            encode_env_kv(buff, kv);
-
-        p++;
+    for (char **p = environ;
+        *p != NULL;
+        p++) {
+        encode_env_kv(buff, *p);
     }
 }
 
