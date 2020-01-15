@@ -105,7 +105,7 @@ defmodule VintageNetLTE do
         speed,
         "noipdefault",
         "usepeerdns",
-#        "defaultroute",
+        #        "defaultroute",
         "noauth",
         "persist"
       ]
