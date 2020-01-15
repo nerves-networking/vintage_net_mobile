@@ -11,7 +11,7 @@ defmodule VintageNetLTE do
 
   @impl true
   def to_raw_config(ifname, %{type: __MOUDLE__} = config, opts) do
-    Logger.error("PPP0!!!!!!!!!!!")
+    _ = Logger.error("PPP0!!!!!!!!!!!")
     pppd = Keyword.fetch!(opts, :bin_pppd)
     chat = Keyword.fetch!(opts, :bin_chat)
     tmpdir = Keyword.fetch!(opts, :tmpdir)
