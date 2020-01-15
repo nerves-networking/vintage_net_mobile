@@ -33,7 +33,7 @@ defmodule VintageNetLTE do
     # TODO: up command may differ between modems
     # should make this configurable
     up_cmds = [
-      {:fun, __MODULE__, :run_usbmodeswitch, []},
+      {:fun, __MODULE__, :run_usb_modeswitch, []},
       {:fun, __MODULE__, :run_mknod, []}
     ]
 
@@ -81,7 +81,7 @@ defmodule VintageNetLTE do
     :ok
   end
 
-  def run_usbmodeswitch() do
+  def run_usb_modeswitch() do
     {_, 0} = System.cmd("usb_modeswitch", ["-v", "12d1", "-p", "14fe", "-J"])
     :timer.sleep(1_000)
     :ok
@@ -90,7 +90,7 @@ defmodule VintageNetLTE do
   def setup() do
     :ok = write_chat_script()
     :ok = run_mknod()
-    :ok = run_usbmodeswitch()
+    :ok = run_usb_modeswitch()
   end
 
   def run_pppd(serial_port, opts \\ []) do
