@@ -26,7 +26,7 @@ defmodule VintageNetLTE.PPPDNotifications do
     local_ip_address = parse_address(Map.get(info, :IPLOCAL))
     remote_ip_address = parse_address(Map.get(info, :IPREMOTE))
 
-    RouteManager.set_route(ifname, [{local_ip_address, 30}], remote_ip_address, :internet)
+    RouteManager.set_route(ifname, [{local_ip_address, 32}], remote_ip_address, :internet)
 
     # Matt - I don't know how many DNS servers can be returned or even if none is valid.
     #        It seems like this should handle a variable amount
