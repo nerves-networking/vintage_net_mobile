@@ -60,8 +60,13 @@ defmodule VintageNetLTE.ToElixir.Server do
     :ok
   end
 
-  defp dispatch({["ip-pre-up", ifname, _tty, _baud, _out_ip, _their_ip], env}) do
+  defp dispatch({["ip-pre-up", ifname, _tty, _baud, _our_ip, _their_ip], env}) do
     PPPDHandler.dispatch(:ip_pre_up, ifname, env)
+    :ok
+  end
+
+  defp dispatch({["ipv6-up", ifname, _tty, _baud, _our_ip, _their_ip], env}) do
+    PPPDHandler.dispatch(:ipv6_up, ifname, env)
     :ok
   end
 
