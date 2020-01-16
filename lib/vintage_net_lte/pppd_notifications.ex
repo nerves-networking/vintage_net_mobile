@@ -58,4 +58,12 @@ defmodule VintageNetLTE.PPPDNotifications do
   def auth_up(ifname, info) do
     Logger.debug("pppd.auth_up(#{ifname}): #{inspect(info)}")
   end
+
+  @doc """
+  Handle auth when a connection goes down
+  """
+  @impl true
+  def auth_down(ifname, info) do
+    Logger.debug("pppd.auth_down(#{ifname}): #{inspect(info)}")
+  end
 end

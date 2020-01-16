@@ -65,6 +65,11 @@ defmodule VintageNetLTE.ToElixir.Server do
     :ok
   end
 
+  defp dispatch({["auth-down", ifname, _peer_name, _user_name, _tty], env}) do
+    PPPDHandler.dispatch(:auth_down, ifname, env)
+    :ok
+  end
+
   defp dispatch({["ppp_to_elixir" | args], env}) do
     _ = Logger.debug("ppp_to_elixir: Args=#{inspect(args)}, Env=#{inspect(env)}")
     :ok
