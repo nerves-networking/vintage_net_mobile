@@ -37,4 +37,17 @@ defmodule VintageNetLTE.PPPDNotifications do
     NameResolver.setup(ifname, domain, [dns1, dns2])
     :ok
   end
+
+  @doc """
+  Handle when the pppd link goes down
+  """
+  @impl true
+  def ip_down(ifname, info) do
+    _ = Logger.debug("pppd.ip_down(#{ifname}): #{inspect(info)}")
+
+    RouteManager.clear_route(ifname)
+    NameResolver.clear(ifname)
+
+    :ok
+  end
 end
