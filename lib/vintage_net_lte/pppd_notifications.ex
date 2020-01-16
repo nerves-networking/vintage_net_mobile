@@ -60,6 +60,14 @@ defmodule VintageNetLTE.PPPDNotifications do
   end
 
   @doc """
+  Handle when the ppp connection is lost with IPv6 enabled
+  """
+  @impl true
+  def ipv6_down(ifname, info) do
+    Logger.debug("pppd.ipv6_down(#{ifname}): #{inspect(info)}")
+  end
+
+  @doc """
   Handle when the interface is down but exists and has IP addresses
   """
   @impl true
