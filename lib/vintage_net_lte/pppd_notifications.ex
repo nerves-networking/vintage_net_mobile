@@ -1,7 +1,7 @@
 defmodule VintageNetLTE.PPPDNotifications do
   @behaviour VintageNetLTE.ToElixir.PPPDHandler
 
-  alias VintageNet.{NameResolver, RouteManager}
+  alias VintageNet.{NameResolver, PropertyTable, RouteManager}
 
   require Logger
 
@@ -35,6 +35,8 @@ defmodule VintageNetLTE.PPPDNotifications do
     domain = nil
 
     NameResolver.setup(ifname, domain, [dns1, dns2])
+
+    PropertyTable.put(VintageNet, ["interface", ifname, "connection"], :internet)
     :ok
   end
 
@@ -47,6 +49,7 @@ defmodule VintageNetLTE.PPPDNotifications do
 
     RouteManager.clear_route(ifname)
     NameResolver.clear(ifname)
+    PropertyTable.put(VintageNet, ["interface", ifname, "connection"], :disconnected)
 
     :ok
   end
