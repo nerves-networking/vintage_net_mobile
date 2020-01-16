@@ -29,6 +29,15 @@ defmodule VintageNetLTE.ToElixir.PPPDHandler do
   @callback ip_down(VintageNet.ifname(), update_data()) :: :ok
 
   @doc """
+  This is called just before the ppp network interface is brought up. At this
+  point the interface exists and has IP address but is still down.
+
+  This is useful for adding firewall rules before any IP traffic can pass
+  through
+  """
+  @callback ip_pre_up(VintageNet.ifname(), update_data()) :: :ok
+
+  @doc """
   This is called after the remote system authenticates itself.
 
   If the `noauth` option is used by `pppd` then this will not be called

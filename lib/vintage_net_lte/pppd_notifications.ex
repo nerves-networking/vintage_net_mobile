@@ -52,6 +52,14 @@ defmodule VintageNetLTE.PPPDNotifications do
   end
 
   @doc """
+  Handle when the interface is down but exists and has IP addresses
+  """
+  @impl true
+  def ip_pre_up(ifname, info) do
+    Logger.debug("pppd.ip_pre_up(#{ifname}): #{inspect(info)}")
+  end
+
+  @doc """
   Handle when the remote authenticates itself
   """
   @impl true
