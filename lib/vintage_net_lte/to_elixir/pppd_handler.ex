@@ -24,6 +24,11 @@ defmodule VintageNetLTE.ToElixir.PPPDHandler do
   @callback ip_up(VintageNet.ifname(), update_data()) :: :ok
 
   @doc """
+  This is called when the ppp connection is lost
+  """
+  @callback ip_down(VintageNet.ifname(), update_data()) :: :ok
+
+  @doc """
   Called internally by vintage_net_lte to dispatch calls
   """
   @spec dispatch(atom(), VintageNet.ifname(), update_data()) :: :ok

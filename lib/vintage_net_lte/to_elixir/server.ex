@@ -55,6 +55,10 @@ defmodule VintageNetLTE.ToElixir.Server do
     :ok
   end
 
+  defp dispatch({["ip-down", ifname, _tty, _baud, _our_ip, _their_ip], env}) do
+    PPPDHandler.dispatch(:ip_down, ifname, env)
+  end
+
   defp dispatch({["ppp_to_elixir" | args], env}) do
     _ = Logger.debug("ppp_to_elixir: Args=#{inspect(args)}, Env=#{inspect(env)}")
     :ok
