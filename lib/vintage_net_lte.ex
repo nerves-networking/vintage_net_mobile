@@ -74,6 +74,7 @@ defmodule VintageNetLTE do
       "usepeerdns",
       "persist",
       "noauth",
+      "nodetach",
       "debug"
     ]
   end
