@@ -57,6 +57,12 @@ defmodule VintageNetLTE.ToElixir.Server do
 
   defp dispatch({["ip-down", ifname, _tty, _baud, _our_ip, _their_ip], env}) do
     PPPDHandler.dispatch(:ip_down, ifname, env)
+    :ok
+  end
+
+  defp dispatch({["auth-up", ifname, _peer_name, _user_name, _tty], env}) do
+    PPPDHandler.dispatch(:auth_up, ifname, env)
+    :ok
   end
 
   defp dispatch({["ppp_to_elixir" | args], env}) do

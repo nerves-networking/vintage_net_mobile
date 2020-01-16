@@ -29,6 +29,13 @@ defmodule VintageNetLTE.ToElixir.PPPDHandler do
   @callback ip_down(VintageNet.ifname(), update_data()) :: :ok
 
   @doc """
+  This is called when after the remote system authenticates itself.
+
+  If the `noauth` option is used by `pppd` then this will not be called
+  """
+  @callback auth_up(VintageNet.ifname(), update_data()) :: :ok
+
+  @doc """
   Called internally by vintage_net_lte to dispatch calls
   """
   @spec dispatch(atom(), VintageNet.ifname(), update_data()) :: :ok

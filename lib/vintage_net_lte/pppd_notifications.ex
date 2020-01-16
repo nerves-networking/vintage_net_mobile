@@ -50,4 +50,12 @@ defmodule VintageNetLTE.PPPDNotifications do
 
     :ok
   end
+
+  @doc """
+  Handle when the remote authenticates itself
+  """
+  @impl true
+  def auth_up(ifname, info) do
+    Logger.debug("pppd.auth_up(#{ifname}): #{inspect(info)}")
+  end
 end
