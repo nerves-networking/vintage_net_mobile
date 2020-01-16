@@ -44,6 +44,11 @@ defmodule VintageNetLTE.ToElixir.PPPDHandler do
   @callback ipv6_up(VintageNet.ifname(), update_data()) :: :ok
 
   @doc """
+  This is called when pppd loses the connection and IPv6 addressing is enabled
+  """
+  @callback ipv6_down(VintageNet.ifname(), update_data()) :: :ok
+
+  @doc """
   This is called after the remote system authenticates itself.
 
   If the `noauth` option is used by `pppd` then this will not be called
