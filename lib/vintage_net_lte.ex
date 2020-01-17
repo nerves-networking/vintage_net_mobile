@@ -10,7 +10,7 @@ defmodule VintageNetLTE do
   def normalize(config), do: config
 
   @impl true
-  def to_raw_config(ifname, %{type: __MOUDLE__} = config, opts) do
+  def to_raw_config(ifname, %{type: __MODULE__} = config, opts) do
     files = [{chatscript_path(opts), Twilio.chatscript()}]
 
     # TODO: up command may differ between modems
