@@ -49,7 +49,6 @@ defmodule VintageNetLTE.ToElixir.Server do
     {[Path.basename(argv0) | args], env}
   end
 
-  # For Matt: add other callbacks here and their symlinks in src/etc/ppp
   defp dispatch({["ip-up", ifname, _tty, _baud, _our_ip, _their_ip], env}) do
     PPPDHandler.dispatch(:ip_up, ifname, env)
     :ok

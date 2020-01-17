@@ -4,8 +4,6 @@ defmodule VintageNetLTE do
   alias VintageNet.Interface.RawConfig
   alias VintageNetLTE.ServiceProvider.Twilio
 
-  require Logger
-
   @impl true
   def normalize(config), do: config
 
@@ -21,8 +19,6 @@ defmodule VintageNetLTE do
     ]
 
     child_specs = [make_pppd_spec(opts)]
-
-    Logger.error("#{inspect(child_specs)}")
 
     %RawConfig{
       ifname: ifname,
@@ -86,7 +82,7 @@ defmodule VintageNetLTE do
   end
 
   def run_mknod() do
-    System.cmd("mknod", ["/dev/ppp", "c", "108", "0"])
+    _ = System.cmd("mknod", ["/dev/ppp", "c", "108", "0"])
     :timer.sleep(1_000)
     :ok
   end
