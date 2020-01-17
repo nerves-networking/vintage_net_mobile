@@ -63,35 +63,6 @@ CONFIG_MKNOD=y
 CONFIG_WC=y
 ```
 
-## Current status
-
-Figuring out how to ensure up commands are ran before `pppd`. There seems to be
-an issue if the interface is not present.
-
-Right now the `VintageNetLTE.setup` call does what the `up_cmds` configuration
-should be doing.
-
-Still have to get routing working through VintageNet.
-
-### Setting routes
-
-Currently `ppp` tries to set the routes be will fail with this error log.
-
-```text
-pppd[314]: not replacing existing default route via 192.168.0.1
-```
-
-So if you try to run `ping "google.com", ifname: "ppp0"` it will not work.
-
-To solve this add the route manually:
-
-```elixir
-cmd "ip route add default dev ppp0"
-```
-
-Then to check if everything is working you can try to run the above `ping` command
-again.
-
 ## Serial AT command debugging
 
 If you are running this on a nerves device and have
