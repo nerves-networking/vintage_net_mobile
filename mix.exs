@@ -9,6 +9,7 @@ defmodule VintageNetLTE.MixProject do
       app: :vintage_net_lte,
       version: @version,
       elixir: "~> 1.8",
+      elixirc_paths: elixirc_paths(Mix.env()),
       test_coverage: [tool: ExCoveralls],
       start_permanent: Mix.env() == :prod,
       compilers: [:elixir_make | Mix.compilers()],
@@ -26,12 +27,15 @@ defmodule VintageNetLTE.MixProject do
   def application do
     [
       env: [
-        pppd_handler: VintageNetLTE.PPPDNotifications,
+        pppd_handler: VintageNetLTE.PPPDNotifications
       ],
       extra_applications: [:logger],
       mod: {VintageNetLTE.Application, []}
     ]
   end
+
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_), do: ["lib"]
 
   defp description do
     "LTE support for VintageNet"
