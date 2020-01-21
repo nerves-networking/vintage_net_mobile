@@ -58,7 +58,7 @@ defmodule VintageNetLTE.MixProject do
   defp deps do
     [
       {:elixir_make, "~> 0.6", runtime: false},
-      {:vintage_net, github: "nerves-networking/vintage_net", branch: "master", override: true},
+      {:vintage_net, "~> 0.7.3"},
       {:muontrap, "~> 0.5.0"},
       {:ex_doc, "~> 0.19", only: :docs, runtime: false},
       {:excoveralls, "~> 0.8", only: :test, runtime: false},
