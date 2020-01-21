@@ -45,8 +45,7 @@ defmodule VintageNetLTE.MixProject do
         "mix.exs",
         "Makefile",
         "README.md",
-        "src/*.[ch]",
-        "src/test-c99.sh",
+        "src",
         "LICENSE",
         "CHANGELOG.md"
       ],
