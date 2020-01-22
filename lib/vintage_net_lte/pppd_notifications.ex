@@ -2,7 +2,6 @@ defmodule VintageNetLTE.PPPDNotifications do
   @behaviour VintageNetLTE.ToElixir.PPPDHandler
 
   alias VintageNet.{NameResolver, PropertyTable, RouteManager}
-
   require Logger
 
   defp parse_address(address) do
@@ -37,6 +36,7 @@ defmodule VintageNetLTE.PPPDNotifications do
     NameResolver.setup(ifname, domain, [dns1, dns2])
 
     PropertyTable.put(VintageNet, ["interface", ifname, "connection"], :internet)
+
     :ok
   end
 

@@ -3,6 +3,7 @@ defmodule VintageNetLTE do
 
   alias VintageNet.Interface.RawConfig
   alias VintageNetLTE.ServiceProvider.Twilio
+  alias VintageNetLTE.SignalStrengthMonitor
 
   @impl true
   def normalize(config), do: config
@@ -18,7 +19,12 @@ defmodule VintageNetLTE do
       {:fun, __MODULE__, :run_mknod, []}
     ]
 
-    child_specs = [make_pppd_spec(opts)]
+    # TODO: figure out a nicer way to specify options for
+    # polling the signal strength
+    child_specs = [
+      {SignalStrengthMonitor, [ifname: ifname, tty: "/dev/ttyUSB2", speed: 115_200]},
+      make_pppd_spec(opts)
+    ]
 
     %RawConfig{
       ifname: ifname,

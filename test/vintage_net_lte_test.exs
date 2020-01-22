@@ -19,6 +19,8 @@ defmodule VintageNetLTETest do
       ],
       files: [{"/tmp/vintage_net/twilio", Twilio.chatscript()}],
       child_specs: [
+        {VintageNetLTE.SignalStrengthMonitor,
+         [ifname: "ppp0", tty: "/dev/ttyUSB2", speed: 115_200]},
         {MuonTrap.Daemon,
          [
            "pppd",

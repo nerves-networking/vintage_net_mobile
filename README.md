@@ -63,6 +63,15 @@ CONFIG_MKNOD=y
 CONFIG_WC=y
 ```
 
+# Properties
+
+In addition to the common `vintage_net` properties for all interface types, this technology reports the following:
+
+| Property      | Values         | Description                                |
+| ------------- | -------------- | ------------------------------------------ |
+| `signal_dbm`  | `-109..-53`    | An integer between the values -109 and -53 |
+| `signal_rssi` | `0-31` or `99` | An integer between 0-31, 99                |
+
 ## Serial AT command debugging
 
 If you are running this on a nerves device and have
@@ -81,14 +90,14 @@ iex> Elixircom.run("/dev/ttyUSB2", speed: 115200)
 OK
 ```
 
-Command    | Description
------------|-----------------------
-at+csq     | Signal Strength
-at+csq=?   | Query supported signal strength format
-at+cfun?   | Level of functionality
-at+cfun=?  | Query supported functionality levels
-at+creg?   | Check if the modem has registered to a provider.
-at+cgreg?  | Same as above for some modems
+| Command   | Description                                      |
+| --------- | ------------------------------------------------ |
+| at+csq    | Signal Strength                                  |
+| at+csq=?  | Query supported signal strength format           |
+| at+cfun?  | Level of functionality                           |
+| at+cfun=? | Query supported functionality levels             |
+| at+creg?  | Check if the modem has registered to a provider. |
+| at+cgreg? | Same as above for some modems                    |
 
 `VintageNetLTE` makes it easy to add cellular support to your device.
 
