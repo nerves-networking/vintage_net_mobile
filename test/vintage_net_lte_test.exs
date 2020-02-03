@@ -3,10 +3,11 @@ defmodule VintageNetLTETest do
 
   alias VintageNet.Interface.RawConfig
   alias VintageNetLTE.ServiceProvider.Twilio
+  alias VintageNetLTE.Modems.MockModem
 
   test "create an LTE configuration" do
     priv_dir = Application.app_dir(:vintage_net_lte, "priv")
-    input = %{type: VintageNetLTE}
+    input = %{type: VintageNetLTE, modem: MockModem}
 
     output = %RawConfig{
       ifname: "ppp0",
@@ -14,7 +15,6 @@ defmodule VintageNetLTETest do
       source_config: input,
       require_interface: false,
       up_cmds: [
-        {:fun, VintageNetLTE, :run_usb_modeswitch, []},
         {:fun, VintageNetLTE, :run_mknod, []}
       ],
       files: [{"/tmp/vintage_net/twilio", Twilio.chatscript()}],
@@ -25,7 +25,7 @@ defmodule VintageNetLTETest do
            [
              "connect",
              "chat -v -f /tmp/vintage_net/twilio",
-             "/dev/ttyUSB0",
+             "/dev/null",
              "115200",
              "noipdefault",
              "usepeerdns",
