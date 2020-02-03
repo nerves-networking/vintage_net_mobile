@@ -8,17 +8,16 @@ defmodule VintageNetLTE do
   def normalize(config), do: config
 
   @impl true
-  def to_raw_config(ifname, %{type: __MODULE__} = config, opts) do
+  def to_raw_config(ifname, %{type: __MODULE__, modem: modem} = config, opts) do
     files = [{chatscript_path(opts), Twilio.chatscript()}]
 
     # TODO: up command may differ between modems
     # should make this configurable
     up_cmds = [
-      {:fun, __MODULE__, :run_usb_modeswitch, []},
       {:fun, __MODULE__, :run_mknod, []}
     ]
 
-    child_specs = [make_pppd_spec(opts)]
+    child_specs = [make_pppd_spec(modem, opts)]
 
     %RawConfig{
       ifname: ifname,
@@ -38,33 +37,28 @@ defmodule VintageNetLTE do
   @impl true
   def check_system(_), do: :ok
 
-  defp make_pppd_spec(opts) do
+  defp make_pppd_spec(modem, opts) do
     pppd_bin = Keyword.fetch!(opts, :bin_pppd)
     priv_dir = Application.app_dir(:vintage_net_lte, "priv")
     pppd_shim_path = Path.join(priv_dir, "pppd_shim.so")
-    pppd_args = make_pppd_args(opts)
+    pppd_args = make_pppd_args(modem, opts)
 
     env = [{"PRIV_DIR", priv_dir}, {"LD_PRELOAD", pppd_shim_path}]
 
     {MuonTrap.Daemon, [pppd_bin, pppd_args, [env: env]]}
   end
 
-  defp make_pppd_args(opts) do
+  defp make_pppd_args(modem, opts) do
     chat_bin = Keyword.fetch!(opts, :bin_chat)
     cs_path = chatscript_path(opts)
-    # TODO: make this a config item
-    serial_port = "/dev/ttyUSB0"
+    modem_spec = modem.spec()
 
-    # TODO: make this a config item
-    # should be allowed to pass in integer
-    # we can normalize the integer into a
-    # string
-    serial_speed = "115200"
+    serial_speed = Integer.to_string(modem_spec.serial_speed)
 
     [
       "connect",
       "#{chat_bin} -v -f #{cs_path}",
-      serial_port,
+      modem_spec.serial_port,
       serial_speed,
       "noipdefault",
       "usepeerdns",
@@ -83,12 +77,6 @@ defmodule VintageNetLTE do
 
   def run_mknod() do
     _ = System.cmd("mknod", ["/dev/ppp", "c", "108", "0"])
-    :timer.sleep(1_000)
-    :ok
-  end
-
-  def run_usb_modeswitch() do
-    _ = System.cmd("usb_modeswitch", ["-v", "12d1", "-p", "14fe", "-J"])
     :timer.sleep(1_000)
     :ok
   end

@@ -11,8 +11,14 @@ functioning yet.
 To get this technology running with VintageNet run the following:
 
 ```elixir
-VintageNet.configure("ppp0", %{type: VintageNetLTE}, persist: false)
+VintageNet.configure("ppp0", %{type: VintageNetLTE, modem: modem}, persist: false)
 ```
+
+where `modem` is a module that implements the `VintageNetLTE.Modem` behaviour.
+
+Currently supported modem:
+
+* `VintageNetLTE.Modems.QuectelBG96`
 
 ## System requirements
 
