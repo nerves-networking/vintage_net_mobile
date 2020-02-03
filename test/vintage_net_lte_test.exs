@@ -15,7 +15,7 @@ defmodule VintageNetLTETest do
       source_config: input,
       require_interface: false,
       up_cmds: [
-        {:fun, VintageNetLTE, :run_mknod, []}
+        {:run_ignore_errors, "mknod", ["/dev/ppp", "c", "108", "0"]},
       ],
       files: [{"/tmp/vintage_net/twilio", Twilio.chatscript()}],
       child_specs: [

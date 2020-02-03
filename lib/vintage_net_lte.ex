@@ -11,10 +11,8 @@ defmodule VintageNetLTE do
   def to_raw_config(ifname, %{type: __MODULE__, modem: modem} = config, opts) do
     files = [{chatscript_path(opts), Twilio.chatscript()}]
 
-    # TODO: up command may differ between modems
-    # should make this configurable
     up_cmds = [
-      {:fun, __MODULE__, :run_mknod, []}
+      {:run_ignore_errors, "mknod", ["/dev/ppp", "c", "108", "0"]}
     ]
 
     child_specs = [make_pppd_spec(modem, opts)]
@@ -73,11 +71,5 @@ defmodule VintageNetLTE do
     opts
     |> Keyword.fetch!(:tmpdir)
     |> Path.join(Twilio.name())
-  end
-
-  def run_mknod() do
-    _ = System.cmd("mknod", ["/dev/ppp", "c", "108", "0"])
-    :timer.sleep(1_000)
-    :ok
   end
 end
