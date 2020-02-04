@@ -11,10 +11,20 @@ functioning yet.
 To get this technology running with VintageNet run the following:
 
 ```elixir
-VintageNet.configure("ppp0", %{type: VintageNetLTE, modem: modem}, persist: false)
+VintageNet.configure("ppp0", %{type: VintageNetLTE, modem: modem, provider: provider_info}, persist: false)
 ```
 
-where `modem` is a module that implements the `VintageNetLTE.Modem` behaviour.
+Where `modem` is a module that implements the `VintageNetLTE.Modem` behaviour.
+
+The `:provider` key contains the following information:
+
+* `:apn` - The service provider's APN
+
+```elixir
+config :vintage_net,
+  config: [
+    {"ppp0", %{type: VintageNetLTE, modem: VintageNetLTE.Modems.QuectelBG96, provider: %{apn: "wireless.twilio.com"}}}
+```
 
 Currently supported modem:
 
