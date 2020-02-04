@@ -2,12 +2,11 @@ defmodule VintageNetLTETest do
   use ExUnit.Case
 
   alias VintageNet.Interface.RawConfig
-  alias VintageNetLTE.ServiceProvider.Twilio
   alias VintageNetLTE.Modems.MockModem
 
   test "create an LTE configuration" do
     priv_dir = Application.app_dir(:vintage_net_lte, "priv")
-    input = %{type: VintageNetLTE, modem: MockModem}
+    input = %{type: VintageNetLTE, modem: MockModem, provider: %{}}
 
     output = %RawConfig{
       ifname: "ppp0",
@@ -15,16 +14,16 @@ defmodule VintageNetLTETest do
       source_config: input,
       require_interface: false,
       up_cmds: [
-        {:run_ignore_errors, "mknod", ["/dev/ppp", "c", "108", "0"]},
+        {:run_ignore_errors, "mknod", ["/dev/ppp", "c", "108", "0"]}
       ],
-      files: [{"/tmp/vintage_net/twilio", Twilio.chatscript()}],
+      files: [{"/tmp/vintage_net/chatscript.ppp0", ""}],
       child_specs: [
         {MuonTrap.Daemon,
          [
            "pppd",
            [
              "connect",
-             "chat -v -f /tmp/vintage_net/twilio",
+             "chat -v -f /tmp/vintage_net/chatscript.ppp0",
              "/dev/null",
              "115200",
              "noipdefault",
