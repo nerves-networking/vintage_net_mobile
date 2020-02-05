@@ -6,7 +6,12 @@ defmodule VintageNetLTE.Modems.QuectelBG96Test do
   test "returns correct spec" do
     provider_info = %{apn: "test.apn.com"}
 
-    assert %{serial_port: "/dev/ttyUSB3", serial_speed: 9600, chatscript: chatscript()} ==
+    assert %{
+             serial_port: "/dev/ttyUSB3",
+             serial_speed: 9600,
+             chatscript: chatscript(),
+             command_port: "ttyUSB2"
+           } ==
              QuectelBG96.spec(provider_info)
   end
 

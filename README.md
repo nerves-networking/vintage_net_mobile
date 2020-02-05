@@ -79,6 +79,14 @@ CONFIG_MKNOD=y
 CONFIG_WC=y
 ```
 
+## VitnageNet Properties
+
+In addition to the common `vintage_net` properties for all interface types, this technology reports the following:
+
+| Property      | Values         | Description                    |
+| ------------- | -------------- | -------------------------------|
+| `signal_rssi` | `0-31` or `99` | An integer between 0-31 or 99  |
+
 ## Serial AT command debugging
 
 If you are running this on a nerves device and have

@@ -38,7 +38,8 @@ defmodule VintageNetLTE.Modems.QuectelBG96 do
     %{
       serial_port: "/dev/ttyUSB3",
       serial_speed: 9600,
-      chatscript: chatscript(provider_info)
+      chatscript: chatscript(provider_info),
+      command_port: "ttyUSB2"
     }
   end
 
