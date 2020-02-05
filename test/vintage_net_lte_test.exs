@@ -3,6 +3,7 @@ defmodule VintageNetLTETest do
 
   alias VintageNet.Interface.RawConfig
   alias VintageNetLTE.Modems.MockModem
+  alias VintageNetLTE.{ATRunner, SignalMonitor}
 
   test "create an LTE configuration" do
     priv_dir = Application.app_dir(:vintage_net_lte, "priv")
@@ -34,7 +35,9 @@ defmodule VintageNetLTETest do
              "debug"
            ],
            [env: [{"PRIV_DIR", priv_dir}, {"LD_PRELOAD", Path.join(priv_dir, "pppd_shim.so")}]]
-         ]}
+         ]},
+        {ATRunner, [tty: "null", speed: 115_200]},
+        {SignalMonitor, [ifname: "ppp0", tty: "null"]}
       ]
     }
 

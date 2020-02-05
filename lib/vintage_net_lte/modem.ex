@@ -9,11 +9,14 @@ defmodule VintageNetLTE.Modem do
 
   * `:serial_port` - this is the tty the modem is connected to
   * `:serial_speed` - this is baud rate for the serial connection
+  * `:chatscript` - the file contents of the chatscript
+  * `:command_port` - the tty port for sending AT commands
   """
   @type spec :: %{
           serial_port: String.t(),
           serial_speed: non_neg_integer(),
-          chatscript: String.t()
+          chatscript: String.t(),
+          command_port: String.t()
         }
 
   @doc """

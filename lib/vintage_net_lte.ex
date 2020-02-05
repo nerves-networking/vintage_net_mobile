@@ -2,6 +2,7 @@ defmodule VintageNetLTE do
   @behaviour VintageNet.Technology
 
   alias VintageNet.Interface.RawConfig
+  alias VintageNetLTE.{ATRunner, SignalMonitor}
 
   @typedoc """
   The provider information for provider specific configuration
@@ -24,7 +25,11 @@ defmodule VintageNetLTE do
       {:run_ignore_errors, "mknod", ["/dev/ppp", "c", "108", "0"]}
     ]
 
-    child_specs = [make_pppd_spec(ifname, modem_spec, opts)]
+    child_specs = [
+      make_pppd_spec(ifname, modem_spec, opts),
+      {ATRunner, [tty: modem_spec.command_port, speed: modem_spec.serial_speed]},
+      {SignalMonitor, [ifname: ifname, tty: modem_spec.command_port()]}
+    ]
 
     %RawConfig{
       ifname: ifname,
