@@ -7,7 +7,7 @@ defmodule VintageNetLTE.Modems.QuectelBG96Test do
     provider_info = %{apn: "test.apn.com"}
 
     assert %{
-             serial_port: "/dev/ttyUSB3",
+             serial_port: "ttyUSB3",
              serial_speed: 9600,
              chatscript: chatscript(),
              command_port: "ttyUSB2"
