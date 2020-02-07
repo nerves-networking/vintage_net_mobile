@@ -36,7 +36,7 @@ defmodule VintageNetLTE.Modems.QuectelBG96 do
   @impl true
   def spec(provider_info) do
     %{
-      serial_port: "/dev/ttyUSB3",
+      serial_port: "ttyUSB3",
       serial_speed: 9600,
       chatscript: chatscript(provider_info),
       command_port: "ttyUSB2"
