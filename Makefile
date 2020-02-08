@@ -8,7 +8,7 @@ PREFIX = $(MIX_APP_PATH)/priv
 all:
 	$(MAKE) -C src/ppp_to_elixir
 	$(MAKE) -C src/pppd_shim
-	cp -r src/etc $(PREFIX)
+	cp -R src/etc $(PREFIX)
 
 clean:
 	$(MAKE) -C src/ppp_to_elixir clean
