@@ -2,23 +2,14 @@ defmodule VintageNetLTE do
   @behaviour VintageNet.Technology
 
   alias VintageNet.Interface.RawConfig
-  alias VintageNetLTE.{ATRunner, SignalMonitor}
-
-  @typedoc """
-  The provider information for provider specific configuration
-
-  * `:apn` - The service provider's APN
-  """
-  @type provider_info :: %{
-          apn: String.t()
-        }
+  alias VintageNetLTE.{ATRunner, SignalMonitor, Modems}
 
   @impl true
   def normalize(config), do: config
 
   @impl true
   def to_raw_config(ifname, %{type: __MODULE__, modem: modem, provider: provider} = config, opts) do
-    modem_spec = modem.spec(provider)
+    modem_spec = Modems.get_modem_spec(modem, provider)
     files = [{chatscript_path(ifname, opts), modem_spec.chatscript}]
 
     up_cmds = [
