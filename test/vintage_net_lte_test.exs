@@ -2,12 +2,11 @@ defmodule VintageNetLTETest do
   use ExUnit.Case
 
   alias VintageNet.Interface.RawConfig
-  alias VintageNetLTE.Modems.MockModem
   alias VintageNetLTE.{ATRunner, SignalMonitor}
 
   test "create an LTE configuration" do
     priv_dir = Application.app_dir(:vintage_net_lte, "priv")
-    input = %{type: VintageNetLTE, modem: MockModem, provider: %{}}
+    input = %{type: VintageNetLTE, modem: "Mock", provider: "TestProvider"}
 
     output = %RawConfig{
       ifname: "ppp0",

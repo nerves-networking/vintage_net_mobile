@@ -4,15 +4,13 @@ defmodule VintageNetLTE.Modems.QuectelBG96Test do
   alias VintageNetLTE.Modems.QuectelBG96
 
   test "returns correct spec" do
-    provider_info = %{apn: "test.apn.com"}
-
     assert %{
              serial_port: "ttyUSB3",
              serial_speed: 9600,
              chatscript: chatscript(),
              command_port: "ttyUSB2"
            } ==
-             QuectelBG96.spec(provider_info)
+             QuectelBG96.spec("Twilio")
   end
 
   defp chatscript() do
@@ -40,7 +38,7 @@ defmodule VintageNetLTE.Modems.QuectelBG96Test do
     OK ATQ0
 
     # Define PDP context
-    OK AT+CGDCONT=1,"IP","test.apn.com"
+    OK AT+CGDCONT=1,"IP","wireless.twilio.com"
 
     # ATDT = Attention Dial Tone
     OK ATDT*99***1#

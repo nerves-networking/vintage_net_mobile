@@ -43,7 +43,7 @@ defmodule VintageNetLTE.Modems.QuectelBG96 do
     }
   end
 
-  defp chatscript(provider_info) do
+  defp chatscript("Twilio") do
     """
     # Exit execution if module receives any of the following strings:
     ABORT 'BUSY'
@@ -68,7 +68,7 @@ defmodule VintageNetLTE.Modems.QuectelBG96 do
     OK ATQ0
 
     # Define PDP context
-    OK AT+CGDCONT=1,"IP","#{provider_info.apn}"
+    OK AT+CGDCONT=1,"IP","wireless.twilio.com"
 
     # ATDT = Attention Dial Tone
     OK ATDT*99***1#

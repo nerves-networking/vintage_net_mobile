@@ -14,21 +14,15 @@ To get this technology running with VintageNet run the following:
 VintageNet.configure("ppp0", %{type: VintageNetLTE, modem: modem, provider: provider_info}, persist: false)
 ```
 
-Where `modem` is a module that implements the `VintageNetLTE.Modem` behaviour.
-
-The `:provider` key contains the following information:
-
-* `:apn` - The service provider's APN
-
 ```elixir
 config :vintage_net,
   config: [
-    {"ppp0", %{type: VintageNetLTE, modem: VintageNetLTE.Modems.QuectelBG96, provider: %{apn: "wireless.twilio.com"}}}
+    {"ppp0", %{type: VintageNetLTE, modem: "Quectel BG96", provider: "Twilio"}}
 ```
 
 Currently supported modem:
 
-* `VintageNetLTE.Modems.QuectelBG96`
+- `VintageNetLTE.Modems.QuectelBG96`
 
 ## System requirements
 
@@ -79,13 +73,29 @@ CONFIG_MKNOD=y
 CONFIG_WC=y
 ```
 
+## Custom Modems
+
+`VintageNetLTE` allows you add your modem implementation to it's runtime by adding
+it to the configuration:
+
+```
+config :vintage_net_lte,
+  extra_modems: [
+    {"Quectel Modem", "AT&T", MyQuectelModem}
+  ]
+```
+
+The modem definition a 3 item tuple in this format
+`{modem_name, provider, modem_module}` where the modem module is module that
+implements the `VintageNetLTE.Modem` behaviour.
+
 ## VitnageNet Properties
 
 In addition to the common `vintage_net` properties for all interface types, this technology reports the following:
 
-| Property      | Values         | Description                    |
-| ------------- | -------------- | -------------------------------|
-| `signal_rssi` | `0-31` or `99` | An integer between 0-31 or 99  |
+| Property      | Values         | Description                   |
+| ------------- | -------------- | ----------------------------- |
+| `signal_rssi` | `0-31` or `99` | An integer between 0-31 or 99 |
 
 ## Serial AT command debugging
 
@@ -105,14 +115,14 @@ iex> Elixircom.run("/dev/ttyUSB2", speed: 115200)
 OK
 ```
 
-Command    | Description
------------|-----------------------
-at+csq     | Signal Strength
-at+csq=?   | Query supported signal strength format
-at+cfun?   | Level of functionality
-at+cfun=?  | Query supported functionality levels
-at+creg?   | Check if the modem has registered to a provider.
-at+cgreg?  | Same as above for some modems
+| Command   | Description                                      |
+| --------- | ------------------------------------------------ |
+| at+csq    | Signal Strength                                  |
+| at+csq=?  | Query supported signal strength format           |
+| at+cfun?  | Level of functionality                           |
+| at+cfun=? | Query supported functionality levels             |
+| at+creg?  | Check if the modem has registered to a provider. |
+| at+cgreg? | Same as above for some modems                    |
 
 `VintageNetLTE` makes it easy to add cellular support to your device.
 

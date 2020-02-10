@@ -11,4 +11,7 @@ config :vintage_net,
   bin_ip: "false"
 
 config :vintage_net_lte,
-  pppd_handler: VintageNetLTE.CapturingPPPDHandler
+  pppd_handler: VintageNetLTE.CapturingPPPDHandler,
+  extra_modems: [
+    {"Mock", "TestProvider", VintageNetLTE.Modems.MockModem}
+  ]

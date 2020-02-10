@@ -22,5 +22,5 @@ defmodule VintageNetLTE.Modem do
   @doc """
   Return the modem spec
   """
-  @callback spec(VintageNetLTE.provider_info()) :: spec()
+  @callback spec(String.t()) :: spec()
 end
