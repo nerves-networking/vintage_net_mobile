@@ -2,42 +2,41 @@ defmodule VintageNetLTETest do
   use ExUnit.Case
 
   alias VintageNet.Interface.RawConfig
-  alias VintageNetLTE.{ATRunner, SignalMonitor}
 
-  test "create an LTE configuration" do
-    priv_dir = Application.app_dir(:vintage_net_lte, "priv")
-    input = %{type: VintageNetLTE, modem: "Mock", provider: "TestProvider"}
+  test "create a configuration for a provider-less custom modem" do
+    input = %{type: VintageNetLTE, modem: "Custom Modem", service_provider: "Twilio"}
 
     output = %RawConfig{
       ifname: "ppp0",
       type: VintageNetLTE,
       source_config: input,
-      require_interface: false,
-      up_cmds: [
-        {:run_ignore_errors, "mknod", ["/dev/ppp", "c", "108", "0"]}
-      ],
-      files: [{"/tmp/vintage_net/chatscript.ppp0", ""}],
-      child_specs: [
-        {MuonTrap.Daemon,
-         [
-           "pppd",
-           [
-             "connect",
-             "chat -v -f /tmp/vintage_net/chatscript.ppp0",
-             "/dev/null",
-             "115200",
-             "noipdefault",
-             "usepeerdns",
-             "persist",
-             "noauth",
-             "nodetach",
-             "debug"
-           ],
-           [env: [{"PRIV_DIR", priv_dir}, {"LD_PRELOAD", Path.join(priv_dir, "pppd_shim.so")}]]
-         ]},
-        {ATRunner, [tty: "null", speed: 115_200]},
-        {SignalMonitor, [ifname: "ppp0", tty: "null"]}
-      ]
+      files: [{"chatscript.ppp0", "Service provider is Twilio"}]
+    }
+
+    assert output == VintageNetLTE.to_raw_config("ppp0", input, Utils.default_opts())
+  end
+
+  test "create a configuration for a provider-ful custom modem" do
+    input = %{type: VintageNetLTE, modem: "Hacked Up Modem", service_provider: "Bob's LTE"}
+
+    output = %RawConfig{
+      ifname: "ppp0",
+      type: VintageNetLTE,
+      source_config: input,
+      files: [{"chatscript.ppp0", "Bob is awesome"}]
+    }
+
+    assert output == VintageNetLTE.to_raw_config("ppp0", input, Utils.default_opts())
+  end
+
+  test "create a configuration for a user-provided service provider" do
+    input = %{type: VintageNetLTE, modem: "Custom Modem", service_provider: "Wilbur's LTE"}
+
+    output = %RawConfig{
+      ifname: "ppp0",
+      type: VintageNetLTE,
+      source_config: input,
+      files: [{"chatscript.ppp0", "Service provider is Wilbur's LTE"}]
     }
 
     assert output == VintageNetLTE.to_raw_config("ppp0", input, Utils.default_opts())

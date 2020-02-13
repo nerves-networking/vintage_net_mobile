@@ -4,10 +4,11 @@ defmodule VintageNetLTE.Application do
   use Application
 
   def start(_type, _args) do
+    env = Application.get_all_env(:vintage_net_lte)
+
     children = [
       {VintageNetLTE.ToElixir.Server, "/tmp/vintage_net/pppd_comms"},
-      {VintageNetLTE.Modems.Table,
-       extra_modems: Application.get_env(:vintage_net_lte, :extra_modems, [])}
+      {VintageNetLTE.Modems, env}
     ]
 
     opts = [strategy: :rest_for_one, name: VintageNetLTE.Supervisor]

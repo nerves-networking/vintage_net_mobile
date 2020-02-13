@@ -1,20 +1,20 @@
 defmodule VintageNetLTE.ToElixir.PPPDHandler do
-  @moduledoc """
-  A behaviour for handling notifications from pppd
+  @moduledoc false
 
-  # Example
-
-  ```elixir
-  defmodule MyApp.PPPDHandler do
-    @behaviour VintageNetLTE.ToElixir.PPPDHandler
-
-    @impl true
-    def ip_up(ifname, data) do
-      ...
-    end
-  end
-  ```
-  """
+  # A behaviour for handling notifications from pppd
+  #
+  # # Example
+  #
+  # ```elixir
+  # defmodule MyApp.PPPDHandler do
+  #   @behaviour VintageNetLTE.ToElixir.PPPDHandler
+  #
+  #   @impl true
+  #   def ip_up(ifname, data) do
+  #     ...
+  #   end
+  # end
+  # ```
 
   @type update_data :: map()
 

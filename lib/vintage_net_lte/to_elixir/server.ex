@@ -4,10 +4,10 @@ defmodule VintageNetLTE.ToElixir.Server do
 
   alias VintageNetLTE.ToElixir.PPPDHandler
 
-  @moduledoc """
-  This GenServer routes messages from C and shell scripts to the appropriate
-  places in VintageNetLTE.
-  """
+  @moduledoc false
+
+  # This GenServer routes messages from C and shell scripts to the appropriate
+  # places in VintageNetLTE.
 
   @doc """
   Start the GenServer.
