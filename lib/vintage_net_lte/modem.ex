@@ -4,23 +4,20 @@ defmodule VintageNetLTE.Modem do
   VintageNetLTE runtime.
   """
 
-  @typedoc """
-  The modem spec requires these fields:
+  alias VintageNet.Interface.RawConfig
 
-  * `:serial_port` - this is the tty the modem is connected to
-  * `:serial_speed` - this is baud rate for the serial connection
-  * `:chatscript` - the file contents of the chatscript
-  * `:command_port` - the tty port for sending AT commands
+  @typedoc """
+  A specification for what modem/providers tuples the implementation handles
   """
-  @type spec :: %{
-          serial_port: String.t(),
-          serial_speed: non_neg_integer(),
-          chatscript: String.t(),
-          command_port: String.t()
-        }
+  @type spec :: {String.t(), String.t() | :_}
 
   @doc """
-  Return the modem spec
+  Return the list of modem/providers tuples handled by this module
   """
-  @callback spec(String.t()) :: spec()
+  @callback specs() :: [spec()]
+
+  @doc """
+  Update the raw configuration for the modem
+  """
+  @callback add_raw_config(RawConfig.t(), map(), keyword()) :: RawConfig.t()
 end

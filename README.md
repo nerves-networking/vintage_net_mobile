@@ -5,24 +5,35 @@
 [![CircleCI](https://circleci.com/gh/nerves-networking/vintage_net_lte.svg?style=svg)](https://circleci.com/gh/nerves-networking/vintage_net_lte)
 [![Coverage Status](https://coveralls.io/repos/github/nerves-networking/vintage_net_lte/badge.svg?branch=master)](https://coveralls.io/github/nerves-networking/vintage_net_lte?branch=master)
 
-This has only been tested with Huawei and Twilio connections and is not fully
-functioning yet.
-
 To get this technology running with VintageNet run the following:
 
 ```elixir
-VintageNet.configure("ppp0", %{type: VintageNetLTE, modem: modem, provider: provider_info}, persist: false)
+    VintageNet.configure(
+      "ppp0",
+      %{
+        type: VintageNetLTE,
+        modem: your_modem,
+        service_provider: your_service_provider
+      }
+    )
 ```
+
+or add this to your `config.exs`:
 
 ```elixir
 config :vintage_net,
   config: [
-    {"ppp0", %{type: VintageNetLTE, modem: "Quectel BG96", provider: "Twilio"}}
+    {"ppp0", %{type: VintageNetLTE, modem: your_modem, service_provider: your_service_provider}}
+  ]
 ```
 
-Currently supported modem:
+Supported modems:
 
-- `VintageNetLTE.Modems.QuectelBG96`
+* `"Quectel BG96"`
+
+Supported service providers:
+
+* `"Twilio"`
 
 ## System requirements
 
@@ -75,21 +86,21 @@ CONFIG_WC=y
 
 ## Custom Modems
 
-`VintageNetLTE` allows you add your modem implementation to it's runtime by adding
-it to the configuration:
+`VintageNetLTE` allows you add custom modem implementations if the built-in
+implementations don't work for you:
 
-```
+```elixir
 config :vintage_net_lte,
-  extra_modems: [
-    {"Quectel Modem", "AT&T", MyQuectelModem}
-  ]
+  extra_modems: [MyBestLTEEverModem]
 ```
 
-The modem definition a 3 item tuple in this format
-`{modem_name, provider, modem_module}` where the modem module is module that
-implements the `VintageNetLTE.Modem` behaviour.
+Modem implementations need to implement the `VintageNetLTE.Modem` behaviour.
 
-## VitnageNet Properties
+This will allow your modem to tie into `VintageNetLTE` without having relying
+on our supported providers. This is useful for highly custom chatscripts or
+non-generic modem implementations.
+
+## VintageNet Properties
 
 In addition to the common `vintage_net` properties for all interface types, this technology reports the following:
 

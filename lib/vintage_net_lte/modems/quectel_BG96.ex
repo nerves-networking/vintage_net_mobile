@@ -33,17 +33,42 @@ defmodule VintageNetLTE.Modems.QuectelBG96 do
 
   @behaviour VintageNetLTE.Modem
 
+  alias VintageNet.Interface.RawConfig
+  alias VintageNetLTE.{ATRunner, SignalMonitor, ServiceProviders}
+
   @impl true
-  def spec(provider_info) do
-    %{
-      serial_port: "ttyUSB3",
-      serial_speed: 9600,
-      chatscript: chatscript(provider_info),
-      command_port: "ttyUSB2"
+  def specs() do
+    # Support all service providers
+    [{"Quectel BG96", :_}]
+  end
+
+  @impl true
+  def add_raw_config(raw_config, config, opts) do
+    ifname = raw_config.ifname
+
+    apn = ServiceProviders.apn!(config.service_provider)
+    files = [{chatscript_path(ifname, opts), chatscript(apn)}]
+
+    up_cmds = [
+      {:run_ignore_errors, "mknod", ["/dev/ppp", "c", "108", "0"]}
+    ]
+
+    child_specs = [
+      make_pppd_spec(ifname, "ttyUSB3", 9600, opts),
+      {ATRunner, [tty: "ttyUSB2", speed: 9600]},
+      {SignalMonitor, [ifname: ifname, tty: "ttyUSB2"]}
+    ]
+
+    %RawConfig{
+      raw_config
+      | files: files,
+        up_cmds: up_cmds,
+        require_interface: false,
+        child_specs: child_specs
     }
   end
 
-  defp chatscript("Twilio") do
+  defp chatscript(apn) do
     """
     # Exit execution if module receives any of the following strings:
     ABORT 'BUSY'
@@ -68,14 +93,48 @@ defmodule VintageNetLTE.Modems.QuectelBG96 do
     OK ATQ0
 
     # Define PDP context
-    OK AT+CGDCONT=1,"IP","wireless.twilio.com"
+    OK AT+CGDCONT=1,"IP","#{apn}"
 
     # ATDT = Attention Dial Tone
     OK ATDT*99***1#
 
     # Don't send any more strings when it receives the string CONNECT. Module considers the data links as having been set up.
     CONNECT ''
-
     """
+  end
+
+  defp make_pppd_spec(ifname, serial_port, serial_speed, opts) do
+    pppd_bin = Keyword.fetch!(opts, :bin_pppd)
+    priv_dir = Application.app_dir(:vintage_net_lte, "priv")
+    pppd_shim_path = Path.join(priv_dir, "pppd_shim.so")
+    pppd_args = make_pppd_args(ifname, serial_port, serial_speed, opts)
+
+    env = [{"PRIV_DIR", priv_dir}, {"LD_PRELOAD", pppd_shim_path}]
+
+    {MuonTrap.Daemon, [pppd_bin, pppd_args, [env: env]]}
+  end
+
+  defp make_pppd_args(ifname, serial_port, serial_speed, opts) do
+    chat_bin = Keyword.fetch!(opts, :bin_chat)
+    cs_path = chatscript_path(ifname, opts)
+
+    serial_speed = Integer.to_string(serial_speed)
+
+    [
+      "connect",
+      "#{chat_bin} -v -f #{cs_path}",
+      serial_port,
+      serial_speed,
+      "noipdefault",
+      "usepeerdns",
+      "persist",
+      "noauth",
+      "nodetach",
+      "debug"
+    ]
+  end
+
+  defp chatscript_path(ifname, opts) do
+    Path.join(Keyword.fetch!(opts, :tmpdir), "chatscript.#{ifname}")
   end
 end

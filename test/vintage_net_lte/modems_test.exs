@@ -3,11 +3,13 @@ defmodule VintageNetLTE.ModemsTest do
 
   alias VintageNetLTE.Modems
 
-  alias VintageNetLTE.Modems.QuectelBG96
+  test "Get modem specs for Quectel BG96 with Twilio" do
+    assert VintageNetLTE.Modems.QuectelBG96 == Modems.lookup("Quectel BG96", "Twilio")
+  end
 
-  test "Get module specs for Quectel BG96 with Twilio" do
-    expected_spec = QuectelBG96.spec("Twilio")
-
-    assert expected_spec == Modems.get_modem_spec("Quectel BG96", "Twilio")
+  test "raises when passed an invalid modem-provider pair" do
+    assert_raise ArgumentError, fn ->
+      Modems.lookup("NotAModem", "NotAProvider")
+    end
   end
 end

@@ -13,5 +13,9 @@ config :vintage_net,
 config :vintage_net_lte,
   pppd_handler: VintageNetLTE.CapturingPPPDHandler,
   extra_modems: [
-    {"Mock", "TestProvider", VintageNetLTE.Modems.MockModem}
+    VintageNetLTETest.CustomModem,
+    VintageNetLTETest.HackedUpModem
+  ],
+  extra_service_providers: [
+    {"Wilbur's LTE", apn: "wilbur.net"}
   ]
