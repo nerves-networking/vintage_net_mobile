@@ -22,7 +22,7 @@ defmodule VintageNetLTE.SignalMonitor do
   defmodule State do
     @moduledoc false
 
-    defstruct signal_check_interval: nil, ifname: nil, tty: nil
+    defstruct signal_check_interval: nil, ifname: nil, tty: nil, connection: nil
   end
 
   @spec start_link([opt]) :: GenServer.on_start()
@@ -36,12 +36,31 @@ defmodule VintageNetLTE.SignalMonitor do
     ifname = Keyword.fetch!(opts, :ifname)
     tty = Keyword.fetch!(opts, :tty)
 
-    _ = signal_check_timer(interval)
+    :timer.send_interval(interval, self(), :signal_check)
+    VintageNet.subscribe(["interface", ifname, "connection"])
 
-    {:ok, %State{signal_check_interval: interval, ifname: ifname, tty: tty}}
+    {:ok,
+     %State{
+       signal_check_interval: interval,
+       ifname: ifname,
+       tty: tty,
+       connection: :disconnected
+     }}
   end
 
   @impl true
+  def handle_info(
+        {VintageNet, ["interface", ifname, "connection"], _old, status, _metadata},
+        %{ifname: ifname} = state
+      ) do
+    {:noreply, %{state | connection: status}}
+  end
+
+  @impl true
+  def handle_info(:signal_check, %{connection: :disconnected} = state) do
+    {:noreply, state}
+  end
+
   def handle_info(:signal_check, state) do
     {:ok, messages} = ATRunner.send(state.tty, "AT+CSQ", "OK")
 
@@ -51,16 +70,8 @@ defmodule VintageNetLTE.SignalMonitor do
 
       at_response ->
         {:csq, {rssi, _bit_error_rate}} = ATParser.parse_at_response(at_response)
-
         PropertyTable.put(VintageNet, ["interface", state.ifname, "lte", "signal_rssi"], rssi)
-
-        _ = signal_check_timer(state.signal_check_interval)
-
         {:noreply, state}
     end
-  end
-
-  defp signal_check_timer(interval) do
-    Process.send_after(self(), :signal_check, interval)
   end
 end

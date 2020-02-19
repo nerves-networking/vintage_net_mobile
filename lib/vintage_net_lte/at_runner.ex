@@ -49,9 +49,15 @@ defmodule VintageNetLTE.ATRunner do
 
   The default timeout is 500 milliseconds
   """
-  @spec send(binary(), binary(), binary(), non_neg_integer()) :: {:ok, [binary()]}
-  def send(tty, command, wait_for, timeout \\ 500) do
+  @spec send(binary(), binary(), binary() | nil, non_neg_integer()) :: {:ok, [binary()]}
+  def send(tty, command, wait_for \\ nil, timeout \\ 500) do
     GenServer.call(server_name(tty), {:send, command, wait_for, timeout})
+  end
+
+  def stop(tty) do
+    tty
+    |> server_name()
+    |> GenServer.stop()
   end
 
   @impl true
@@ -78,13 +84,22 @@ defmodule VintageNetLTE.ATRunner do
   def handle_call({:send, command, wait_for, timeout}, from, state) do
     command = %Command{command: command, stop_response: wait_for, waiter: from, timeout: timeout}
 
-    case CommandList.put(state.command_list, command) do
-      {:queued, command_list} ->
-        {:noreply, %{state | command_list: command_list}}
+    state =
+      case CommandList.put(state.command_list, command) do
+        {:queued, command_list} ->
+          %{state | command_list: command_list}
 
-      command_list ->
-        timeout_ref = write_at_command(state.uart, command)
-        {:noreply, %{state | command_list: command_list, command_timeout_ref: timeout_ref}}
+        command_list ->
+          timeout_ref = write_at_command(state.uart, command)
+          %{state | command_list: command_list, command_timeout_ref: timeout_ref}
+      end
+
+    case wait_for do
+      nil ->
+        {:reply, :ok, state}
+
+      _ ->
+        {:noreply, state}
     end
   end
 
@@ -104,8 +119,7 @@ defmodule VintageNetLTE.ATRunner do
   end
 
   def handle_info(:timeout, state) do
-    GenServer.reply(state.waiter, {:error, :timeout, state.buffer})
-
+    GenServer.reply(state.command_list.current_command.waiter, {:error, :timeout, state.buffer})
     {:noreply, handle_next_command(state)}
   end
 
