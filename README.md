@@ -30,6 +30,7 @@ config :vintage_net,
 Supported modems:
 
 * `"Quectel BG96"`
+* `"Quectel EC25-AF"`
 
 Supported service providers:
 

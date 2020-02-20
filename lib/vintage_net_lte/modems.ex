@@ -16,7 +16,7 @@ defmodule VintageNetLTE.Modems do
 
   use Agent
 
-  @default_modems [VintageNetLTE.Modems.QuectelBG96]
+  @default_modems [VintageNetLTE.Modems.QuectelBG96, VintageNetLTE.Modems.QuectelEC25AF]
 
   @spec start_link([VintageNetLTE.opt()]) :: Agent.on_start()
   def start_link(opts) do
