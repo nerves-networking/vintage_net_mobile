@@ -34,6 +34,7 @@ Supported modems:
 Supported service providers:
 
 * `"Twilio"`
+* `"Twilio Super"`
 
 ## System requirements
 
