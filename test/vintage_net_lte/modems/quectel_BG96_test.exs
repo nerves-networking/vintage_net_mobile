@@ -23,7 +23,6 @@ defmodule VintageNetLTE.Modems.QuectelBG96Test do
       files: [
         {"/tmp/vintage_net/chatscript.ppp0",
          """
-         # Exit execution if module receives any of the following strings:
          ABORT 'BUSY'
          ABORT 'NO CARRIER'
          ABORT 'NO DIALTONE'
@@ -33,25 +32,18 @@ defmodule VintageNetLTE.Modems.QuectelBG96Test do
          TIMEOUT 10
          REPORT CONNECT
 
-         # Module will send the string AT regardless of the string it receives
          "" AT
 
-         # Instructs the modem to disconnect from the line, terminating any call in progress. All of the functions of the command shall be completed before the modem returns a result code.
          OK ATH
 
-         # Instructs the modem to set all parameters to the factory defaults.
          OK ATZ
 
-         # Result codes are sent to the Data Terminal Equipment (DTE).
          OK ATQ0
 
-         # Define PDP context
          OK AT+CGDCONT=1,"IP","wireless.twilio.com"
 
-         # ATDT = Attention Dial Tone
          OK ATDT*99***1#
 
-         # Don't send any more strings when it receives the string CONNECT. Module considers the data links as having been set up.
          CONNECT ''
          """}
       ],
