@@ -78,12 +78,4 @@ defmodule VintageNetLTE do
   # TODO: implement
   @impl true
   def check_system(_), do: :ok
-
-  @doc """
-  Make the chatscript path for the interface
-  """
-  @spec chatscript_path(binary(), keyword()) :: binary()
-  def chatscript_path(ifname, opts) do
-    Path.join(Keyword.fetch!(opts, :tmpdir), "chatscript.#{ifname}")
-  end
 end

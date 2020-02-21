@@ -3,6 +3,7 @@ defmodule VintageNetLTE.PPPDConfig do
   Module for configuring PPPD
   """
 
+  alias VintageNetLTE.Chatscript
   alias VintageNet.Interface.RawConfig
 
   @doc """
@@ -25,7 +26,7 @@ defmodule VintageNetLTE.PPPDConfig do
 
   defp make_pppd_args(ifname, serial_port, serial_speed, opts) do
     chat_bin = Keyword.fetch!(opts, :bin_chat)
-    cs_path = VintageNetLTE.chatscript_path(ifname, opts)
+    cs_path = Chatscript.path(ifname, opts)
 
     serial_speed = Integer.to_string(serial_speed)
 
