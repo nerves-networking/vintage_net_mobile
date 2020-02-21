@@ -13,7 +13,10 @@ defmodule VintageNetLTE.ServiceProviders do
   ```
   """
 
-  @default_service_providers [{"Twilio", apn: "wireless.twilio.com"}]
+  @default_service_providers [
+    {"Twilio", apn: "wireless.twilio.com"},
+    {"Twilio Super", apn: "super"}
+  ]
 
   @doc """
   Return the APN for the specified service provider
