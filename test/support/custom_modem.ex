@@ -1,5 +1,5 @@
-defmodule VintageNetLTETest.CustomModem do
-  @behaviour VintageNetLTE.Modem
+defmodule VintageNetMobileTest.CustomModem do
+  @behaviour VintageNetMobile.Modem
 
   alias VintageNet.Interface.RawConfig
 
