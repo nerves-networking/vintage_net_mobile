@@ -2,4 +2,5 @@
 
 ## v0.1.0
 
-TBD
+Initial `vintage_net_mobile` release.
+

@@ -38,7 +38,7 @@ defmodule VintageNetMobile.MixProject do
   defp elixirc_paths(_), do: ["lib"]
 
   defp description do
-    "Mobile conntection support for VintageNet"
+    "Mobile connection support for VintageNet"
   end
 
   defp package do
