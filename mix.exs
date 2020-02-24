@@ -1,12 +1,12 @@
-defmodule VintageNetLTE.MixProject do
+defmodule VintageNetMobile.MixProject do
   use Mix.Project
 
   @version "0.1.0"
-  @source_url "https://github.com/nerves-networking/vintage_net_lte"
+  @source_url "https://github.com/nerves-networking/vintage_net_mobile"
 
   def project do
     [
-      app: :vintage_net_lte,
+      app: :vintage_net_mobile,
       version: @version,
       elixir: "~> 1.8",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -27,10 +27,10 @@ defmodule VintageNetLTE.MixProject do
   def application do
     [
       env: [
-        pppd_handler: VintageNetLTE.PPPDNotifications
+        pppd_handler: VintageNetMobile.PPPDNotifications
       ],
       extra_applications: [:logger],
-      mod: {VintageNetLTE.Application, []}
+      mod: {VintageNetMobile.Application, []}
     ]
   end
 
@@ -38,7 +38,7 @@ defmodule VintageNetLTE.MixProject do
   defp elixirc_paths(_), do: ["lib"]
 
   defp description do
-    "LTE support for VintageNet"
+    "Mobile conntection support for VintageNet"
   end
 
   defp package do

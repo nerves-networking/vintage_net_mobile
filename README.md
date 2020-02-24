@@ -1,9 +1,11 @@
-# VintageNetLTE
+# VintageNetMobile
 
-[![Hex version](https://img.shields.io/hexpm/v/vintage_net_lte.svg "Hex version")](https://hex.pm/packages/vintage_net_lte)
-[![API docs](https://img.shields.io/hexpm/v/vintage_net_lte.svg?label=hexdocs "API docs")](https://hexdocs.pm/vintage_net_lte/VintageNetEthernet.html)
-[![CircleCI](https://circleci.com/gh/nerves-networking/vintage_net_lte.svg?style=svg)](https://circleci.com/gh/nerves-networking/vintage_net_lte)
-[![Coverage Status](https://coveralls.io/repos/github/nerves-networking/vintage_net_lte/badge.svg?branch=master)](https://coveralls.io/github/nerves-networking/vintage_net_lte?branch=master)
+[![Hex version](https://img.shields.io/hexpm/v/vintage_net_mobile.svg "Hex version")](https://hex.pm/packages/vintage_net_mobile)
+[![API docs](https://img.shields.io/hexpm/v/vintage_net_mobile.svg?label=hexdocs "API docs")](https://hexdocs.pm/vintage_net_mobile/VintageNetMobile.html)
+[![CircleCI](https://circleci.com/gh/nerves-networking/vintage_net_mobile.svg?style=svg)](https://circleci.com/gh/nerves-networking/vintage_net_mobile)
+[![Coverage Status](https://coveralls.io/repos/github/nerves-networking/vintage_net_mobile/badge.svg?branch=master)](https://coveralls.io/github/nerves-networking/vintage_net_mobile?branch=master)
+
+A `VintageNet` technology for using mobile connections.
 
 To get this technology running with VintageNet run the following:
 
@@ -11,7 +13,7 @@ To get this technology running with VintageNet run the following:
     VintageNet.configure(
       "ppp0",
       %{
-        type: VintageNetLTE,
+        type: VintageNetMobile,
         modem: your_modem,
         service_provider: your_service_provider
       }
@@ -23,7 +25,7 @@ or add this to your `config.exs`:
 ```elixir
 config :vintage_net,
   config: [
-    {"ppp0", %{type: VintageNetLTE, modem: your_modem, service_provider: your_service_provider}}
+    {"ppp0", %{type: VintageNetMobile, modem: your_modem, service_provider: your_service_provider}}
   ]
 ```
 
@@ -44,7 +46,7 @@ official Nerves systems.
 
 ### Linux kernel
 
-Enable PPP and drivers for your LTE modem:
+Enable PPP and drivers for your modem:
 
 ```text
 CONFIG_PPP=m
@@ -88,17 +90,17 @@ CONFIG_WC=y
 
 ## Custom Modems
 
-`VintageNetLTE` allows you add custom modem implementations if the built-in
+`VintageNetMobile` allows you add custom modem implementations if the built-in
 implementations don't work for you:
 
 ```elixir
-config :vintage_net_lte,
+config :vintage_net_mobile,
   extra_modems: [MyBestLTEEverModem]
 ```
 
-Modem implementations need to implement the `VintageNetLTE.Modem` behaviour.
+Modem implementations need to implement the `VintageNetMobile.Modem` behaviour.
 
-This will allow your modem to tie into `VintageNetLTE` without having relying
+This will allow your modem to tie into `VintageNetMobile` without having relying
 on our supported providers. This is useful for highly custom chatscripts or
 non-generic modem implementations.
 
@@ -137,12 +139,12 @@ OK
 | at+creg?  | Check if the modem has registered to a provider. |
 | at+cgreg? | Same as above for some modems                    |
 
-`VintageNetLTE` makes it easy to add cellular support to your device.
+`VintageNetMobile` makes it easy to add cellular support to your device.
 
 ```elixir
 def deps do
   [
-    {:vintage_net_lte, "~> 0.1.0"}
+    {:vintage_net_mobile, "~> 0.1.0"}
   ]
 end
 ```

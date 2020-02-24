@@ -10,11 +10,11 @@ config :vintage_net,
   persistence_dir: "./test_tmp/persistence",
   bin_ip: "false"
 
-config :vintage_net_lte,
-  pppd_handler: VintageNetLTE.CapturingPPPDHandler,
+config :vintage_net_mobile,
+  pppd_handler: VintageNetMobile.CapturingPPPDHandler,
   extra_modems: [
-    VintageNetLTETest.CustomModem,
-    VintageNetLTETest.HackedUpModem
+    VintageNetMobileTest.CustomModem,
+    VintageNetMobileTest.HackedUpModem
   ],
   extra_service_providers: [
     {"Wilbur's LTE", apn: "wilbur.net"}

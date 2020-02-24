@@ -1,5 +1,5 @@
-defmodule VintageNetLTE.CapturingPPPDHandler do
-  @behaviour VintageNetLTE.ToElixir.PPPDHandler
+defmodule VintageNetMobile.CapturingPPPDHandler do
+  @behaviour VintageNetMobile.ToElixir.PPPDHandler
 
   @impl true
   def ip_up(ifname, env) do
