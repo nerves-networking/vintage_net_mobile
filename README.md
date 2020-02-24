@@ -7,6 +7,14 @@
 
 A `VintageNet` technology for using mobile connections.
 
+```elixir
+def deps do
+  [
+    {:vintage_net_mobile, "~> 0.1.0"}
+  ]
+end
+```
+
 To get this technology running with VintageNet run the following:
 
 ```elixir
@@ -141,10 +149,3 @@ OK
 
 `VintageNetMobile` makes it easy to add cellular support to your device.
 
-```elixir
-def deps do
-  [
-    {:vintage_net_mobile, "~> 0.1.0"}
-  ]
-end
-```
