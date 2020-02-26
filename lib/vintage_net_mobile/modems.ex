@@ -14,14 +14,7 @@ defmodule VintageNetMobile.Modems do
   ```
   """
 
-  use Agent
-
   @default_modems [VintageNetMobile.Modems.QuectelBG96, VintageNetMobile.Modems.QuectelEC25AF]
-
-  @spec start_link([VintageNetMobile.opt()]) :: Agent.on_start()
-  def start_link(opts) do
-    Agent.start_link(fn -> table(opts) end, name: __MODULE__)
-  end
 
   @doc """
   Look up the modem module for the given modem name and provider name
@@ -31,7 +24,13 @@ defmodule VintageNetMobile.Modems do
   """
   @spec lookup(String.t(), String.t()) :: module() | nil
   def lookup(modem, service_provider) do
-    case Agent.get(__MODULE__, &lookup(&1, modem, service_provider)) do
+    opts = Application.get_all_env(:vintage_net_mobile)
+    default_modems = modems_to_map(@default_modems)
+    extra_modems = modems_to_map(Keyword.get(opts, :extra_modems, []))
+
+    modems = Map.merge(default_modems, extra_modems)
+
+    case lookup(modems, modem, service_provider) do
       nil ->
         raise ArgumentError, """
         It looks like you are trying to use a modem-provider pair that is not supported by VintageNetMobile.
@@ -48,17 +47,10 @@ defmodule VintageNetMobile.Modems do
     end
   end
 
-  defp table(opts) do
-    default_modems = modems_to_map(@default_modems)
-    extra_modems = modems_to_map(Keyword.get(opts, :extra_modems, []))
-
-    Map.merge(default_modems, extra_modems)
-  end
-
-  defp lookup(table, modem, provider) do
+  defp lookup(modems, modem, provider) do
     # See if there's a provider-specific implementation first and then
     # try a generic one.
-    Map.get(table, {modem, provider}) || Map.get(table, {modem, :_})
+    Map.get(modems, {modem, provider}) || Map.get(modems, {modem, :_})
   end
 
   defp modems_to_map(modems) do
