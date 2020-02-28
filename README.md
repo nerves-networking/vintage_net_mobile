@@ -10,7 +10,7 @@ A `VintageNet` technology for using mobile connections.
 ```elixir
 def deps do
   [
-    {:vintage_net_mobile, "~> 0.1.0"}
+    {:vintage_net_mobile, "~> 0.1.1"}
   ]
 end
 ```
