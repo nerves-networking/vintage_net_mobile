@@ -20,4 +20,9 @@ defmodule VintageNetMobile.Modem do
   Update the raw configuration for the modem
   """
   @callback add_raw_config(RawConfig.t(), map(), keyword()) :: RawConfig.t()
+
+  @doc """
+  Check to make sure the modem is ready to be used
+  """
+  @callback ready() :: :ok | {:error, :missing_modem}
 end

@@ -18,6 +18,7 @@ defmodule VintageNetMobile.Modems.QuectelEC25AFTest do
       source_config: input,
       require_interface: false,
       up_cmds: [
+        {:fun, QuectelEC25AF, :ready, []},
         {:run_ignore_errors, "mknod", ["/dev/ppp", "c", "108", "0"]}
       ],
       files: [

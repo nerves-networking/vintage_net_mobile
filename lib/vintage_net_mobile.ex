@@ -70,6 +70,7 @@ defmodule VintageNetMobile do
       source_config: config
     }
     |> modem_implementation.add_raw_config(config, opts)
+    |> add_ready_command(modem_implementation)
   end
 
   @impl true
@@ -78,4 +79,10 @@ defmodule VintageNetMobile do
   # TODO: implement
   @impl true
   def check_system(_), do: :ok
+
+  defp add_ready_command(raw_config, modem_implementation) do
+    new_up_cmds = [{:fun, modem_implementation, :ready, []} | raw_config.up_cmds]
+
+    %RawConfig{raw_config | up_cmds: new_up_cmds}
+  end
 end

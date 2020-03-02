@@ -18,6 +18,7 @@ defmodule VintageNetMobile.Modems.QuectelBG96Test do
       source_config: input,
       require_interface: false,
       up_cmds: [
+        {:fun, QuectelBG96, :ready, []},
         {:run_ignore_errors, "mknod", ["/dev/ppp", "c", "108", "0"]}
       ],
       files: [
