@@ -18,4 +18,7 @@ defmodule VintageNetMobileTest.CustomModem do
       | files: [{"chatscript.#{ifname}", "Service provider is #{config.service_provider}"}]
     }
   end
+
+  @impl true
+  def ready(), do: :ok
 end

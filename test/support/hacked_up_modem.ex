@@ -19,4 +19,7 @@ defmodule VintageNetMobileTest.HackedUpModem do
       | files: [{"chatscript.#{ifname}", "Bob is awesome"}]
     }
   end
+
+  @impl true
+  def ready(), do: :ok
 end

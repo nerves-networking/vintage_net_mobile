@@ -34,4 +34,13 @@ defmodule VintageNetMobile.Modems.QuectelEC25AF do
     }
     |> PPPDConfig.add_child_spec("ttyUSB3", 9600, opts)
   end
+
+  @impl true
+  def ready() do
+    if File.exists?("/dev/ttyUSB3") do
+      :ok
+    else
+      {:error, :missing_usb_modem}
+    end
+  end
 end
