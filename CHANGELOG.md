@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.1.2
+
+* Bug fix
+  * Prevent `VintageNet` from trying to run `ppp` before a modem is ready.
+
 ## v0.1.1
 
 * Bug fixes
