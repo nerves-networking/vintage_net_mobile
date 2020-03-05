@@ -4,13 +4,14 @@ defmodule VintageNetMobile.Modems.QuectelEC25AFTest do
   alias VintageNetMobile.Modems.QuectelEC25AF
   alias VintageNet.Interface.RawConfig
 
-  test "returns table entries" do
-    assert [{"Quectel EC25-AF", :_}] == QuectelEC25AF.specs()
-  end
-
   test "create an LTE configuration" do
     priv_dir = Application.app_dir(:vintage_net_mobile, "priv")
-    input = %{type: VintageNetMobile, modem: "Quectel EC25-AF", service_provider: "Twilio"}
+
+    input = %{
+      type: VintageNetMobile,
+      modem: QuectelEC25AF,
+      service_providers: ["wireless.twilio.com"]
+    }
 
     output = %RawConfig{
       ifname: "ppp0",
@@ -72,5 +73,24 @@ defmodule VintageNetMobile.Modems.QuectelEC25AFTest do
     }
 
     assert output == VintageNetMobile.to_raw_config("ppp0", input, Utils.default_opts())
+  end
+
+  describe "validating configurations" do
+    test "marks no service providers as invalid" do
+      config = %{service_providers: []}
+
+      assert {:error, :empty_service_providers} == QuectelEC25AF.validate_config(config)
+    end
+
+    test "marks more than one service providers as invalid" do
+      config = %{service_providers: ["one", "two"]}
+      assert {:error, :max_service_providers} == QuectelEC25AF.validate_config(config)
+    end
+
+    test "mark one service provider as valid" do
+      config = %{service_providers: ["one"]}
+
+      assert :ok = QuectelEC25AF.validate_config(config)
+    end
   end
 end

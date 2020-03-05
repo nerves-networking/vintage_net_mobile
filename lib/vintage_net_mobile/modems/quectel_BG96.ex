@@ -1,5 +1,23 @@
 defmodule VintageNetMobile.Modems.QuectelBG96 do
   @moduledoc """
+  Modem support the Quectel BG96
+
+  ```elixir
+  config :vintage_net,
+  config: [
+    {"ppp0",
+     %{
+       type: VintageNetMobile,
+       modem: VintageNetMobile.Modems.QuectelBG96,
+       service_providers: ["freelte"]
+     }}
+  ]
+  ```
+
+  This modem only allows for one service provider.
+
+  ### Helpful AT commands
+
   To force LTE only:
 
   ```
@@ -34,19 +52,13 @@ defmodule VintageNetMobile.Modems.QuectelBG96 do
   @behaviour VintageNetMobile.Modem
 
   alias VintageNet.Interface.RawConfig
-  alias VintageNetMobile.{ATRunner, SignalMonitor, ServiceProviders, PPPDConfig, Chatscript}
-
-  @impl true
-  def specs() do
-    # Support all service providers
-    [{"Quectel BG96", :_}]
-  end
+  alias VintageNetMobile.{ATRunner, SignalMonitor, PPPDConfig, Chatscript}
 
   @impl true
   def add_raw_config(raw_config, config, opts) do
     ifname = raw_config.ifname
+    [apn] = config.service_providers
 
-    apn = ServiceProviders.apn!(config.service_provider)
     files = [{Chatscript.path(ifname, opts), Chatscript.default(apn)}]
 
     up_cmds = [
@@ -74,6 +86,20 @@ defmodule VintageNetMobile.Modems.QuectelBG96 do
       :ok
     else
       {:error, :missing_modem}
+    end
+  end
+
+  @impl true
+  def validate_config(config) do
+    case config.service_providers do
+      [] ->
+        {:error, :empty_service_providers}
+
+      [_service_provider] ->
+        :ok
+
+      _service_providers ->
+        {:error, :max_service_providers}
     end
   end
 end

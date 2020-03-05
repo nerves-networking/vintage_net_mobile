@@ -4,13 +4,6 @@ defmodule VintageNetMobileTest.HackedUpModem do
   alias VintageNet.Interface.RawConfig
 
   @impl true
-  def specs() do
-    # Support only one LTE provider since this example is for setups
-    # that are too hard to make generic.
-    [{"Hacked Up Modem", "Bob's LTE"}]
-  end
-
-  @impl true
   def add_raw_config(raw_config, _config, _opts) do
     ifname = raw_config.ifname
 
@@ -19,6 +12,9 @@ defmodule VintageNetMobileTest.HackedUpModem do
       | files: [{"chatscript.#{ifname}", "Bob is awesome"}]
     }
   end
+
+  @impl true
+  def validate_config(_config), do: {:error, :invalid}
 
   @impl true
   def ready(), do: :ok

@@ -1,19 +1,32 @@
 defmodule VintageNetMobile.Modems.QuectelEC25AF do
+  @moduledoc """
+  Modem support the Quectel EC25-AF
+
+  ```elixir
+  config :vintage_net,
+  config: [
+    {"ppp0",
+     %{
+       type: VintageNetMobile,
+       modem: VintageNetMobile.Modems.Quectel25AF,
+       service_providers: ["freelte"]
+     }}
+  ]
+  ```
+
+  This modem only allows for one service provider.
+  """
+
   @behaviour VintageNetMobile.Modem
 
-  alias VintageNetMobile.{ServiceProviders, ATRunner, SignalMonitor, PPPDConfig, Chatscript}
+  alias VintageNetMobile.{ATRunner, SignalMonitor, PPPDConfig, Chatscript}
   alias VintageNet.Interface.RawConfig
-
-  @impl true
-  def specs() do
-    [{"Quectel EC25-AF", :_}]
-  end
 
   @impl true
   def add_raw_config(raw_config, config, opts) do
     ifname = raw_config.ifname
 
-    apn = ServiceProviders.apn!(config.service_provider)
+    [apn] = config.service_providers
     files = [{Chatscript.path(ifname, opts), Chatscript.default(apn)}]
 
     up_cmds = [
@@ -41,6 +54,20 @@ defmodule VintageNetMobile.Modems.QuectelEC25AF do
       :ok
     else
       {:error, :missing_usb_modem}
+    end
+  end
+
+  @impl true
+  def validate_config(config) do
+    case config.service_providers do
+      [] ->
+        {:error, :empty_service_providers}
+
+      [_service_provider] ->
+        :ok
+
+      _service_providers ->
+        {:error, :max_service_providers}
     end
   end
 end

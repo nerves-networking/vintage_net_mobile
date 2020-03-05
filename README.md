@@ -33,19 +33,25 @@ or add this to your `config.exs`:
 ```elixir
 config :vintage_net,
   config: [
-    {"ppp0", %{type: VintageNetMobile, modem: your_modem, service_provider: your_service_provider}}
+    {"ppp0", %{type: VintageNetMobile, modem: your_modem, service_providers: [
+      "pimentocheese",
+    ]}}
   ]
 ```
+
+A good resource to find APNs for your service provider is:
+https://gitlab.gnome.org/GNOME/mobile-broadband-provider-info/-/blob/master/serviceproviders.xml
+
+When using a custom modem you can leave out the `:service_providers` field and
+hard code the service provider and protocol information into a custom
+chatscript for you modem.
+
+See "Custom Modems" section for more information on how to do that.
 
 Supported modems:
 
 * `"Quectel BG96"`
 * `"Quectel EC25-AF"`
-
-Supported service providers:
-
-* `"Twilio"`
-* `"Twilio Super"`
 
 ## System requirements
 
@@ -98,19 +104,71 @@ CONFIG_WC=y
 
 ## Custom Modems
 
-`VintageNetMobile` allows you add custom modem implementations if the built-in
-implementations don't work for you:
+To use a custom modem implementation `VintageNetMobile` exposes the
+`VintageNetMobile.Modem` behaviour. This is also the way to provide custom
+chatscripts. `VitnageNetMobile` does provide a simple default chatscript
+via the `VintageNetMobile.Chatscript` module, however if you are trying handle
+more advanced configuration you will probably want to provide your own
+chatscript.
+
+### Example
 
 ```elixir
-config :vintage_net_mobile,
-  extra_modems: [MyBestLTEEverModem]
+defmodule MyModem do
+  @behaviour VintageNetMobile.Modem
+
+  alias VintageNetMobile.{Chatscript, PPPDConfig}
+
+  @impl true
+  def add_raw_config(vintage_raw_config, provided_config, vintage_net_env) do
+    ifname = vintagenet_raw_config.ifname
+
+    files = [{Chatscript.path(ifname, opts), chatscript()}]
+
+    up_cmds = [
+      {:run_ignore_errors, "mknod", ["/dev/ppp", "c", "108", "0"]}
+    ]
+
+    child_specs = [
+      {ATRunner, [tty: "ttyUSB2", speed: 9600]},
+      {SignalMonitor, [ifname: ifname, tty: "ttyUSB2"]}
+    ]
+
+    %RawConfig{
+      raw_config
+      | files: files,
+        up_cmds: up_cmds,
+        require_interface: false,
+        child_specs: child_specs
+    }
+    |> PPPDConfig.add_child_spec("ttyUSB3", 9600, opts)
+  end
+
+  @impl true
+  def ready(), do: true
+
+  @impl true
+  def validate_config(_provided_config) do
+    :ok
+  end
+
+  defp chatscript() do
+    """
+    ....
+    """
+  end
+end
 ```
 
-Modem implementations need to implement the `VintageNetMobile.Modem` behaviour.
+```elixir
+config :vintage_net,
+  config: [
+    {"ppp0", %{type: VintageNetMobile, modem: MyModem}}
+  ]
+```
 
-This will allow your modem to tie into `VintageNetMobile` without having relying
-on our supported providers. This is useful for highly custom chatscripts or
-non-generic modem implementations.
+Notice how we did not need to provide any services providers for a custom modem
+as we can provide the necessary information in the custom chatscript.
 
 ## VintageNet Properties
 

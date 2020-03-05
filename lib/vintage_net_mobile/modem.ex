@@ -6,16 +6,6 @@ defmodule VintageNetMobile.Modem do
 
   alias VintageNet.Interface.RawConfig
 
-  @typedoc """
-  A specification for what modem/providers tuples the implementation handles
-  """
-  @type spec :: {String.t(), String.t() | :_}
-
-  @doc """
-  Return the list of modem/providers tuples handled by this module
-  """
-  @callback specs() :: [spec()]
-
   @doc """
   Update the raw configuration for the modem
   """
@@ -25,4 +15,9 @@ defmodule VintageNetMobile.Modem do
   Check to make sure the modem is ready to be used
   """
   @callback ready() :: :ok | {:error, :missing_modem}
+
+  @doc """
+  All the modem to validate the configuration provided
+  """
+  @callback validate_config(map()) :: :ok | {:error, reason :: any()}
 end

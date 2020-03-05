@@ -2,7 +2,6 @@ defmodule VintageNetMobile do
   @behaviour VintageNet.Technology
 
   alias VintageNet.Interface.RawConfig
-  alias VintageNetMobile.Modems
 
   @moduledoc """
   Use cellular modems with VintageNet
@@ -15,7 +14,7 @@ defmodule VintageNetMobile do
         %{
           type: VintageNetMobile,
           modem: your_modem,
-          service_provider: your_service_provider
+          service_providers: your_service_providers
         }
       )
   ```
@@ -25,7 +24,8 @@ defmodule VintageNetMobile do
   ```elixir
   config :vintage_net,
     config: [
-      {"ppp0", %{type: VintageNetMobile, modem: your_modem, service_provider: your_service_provider}}
+      {"ppp0",
+      %{type: VintageNetMobile, modem: your_modem, service_providers: your_service_providers}}
     ]
   ```
 
@@ -61,16 +61,23 @@ defmodule VintageNetMobile do
 
   @impl true
   def to_raw_config(ifname, %{type: __MODULE__, modem: modem} = config, opts) do
-    service_provider = Map.get(config, :service_provider)
-    modem_implementation = Modems.lookup(modem, service_provider)
+    case modem.validate_config(config) do
+      :ok ->
+        %RawConfig{
+          ifname: ifname,
+          type: __MODULE__,
+          source_config: config
+        }
+        |> modem.add_raw_config(config, opts)
+        |> add_ready_command(modem)
 
-    %RawConfig{
-      ifname: ifname,
-      type: __MODULE__,
-      source_config: config
-    }
-    |> modem_implementation.add_raw_config(config, opts)
-    |> add_ready_command(modem_implementation)
+      {:error, reason} ->
+        raise ArgumentError, """
+        Invalid configuration: #{inspect(reason)}
+
+        Please check your modem documentation to see the correct configuration.
+        """
+    end
   end
 
   @impl true
