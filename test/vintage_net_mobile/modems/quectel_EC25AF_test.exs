@@ -10,7 +10,12 @@ defmodule VintageNetMobile.Modems.QuectelEC25AFTest do
 
   test "create an LTE configuration" do
     priv_dir = Application.app_dir(:vintage_net_mobile, "priv")
-    input = %{type: VintageNetMobile, modem: "Quectel EC25-AF", service_provider: "Twilio"}
+
+    input = %{
+      type: VintageNetMobile,
+      modem: "Quectel EC25-AF",
+      service_providers: [%{apn: "wireless.twilio.com"}]
+    }
 
     output = %RawConfig{
       ifname: "ppp0",
@@ -72,5 +77,13 @@ defmodule VintageNetMobile.Modems.QuectelEC25AFTest do
     }
 
     assert output == VintageNetMobile.to_raw_config("ppp0", input, Utils.default_opts())
+  end
+
+  test "don't allow empty providers list" do
+    assert {:error, :empty} == QuectelEC25AF.validate_service_providers([])
+  end
+
+  test "allow for one or more service providers" do
+    assert :ok == QuectelEC25AF.validate_service_providers([1, 2])
   end
 end

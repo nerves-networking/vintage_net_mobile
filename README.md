@@ -23,7 +23,7 @@ To get this technology running with VintageNet run the following:
       %{
         type: VintageNetMobile,
         modem: your_modem,
-        service_provider: your_service_provider
+        service_providers: your_service_providers
       }
     )
 ```
@@ -33,7 +33,18 @@ or add this to your `config.exs`:
 ```elixir
 config :vintage_net,
   config: [
-    {"ppp0", %{type: VintageNetMobile, modem: your_modem, service_provider: your_service_provider}}
+    {"ppp0", %{type: VintageNetMobile, modem: your_modem, service_providers: your_service_providers}}
+  ]
+```
+
+Service providers are maps that have an `:apn` field:
+
+```elixir
+config :vintage_net,
+  config: [
+    {"ppp0", %{type: VintageNetMobile, modem: your_modem, service_providers: [
+      %{apn: "pimentocheese"}
+    ]}}
   ]
 ```
 
@@ -41,11 +52,6 @@ Supported modems:
 
 * `"Quectel BG96"`
 * `"Quectel EC25-AF"`
-
-Supported service providers:
-
-* `"Twilio"`
-* `"Twilio Super"`
 
 ## System requirements
 

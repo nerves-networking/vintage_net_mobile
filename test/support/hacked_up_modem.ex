@@ -7,7 +7,7 @@ defmodule VintageNetMobileTest.HackedUpModem do
   def specs() do
     # Support only one LTE provider since this example is for setups
     # that are too hard to make generic.
-    [{"Hacked Up Modem", "Bob's LTE"}]
+    [{"Hacked Up Modem", [%{apn: "bobslte"}]}]
   end
 
   @impl true
@@ -22,4 +22,7 @@ defmodule VintageNetMobileTest.HackedUpModem do
 
   @impl true
   def ready(), do: :ok
+
+  @impl true
+  def validate_service_providers(_), do: :ok
 end

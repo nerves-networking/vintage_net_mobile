@@ -47,30 +47,44 @@ defmodule VintageNetMobile do
 
   For example:
 
-  `{"A Provider", apn: "apn.provider.net"}`
+  `%{apn: "apn.provider.net"}`
   """
-  @type service_provider_info :: {String.t(), [apn: String.t()]}
+  @type service_provider_info :: %{apn: String.t()}
 
   @typedoc """
-  TODO
+  VintageNetMobile options
+
+  * `:extra_modems` - list of extra modems that can tie into the `VintageNet` runtime
+     via `VintageNetMobile`
   """
-  @type opt :: {:extra_modems, [module()]} | {:extra_service_providers, [service_provider_info()]}
+  @type opt :: {:extra_modems, [module()]}
 
   @impl true
   def normalize(config), do: config
 
   @impl true
   def to_raw_config(ifname, %{type: __MODULE__, modem: modem} = config, opts) do
-    service_provider = Map.get(config, :service_provider)
-    modem_implementation = Modems.lookup(modem, service_provider)
+    service_providers = Map.get(config, :service_providers)
+    modem_implementation = Modems.lookup(modem, service_providers)
 
-    %RawConfig{
-      ifname: ifname,
-      type: __MODULE__,
-      source_config: config
-    }
-    |> modem_implementation.add_raw_config(config, opts)
-    |> add_ready_command(modem_implementation)
+    case modem_implementation.validate_service_providers(config.service_providers) do
+      :ok ->
+        %RawConfig{
+          ifname: ifname,
+          type: __MODULE__,
+          source_config: config
+        }
+        |> modem_implementation.add_raw_config(config, opts)
+        |> add_ready_command(modem_implementation)
+
+      {:error, reason} ->
+        raise ArgumentError, """
+        Looks like you provided invalid service providers because #{inspect(reason)}.
+
+        Please see your modem's documentation in regards to what it expects from
+        the configured service providers
+        """
+    end
   end
 
   @impl true

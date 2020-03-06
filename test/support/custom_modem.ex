@@ -15,10 +15,13 @@ defmodule VintageNetMobileTest.CustomModem do
 
     %RawConfig{
       raw_config
-      | files: [{"chatscript.#{ifname}", "Service provider is #{config.service_provider}"}]
+      | files: [{"chatscript.#{ifname}", "The service providers are #{config.service_providers}"}]
     }
   end
 
   @impl true
   def ready(), do: :ok
+
+  @impl true
+  def validate_service_providers(_), do: :ok
 end
