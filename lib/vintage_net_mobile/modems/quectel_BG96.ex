@@ -34,7 +34,7 @@ defmodule VintageNetMobile.Modems.QuectelBG96 do
   @behaviour VintageNetMobile.Modem
 
   alias VintageNet.Interface.RawConfig
-  alias VintageNetMobile.{ATRunner, SignalMonitor, ServiceProviders, PPPDConfig, Chatscript}
+  alias VintageNetMobile.{ATRunner, SignalMonitor, PPPDConfig, Chatscript}
 
   @impl true
   def specs() do
@@ -45,8 +45,8 @@ defmodule VintageNetMobile.Modems.QuectelBG96 do
   @impl true
   def add_raw_config(raw_config, config, opts) do
     ifname = raw_config.ifname
+    [%{apn: apn} | _] = config.service_providers
 
-    apn = ServiceProviders.apn!(config.service_provider)
     files = [{Chatscript.path(ifname, opts), Chatscript.default(apn)}]
 
     up_cmds = [
@@ -76,4 +76,8 @@ defmodule VintageNetMobile.Modems.QuectelBG96 do
       {:error, :missing_modem}
     end
   end
+
+  @impl true
+  def validate_service_providers([]), do: {:error, :empty}
+  def validate_service_providers(_), do: :ok
 end

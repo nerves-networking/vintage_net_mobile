@@ -47,10 +47,12 @@ defmodule VintageNetMobile.Modems do
     end
   end
 
-  defp lookup(modems, modem, provider) do
+  defp lookup(modems, modem, providers) do
     # See if there's a provider-specific implementation first and then
     # try a generic one.
-    Map.get(modems, {modem, provider}) || Map.get(modems, {modem, :_})
+    Enum.find_value(providers, fn provider ->
+      Map.get(modems, {modem, provider}) || Map.get(modems, {modem, :_})
+    end)
   end
 
   defp modems_to_map(modems) do
