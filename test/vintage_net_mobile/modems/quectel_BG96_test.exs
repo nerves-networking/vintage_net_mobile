@@ -14,7 +14,7 @@ defmodule VintageNetMobile.Modems.QuectelBG96Test do
     input = %{
       type: VintageNetMobile,
       modem: "Quectel BG96",
-      service_providers: [%{apn: "wireless.twilio.com"}]
+      service_providers: [%{apn: "superfastlte"}, %{apn: "wireless.twilio.com"}]
     }
 
     output = %RawConfig{
@@ -46,7 +46,8 @@ defmodule VintageNetMobile.Modems.QuectelBG96Test do
 
          OK ATQ0
 
-         OK AT+CGDCONT=1,"IP","wireless.twilio.com"
+         OK AT+CGDCONT=1,"IP","superfastlte"
+         OK AT+CGDCONT=2,"IP","wireless.twilio.com"
 
          OK ATDT*99***1#
 

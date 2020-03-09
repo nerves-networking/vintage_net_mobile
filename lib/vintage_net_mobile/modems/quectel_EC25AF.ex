@@ -12,9 +12,8 @@ defmodule VintageNetMobile.Modems.QuectelEC25AF do
   @impl true
   def add_raw_config(raw_config, config, opts) do
     ifname = raw_config.ifname
-    [%{apn: apn} | _] = config.service_providers
 
-    files = [{Chatscript.path(ifname, opts), Chatscript.default(apn)}]
+    files = [{Chatscript.path(ifname, opts), Chatscript.default(config.service_providers)}]
 
     up_cmds = [
       {:run_ignore_errors, "mknod", ["/dev/ppp", "c", "108", "0"]}

@@ -9,8 +9,8 @@ defmodule VintageNetMobile.Chatscript do
   This is useful if all you need is a basic chatscript. If you have more
   complex and custom needs you will not want to use this.
   """
-  @spec default(binary()) :: binary()
-  def default(apn) do
+  @spec default([VintageNetMobile.service_provider_info()]) :: binary()
+  def default(service_providers) do
     """
     ABORT 'BUSY'
     ABORT 'NO CARRIER'
@@ -29,8 +29,7 @@ defmodule VintageNetMobile.Chatscript do
 
     OK ATQ0
 
-    OK AT+CGDCONT=1,"IP","#{apn}"
-
+    #{pdp_contexts(service_providers)}
     OK ATDT*99***1#
 
     CONNECT ''
@@ -43,5 +42,22 @@ defmodule VintageNetMobile.Chatscript do
   @spec path(binary(), keyword()) :: binary()
   def path(ifname, opts) do
     Path.join(Keyword.fetch!(opts, :tmpdir), "chatscript.#{ifname}")
+  end
+
+  defp pdp_contexts(service_providers) do
+    {pdp_context_str, _} =
+      Enum.reduce(service_providers, {"", 1}, fn provider, {pdp_context_str, pdp_id} ->
+        %{apn: apn} = provider
+
+        pdp_context_str =
+          pdp_context_str <>
+            """
+            OK AT+CGDCONT=#{pdp_id},"IP","#{apn}"
+            """
+
+        {pdp_context_str, pdp_id + 1}
+      end)
+
+    pdp_context_str
   end
 end

@@ -14,7 +14,7 @@ defmodule VintageNetMobile.Modems.QuectelEC25AFTest do
     input = %{
       type: VintageNetMobile,
       modem: "Quectel EC25-AF",
-      service_providers: [%{apn: "wireless.twilio.com"}]
+      service_providers: [%{apn: "choosethislteitissafe"}, %{apn: "wireless.twilio.com"}]
     }
 
     output = %RawConfig{
@@ -46,7 +46,8 @@ defmodule VintageNetMobile.Modems.QuectelEC25AFTest do
 
          OK ATQ0
 
-         OK AT+CGDCONT=1,"IP","wireless.twilio.com"
+         OK AT+CGDCONT=1,"IP","choosethislteitissafe"
+         OK AT+CGDCONT=2,"IP","wireless.twilio.com"
 
          OK ATDT*99***1#
 

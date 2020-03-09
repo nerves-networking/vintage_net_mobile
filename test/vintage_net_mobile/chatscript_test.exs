@@ -33,6 +33,6 @@ defmodule VintageNetMobile.ChatscriptTest do
     CONNECT ''
     """
 
-    assert expected_chatscript == Chatscript.default("fake.apn.com")
+    assert expected_chatscript == Chatscript.default([%{apn: "fake.apn.com"}])
   end
 end
