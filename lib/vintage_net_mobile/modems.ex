@@ -14,7 +14,11 @@ defmodule VintageNetMobile.Modems do
   ```
   """
 
-  @default_modems [VintageNetMobile.Modems.QuectelBG96, VintageNetMobile.Modems.QuectelEC25AF]
+  @default_modems [
+    VintageNetMobile.Modems.QuectelBG96,
+    VintageNetMobile.Modems.QuectelEC25AF,
+    VintageNetMobile.Modems.UbloxTOBYL2
+  ]
 
   @doc """
   Look up the modem module for the given modem name and provider name
