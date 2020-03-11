@@ -75,6 +75,22 @@ Here's an example with a service provider list:
   }
 ```
 
+## Custom modems
+
+`VintageNetMobile` allows you add custom modem implementations if the built-in
+ones don't work for you. See the `VintageNetMobile.Modem` behaviour.
+
+In order to implement a modem, you will need:
+
+1. Instructions for connecting to the modem via your Linux. Sometimes this
+   involves `usb_modeswitch` or knowing which serial ports the modem exposes.
+2. Example chat scripts. These are lists of `AT` commands and their expected
+   responses for configuring the service provider and entering `PPP` mode.
+3. (Optional) Instructions for checking the signal strength when connected.
+
+One strategy is to see if there's an existing modem that looks similar to yours
+and modify it.
+
 ## System requirements
 
 These requirements are believed to be the minimum needed to be added to the
@@ -123,22 +139,6 @@ and then create `busybox.fragment` with the following:
 CONFIG_MKNOD=y
 CONFIG_WC=y
 ```
-
-## Custom Modems
-
-`VintageNetMobile` allows you add custom modem implementations if the built-in
-implementations don't work for you:
-
-```elixir
-config :vintage_net_mobile,
-  extra_modems: [MyBestLTEEverModem]
-```
-
-Modem implementations need to implement the `VintageNetMobile.Modem` behaviour.
-
-This will allow your modem to tie into `VintageNetMobile` without having relying
-on our supported providers. This is useful for highly custom chatscripts or
-non-generic modem implementations.
 
 ## VintageNet Properties
 
