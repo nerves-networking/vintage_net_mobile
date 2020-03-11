@@ -1,7 +1,5 @@
 defmodule VintageNetMobile.Chatscript do
-  @moduledoc """
-  Functions for working with chatscripts
-  """
+  @moduledoc false
 
   @doc """
   Output a basic default chatscript.

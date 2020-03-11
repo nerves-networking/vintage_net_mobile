@@ -4,7 +4,7 @@ defmodule VintageNetMobile.ModemsTest do
   alias VintageNetMobile.Modems
 
   test "Get modem specs for Quectel BG96 with service providers" do
-    assert VintageNetMobile.Modems.QuectelBG96 ==
+    assert VintageNetMobile.Modem.QuectelBG96 ==
              Modems.lookup("Quectel BG96", [%{apn: "wireless.twilio.com"}])
   end
 

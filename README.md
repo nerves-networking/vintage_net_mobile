@@ -5,7 +5,16 @@
 [![CircleCI](https://circleci.com/gh/nerves-networking/vintage_net_mobile.svg?style=svg)](https://circleci.com/gh/nerves-networking/vintage_net_mobile)
 [![Coverage Status](https://coveralls.io/repos/github/nerves-networking/vintage_net_mobile/badge.svg?branch=master)](https://coveralls.io/github/nerves-networking/vintage_net_mobile?branch=master)
 
-A `VintageNet` technology for using mobile connections.
+This library provides a `VintageNet` technology for using cellular modems.
+Currently, it supports the following modules:
+
+* [`"Quectel BG96"`](https://www.quectel.com/product/bg96.htm)
+* [`"Quectel EC25"`](https://www.quectel.com/product/ec25.htm)
+* [`"ublox Toby-L2"`](https://www.u-blox.com/en/product/toby-l2-series)
+
+See the "Custom Modems" section for adding new modules.
+
+To use this library, first add it to your project's dependency list:
 
 ```elixir
 def deps do
@@ -15,43 +24,56 @@ def deps do
 end
 ```
 
-To get this technology running with VintageNet run the following:
+You will then need to configure `VintageNet`. All cellular modems currently show
+up on "ppp0", so configurations look like this:
 
 ```elixir
-    VintageNet.configure(
-      "ppp0",
-      %{
-        type: VintageNetMobile,
-        modem: your_modem,
-        service_providers: your_service_providers
-      }
-    )
+VintageNet.configure(
+  "ppp0",
+  %{
+    type: VintageNetMobile,
+    modem: your_modem,
+    service_providers: your_service_providers
+  }
+)
 ```
 
-or add this to your `config.exs`:
+The `:modem` key should be set to your modem implementation. Cellular modems
+tend to be very similar. If `vintage_net_mobile` doesn't list your modem, see
+the customizing section. It may just be a copy/paste away.
+
+The `:service_providers` key should be set to information provided by each of
+your service providers. It is common that this is a list of one item.
+Circumstances may require you to list more than one, though. Additionally, modem
+implementations may require more or less information depending on their
+implementation. (It's possible to hard-code the service provider in the modem
+implementation. In that case, this key isn't used and should be set to an empty
+list. This is useful when your cellular modem provides instructions that
+magically work and the AT commands that they give are confusing.)
+
+Information for each service provider is a map with some or all of the following
+fields:
+
+* `:apn`
+* `:type`
+
+Your service provider should provide you with the information that you need to
+connect. Often it is just an APN. The Gnome project provides a database of
+[service provider
+information](https://wiki.gnome.org/Projects/NetworkManager/MobileBroadband/ServiceProviders)
+that may also be useful.
+
+Here's an example with a service provider list:
 
 ```elixir
-config :vintage_net,
-  config: [
-    {"ppp0", %{type: VintageNetMobile, modem: your_modem, service_providers: your_service_providers}}
-  ]
+  %{
+    type: VintageNetMobile,
+    modem: your_modem,
+    service_providers: [
+      %{apn: "wireless.twilio.com"}
+    ]
+  }
 ```
-
-Service providers are maps that have an `:apn` field:
-
-```elixir
-config :vintage_net,
-  config: [
-    {"ppp0", %{type: VintageNetMobile, modem: your_modem, service_providers: [
-      %{apn: "pimentocheese"}
-    ]}}
-  ]
-```
-
-Supported modems:
-
-* `"Quectel BG96"`
-* `"Quectel EC25-AF"`
 
 ## System requirements
 
@@ -154,4 +176,3 @@ OK
 | at+cgreg? | Same as above for some modems                    |
 
 `VintageNetMobile` makes it easy to add cellular support to your device.
-

@@ -1,7 +1,5 @@
 defmodule VintageNetMobile.SignalMonitor do
-  @moduledoc """
-  Monitor the signal quality of the modem
-  """
+  @moduledoc false
 
   @typedoc """
   The options for the monitor are:

@@ -1,7 +1,5 @@
 defmodule VintageNetMobile.ATRunner do
-  @moduledoc """
-  Send AT command_list to modem
-  """
+  @moduledoc false
 
   alias VintageNetMobile.ATRunner.CommandList
   alias VintageNetMobile.ATRunner.CommandList.Command

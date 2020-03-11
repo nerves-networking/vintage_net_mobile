@@ -1,45 +1,28 @@
-defmodule VintageNetMobile.Modems.QuectelBG96 do
+defmodule VintageNetMobile.Modem.QuectelEC25 do
+  @behaviour VintageNetMobile.Modem
+
   @moduledoc """
-  To force LTE only:
+  Quectel EC25 support
 
-  ```
-  at+qcfg="nwscanmode",3,1
-  ```
+  The Quectel EC25 is a series of LTE Cat 4 modules. Here's an example
+  configuration:
 
-  To read which Radio Access Technology (RAT) is currently set:
-
-  ```
-  at+qcfg="nwscanmode"
-  ```
-
-  To disable Cat NB1 (should do this if in US):
-
-  ```
-  at+qcfg="iotopmode",0,1
-  ```
-
-  To enable Cat NB1:
-
-  ```
-  at+qcfg="iotopmode",1,1
-  ```
-
-  To enable trying both Cat NB1 and Cat M1:
-
-  ```
-  at+qcfg="iotopmode",2,1
+  ```elixir
+  {"ppp0",
+   %{
+     type: VintageNetMobile,
+     modem: "Quectel EC25",
+     service_providers: [%{apn: "super"}, %{apn: "wireless.twilio.com"}]
+   }}
   ```
   """
 
-  @behaviour VintageNetMobile.Modem
-
-  alias VintageNet.Interface.RawConfig
   alias VintageNetMobile.{ATRunner, SignalMonitor, PPPDConfig, Chatscript}
+  alias VintageNet.Interface.RawConfig
 
   @impl true
   def specs() do
-    # Support all service providers
-    [{"Quectel BG96", :_}]
+    [{"Quectel EC25", :_}]
   end
 
   @impl true
@@ -72,7 +55,7 @@ defmodule VintageNetMobile.Modems.QuectelBG96 do
     if File.exists?("/dev/ttyUSB3") do
       :ok
     else
-      {:error, :missing_modem}
+      {:error, :missing_usb_modem}
     end
   end
 

@@ -1,7 +1,5 @@
 defmodule VintageNetMobile.PPPDConfig do
-  @moduledoc """
-  Module for configuring PPPD
-  """
+  @moduledoc false
 
   alias VintageNetMobile.Chatscript
   alias VintageNet.Interface.RawConfig

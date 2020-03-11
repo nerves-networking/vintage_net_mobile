@@ -1,12 +1,58 @@
-defmodule VintageNetMobile.Modems.QuectelEC25AF do
+defmodule VintageNetMobile.Modem.QuectelBG96 do
   @behaviour VintageNetMobile.Modem
 
-  alias VintageNetMobile.{ATRunner, SignalMonitor, PPPDConfig, Chatscript}
+  @moduledoc """
+  Quectel BG96 support
+
+  The Quectel BG96 is an LTE Cat M1/Cat NB1/EGPRS module. Here's an example
+  configuration:
+
+  ```elixir
+  {"ppp0",
+   %{
+     type: VintageNetMobile,
+     modem: "Quectel BG96",
+     service_providers: [%{apn: "super"}]
+   }}
+  ```
+  """
+
+  # To force LTE only:
+  # ```
+  # at+qcfg="nwscanmode",3,1
+  # ```
+  #
+  # To read which Radio Access Technology (RAT) is currently set:
+  #
+  # ```
+  # at+qcfg="nwscanmode"
+  # ```
+  #
+  # To disable Cat NB1 (should do this if in US):
+  #
+  # ```
+  # at+qcfg="iotopmode",0,1
+  # ```
+  #
+  # To enable Cat NB1:
+  #
+  # ```
+  # at+qcfg="iotopmode",1,1
+  # ```
+  #
+  # To enable trying both Cat NB1 and Cat M1:
+  #
+  # ```
+  # at+qcfg="iotopmode",2,1
+  # ```
+
   alias VintageNet.Interface.RawConfig
+  alias VintageNetMobile.{ATRunner, SignalMonitor, PPPDConfig, Chatscript}
 
   @impl true
   def specs() do
-    [{"Quectel EC25-AF", :_}]
+    # Support all service providers
+    [{"Quectel BG96", :_}]
   end
 
   @impl true
@@ -39,7 +85,7 @@ defmodule VintageNetMobile.Modems.QuectelEC25AF do
     if File.exists?("/dev/ttyUSB3") do
       :ok
     else
-      {:error, :missing_usb_modem}
+      {:error, :missing_modem}
     end
   end
 

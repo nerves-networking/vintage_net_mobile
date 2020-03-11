@@ -15,9 +15,9 @@ defmodule VintageNetMobile.Modems do
   """
 
   @default_modems [
-    VintageNetMobile.Modems.QuectelBG96,
-    VintageNetMobile.Modems.QuectelEC25AF,
-    VintageNetMobile.Modems.UbloxTOBYL2
+    VintageNetMobile.Modem.QuectelBG96,
+    VintageNetMobile.Modem.QuectelEC25,
+    VintageNetMobile.Modem.UbloxTOBYL2
   ]
 
   @doc """

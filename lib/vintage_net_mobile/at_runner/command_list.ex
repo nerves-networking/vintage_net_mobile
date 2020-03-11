@@ -1,15 +1,8 @@
 defmodule VintageNetMobile.ATRunner.CommandList do
-  @moduledoc """
-  Functions for working with commands to send to a modem
-
-  This data structure provides queueing of commands while a command is
-  currently in process.
-  """
+  @moduledoc false
 
   defmodule Command do
-    @moduledoc """
-    A command that is to be sent and handled in the `VintageNetMobile.ATRunner`
-    """
+    @moduledoc false
 
     @type t :: %__MODULE__{
             command: binary(),

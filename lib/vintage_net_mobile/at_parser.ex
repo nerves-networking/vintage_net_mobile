@@ -1,7 +1,5 @@
 defmodule VintageNetMobile.ATParser do
-  @moduledoc """
-  Parse AT response
-  """
+  @moduledoc false
 
   @doc """
   Parse the at response

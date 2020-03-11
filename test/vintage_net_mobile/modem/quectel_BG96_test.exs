@@ -1,7 +1,7 @@
-defmodule VintageNetMobile.Modems.QuectelBG96Test do
+defmodule VintageNetMobile.Modem.QuectelBG96Test do
   use ExUnit.Case
 
-  alias VintageNetMobile.Modems.QuectelBG96
+  alias VintageNetMobile.Modem.QuectelBG96
   alias VintageNet.Interface.RawConfig
 
   test "returns table entries" do

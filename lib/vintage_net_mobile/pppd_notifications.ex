@@ -1,6 +1,8 @@
 defmodule VintageNetMobile.PPPDNotifications do
   @behaviour VintageNetMobile.ToElixir.PPPDHandler
 
+  @moduledoc false
+
   alias VintageNet.{NameResolver, PropertyTable, RouteManager}
 
   require Logger

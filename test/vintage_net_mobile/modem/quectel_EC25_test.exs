@@ -1,11 +1,11 @@
-defmodule VintageNetMobile.Modems.QuectelEC25AFTest do
+defmodule VintageNetMobile.Modem.QuectelEC25Test do
   use ExUnit.Case
 
-  alias VintageNetMobile.Modems.QuectelEC25AF
+  alias VintageNetMobile.Modem.QuectelEC25
   alias VintageNet.Interface.RawConfig
 
   test "returns table entries" do
-    assert [{"Quectel EC25-AF", :_}] == QuectelEC25AF.specs()
+    assert [{"Quectel EC25", :_}] == QuectelEC25.specs()
   end
 
   test "create an LTE configuration" do
@@ -13,7 +13,7 @@ defmodule VintageNetMobile.Modems.QuectelEC25AFTest do
 
     input = %{
       type: VintageNetMobile,
-      modem: "Quectel EC25-AF",
+      modem: "Quectel EC25",
       service_providers: [%{apn: "choosethislteitissafe"}, %{apn: "wireless.twilio.com"}]
     }
 
@@ -23,7 +23,7 @@ defmodule VintageNetMobile.Modems.QuectelEC25AFTest do
       source_config: input,
       require_interface: false,
       up_cmds: [
-        {:fun, QuectelEC25AF, :ready, []},
+        {:fun, QuectelEC25, :ready, []},
         {:run_ignore_errors, "mknod", ["/dev/ppp", "c", "108", "0"]}
       ],
       files: [
@@ -81,10 +81,10 @@ defmodule VintageNetMobile.Modems.QuectelEC25AFTest do
   end
 
   test "don't allow empty providers list" do
-    assert {:error, :empty} == QuectelEC25AF.validate_service_providers([])
+    assert {:error, :empty} == QuectelEC25.validate_service_providers([])
   end
 
   test "allow for one or more service providers" do
-    assert :ok == QuectelEC25AF.validate_service_providers([1, 2])
+    assert :ok == QuectelEC25.validate_service_providers([1, 2])
   end
 end
