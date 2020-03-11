@@ -11,7 +11,7 @@ defmodule VintageNetMobile.Modem.QuectelEC25 do
   {"ppp0",
    %{
      type: VintageNetMobile,
-     modem: "Quectel EC25",
+     modem: VintageNetMobile.Modem.QuectelEC25,
      service_providers: [%{apn: "super"}, %{apn: "wireless.twilio.com"}]
    }}
   ```
@@ -19,11 +19,6 @@ defmodule VintageNetMobile.Modem.QuectelEC25 do
 
   alias VintageNetMobile.{ATRunner, SignalMonitor, PPPDConfig, Chatscript}
   alias VintageNet.Interface.RawConfig
-
-  @impl true
-  def specs() do
-    [{"Quectel EC25", :_}]
-  end
 
   @impl true
   def add_raw_config(raw_config, config, opts) do

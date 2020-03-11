@@ -6,11 +6,11 @@
 [![Coverage Status](https://coveralls.io/repos/github/nerves-networking/vintage_net_mobile/badge.svg?branch=master)](https://coveralls.io/github/nerves-networking/vintage_net_mobile?branch=master)
 
 This library provides a `VintageNet` technology for using cellular modems.
-Currently, it supports the following modules:
+Currently, it supports the following modems:
 
-* [`"Quectel BG96"`](https://www.quectel.com/product/bg96.htm)
-* [`"Quectel EC25"`](https://www.quectel.com/product/ec25.htm)
-* [`"ublox Toby-L2"`](https://www.u-blox.com/en/product/toby-l2-series)
+* Quectel BG96 - [`VintageNetMobile.Modem.QuectelBG96`](https://www.quectel.com/product/bg96.htm)
+* Quectel EC25 - [`VintageNetMobile.Modem.QuectelEC25`](https://www.quectel.com/product/ec25.htm)
+* ublox TOBY L2 - [`VintageNetMobile.Modem.UbloxTOBYL2`](https://www.u-blox.com/en/product/toby-l2-series)
 
 See the "Custom Modems" section for adding new modules.
 

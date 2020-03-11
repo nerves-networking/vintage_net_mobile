@@ -1,20 +1,9 @@
 defmodule VintageNetMobile.Modem do
   @moduledoc """
-  A behaviour for providing a specification for a modem to use with the
-  VintageNetMobile runtime.
+  A behaviour for modem implementations
   """
 
   alias VintageNet.Interface.RawConfig
-
-  @typedoc """
-  A specification for what modem/providers tuples the implementation handles
-  """
-  @type spec :: {String.t(), VintageNetMobile.service_provider_info() | :_}
-
-  @doc """
-  Return the list of modem/providers tuples handled by this module
-  """
-  @callback specs() :: [spec()]
 
   @doc """
   Update the raw configuration for the modem

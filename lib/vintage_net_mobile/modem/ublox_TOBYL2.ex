@@ -11,7 +11,7 @@ defmodule VintageNetMobile.Modem.UbloxTOBYL2 do
   {"ppp0",
    %{
      type: VintageNetMobile,
-     modem: "u-blox TOBY-L2",
+     modem: VintageNetMobile.Modem.UbloxTOBYL2,
      service_providers: [
        %{type: "4g", apn: "lte-apn"},
        %{type: "3g", apn: "old-apn"}
@@ -24,11 +24,6 @@ defmodule VintageNetMobile.Modem.UbloxTOBYL2 do
   alias VintageNet.Interface.RawConfig
 
   require Logger
-
-  @impl true
-  def specs() do
-    [{"u-blox TOBY-L2", :_}]
-  end
 
   @impl true
   def add_raw_config(raw_config, config, opts) do

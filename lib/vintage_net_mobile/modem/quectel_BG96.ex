@@ -11,7 +11,7 @@ defmodule VintageNetMobile.Modem.QuectelBG96 do
   {"ppp0",
    %{
      type: VintageNetMobile,
-     modem: "Quectel BG96",
+     modem: VintageNetMobile.Modem.QuectelBG96,
      service_providers: [%{apn: "super"}]
    }}
   ```
@@ -48,12 +48,6 @@ defmodule VintageNetMobile.Modem.QuectelBG96 do
 
   alias VintageNet.Interface.RawConfig
   alias VintageNetMobile.{ATRunner, SignalMonitor, PPPDConfig, Chatscript}
-
-  @impl true
-  def specs() do
-    # Support all service providers
-    [{"Quectel BG96", :_}]
-  end
 
   @impl true
   def add_raw_config(raw_config, config, opts) do

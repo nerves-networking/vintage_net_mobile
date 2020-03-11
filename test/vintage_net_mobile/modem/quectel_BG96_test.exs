@@ -4,16 +4,12 @@ defmodule VintageNetMobile.Modem.QuectelBG96Test do
   alias VintageNetMobile.Modem.QuectelBG96
   alias VintageNet.Interface.RawConfig
 
-  test "returns table entries" do
-    assert [{"Quectel BG96", :_}] == QuectelBG96.specs()
-  end
-
   test "create an LTE configuration" do
     priv_dir = Application.app_dir(:vintage_net_mobile, "priv")
 
     input = %{
       type: VintageNetMobile,
-      modem: "Quectel BG96",
+      modem: QuectelBG96,
       service_providers: [%{apn: "superfastlte"}, %{apn: "wireless.twilio.com"}]
     }
 

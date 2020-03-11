@@ -2,7 +2,6 @@ defmodule VintageNetMobile do
   @behaviour VintageNet.Technology
 
   alias VintageNet.Interface.RawConfig
-  alias VintageNetMobile.Modems
 
   @moduledoc """
   Use cellular modems with VintageNet
@@ -65,17 +64,16 @@ defmodule VintageNetMobile do
   @impl true
   def to_raw_config(ifname, %{type: __MODULE__, modem: modem} = config, opts) do
     service_providers = Map.get(config, :service_providers)
-    modem_implementation = Modems.lookup(modem, service_providers)
 
-    case modem_implementation.validate_service_providers(config.service_providers) do
+    case modem.validate_service_providers(service_providers) do
       :ok ->
         %RawConfig{
           ifname: ifname,
           type: __MODULE__,
           source_config: config
         }
-        |> modem_implementation.add_raw_config(config, opts)
-        |> add_ready_command(modem_implementation)
+        |> modem.add_raw_config(config, opts)
+        |> add_ready_command(modem)
 
       {:error, reason} ->
         raise ArgumentError, """
@@ -94,8 +92,8 @@ defmodule VintageNetMobile do
   @impl true
   def check_system(_), do: :ok
 
-  defp add_ready_command(raw_config, modem_implementation) do
-    new_up_cmds = [{:fun, modem_implementation, :ready, []} | raw_config.up_cmds]
+  defp add_ready_command(raw_config, modem) do
+    new_up_cmds = [{:fun, modem, :ready, []} | raw_config.up_cmds]
 
     %RawConfig{raw_config | up_cmds: new_up_cmds}
   end
