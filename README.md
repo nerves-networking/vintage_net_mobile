@@ -54,8 +54,8 @@ magically work and the AT commands that they give are confusing.)
 Information for each service provider is a map with some or all of the following
 fields:
 
-* `:apn`
-* `:type`
+* `:apn` (required) - e.g., `"access_point_name"`
+* `:usage` (optional) - `:eps_bearer` (LTE) or `:pdp` (UMTS/GPRS)
 
 Your service provider should provide you with the information that you need to
 connect. Often it is just an APN. The Gnome project provides a database of

@@ -13,12 +13,18 @@ defmodule VintageNetMobile.Modem.UbloxTOBYL2 do
      type: VintageNetMobile,
      modem: VintageNetMobile.Modem.UbloxTOBYL2,
      service_providers: [
-       %{type: "4g", apn: "lte-apn"},
-       %{type: "3g", apn: "old-apn"}
+       %{apn: "lte-apn", usage: :eps_bearer},
+       %{apn: "old-apn", usage: :pdp}
      ]
    }}
   ```
+
+  This implementation currently requires APNs to be annotated for whether
+  they are to be used on LTE (`:eps_bearer`) or on UMTS/GPRS (`:pdp`).
   """
+
+  # Useful references:
+  #  * AT commands - https://www.u-blox.com/en/docs/UBX-13002752
 
   alias VintageNetMobile.{ATRunner, SignalMonitor, PPPDConfig, Chatscript}
   alias VintageNet.Interface.RawConfig
@@ -60,8 +66,8 @@ defmodule VintageNetMobile.Modem.UbloxTOBYL2 do
   end
 
   def chatscript(service_providers) do
-    apn_4g = Enum.find(service_providers, &(&1.type == "4g"))
-    apn_3g = Enum.find(service_providers, &(&1.type == "3g"))
+    lte_provider = eps_bearer(service_providers)
+    other_provider = pdp(service_providers)
 
     """
     # Exit execution if module receives any of the following strings:
@@ -88,12 +94,12 @@ defmodule VintageNetMobile.Modem.UbloxTOBYL2 do
     # Enter airplane mode
     OK AT+CFUN=4
 
-    # Delete existing contextx
+    # Delete existing contexts
     OK AT+CGDEL
 
     # Define PDP context
-    OK AT+UCGDFLT=1,"IP","#{apn_4g.apn}"
-    OK AT+CGDCONT=1,"IP","#{apn_3g.apn}"
+    OK AT+UCGDFLT=1,"IP","#{lte_provider.apn}"
+    OK AT+CGDCONT=1,"IP","#{other_provider.apn}"
 
     OK AT+CFUN=1
 
@@ -105,6 +111,25 @@ defmodule VintageNetMobile.Modem.UbloxTOBYL2 do
   end
 
   @impl true
-  def validate_service_providers([]), do: {:error, :empty}
-  def validate_service_providers(_), do: :ok
+  def validate_service_providers([]), do: {:error, "No service providers"}
+
+  def validate_service_providers(providers) do
+    if eps_bearer(providers) != nil and pdp(providers) != nil do
+      :ok
+    else
+      {:error, "Must annotate APNs with their usage (:eps_bearer and :pdp)"}
+    end
+  end
+
+  defp find_by_usage(service_providers, what) do
+    Enum.find(service_providers, &(Map.get(&1, :usage) == what))
+  end
+
+  defp eps_bearer(service_providers) do
+    find_by_usage(service_providers, :eps_bearer)
+  end
+
+  defp pdp(service_providers) do
+    find_by_usage(service_providers, :pdp)
+  end
 end
