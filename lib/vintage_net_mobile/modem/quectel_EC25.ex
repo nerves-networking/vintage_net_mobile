@@ -12,9 +12,12 @@ defmodule VintageNetMobile.Modem.QuectelEC25 do
    %{
      type: VintageNetMobile,
      modem: VintageNetMobile.Modem.QuectelEC25,
-     service_providers: [%{apn: "super"}, %{apn: "wireless.twilio.com"}]
+     service_providers: [%{apn: "wireless.twilio.com"}]
    }}
   ```
+
+  If multiple service providers are configured, this implementation only
+  attempts to connect to the first one.
   """
 
   alias VintageNetMobile.{ATRunner, SignalMonitor, PPPDConfig, Chatscript}

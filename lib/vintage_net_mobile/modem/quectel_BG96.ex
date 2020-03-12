@@ -15,6 +15,9 @@ defmodule VintageNetMobile.Modem.QuectelBG96 do
      service_providers: [%{apn: "super"}]
    }}
   ```
+
+  If multiple service providers are configured, this implementation only
+  attempts to connect to the first one.
   """
 
   # To force LTE only:

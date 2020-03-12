@@ -39,8 +39,6 @@ defmodule VintageNetMobile.Modem.QuectelEC25Test do
          OK ATZ
          OK ATQ0
          OK AT+CGDCONT=1,"IP","choosethislteitissafe"
-         OK AT+CGDCONT=2,"IP","wireless.twilio.com"
-
          OK ATDT*99***1#
          CONNECT ''
          """}

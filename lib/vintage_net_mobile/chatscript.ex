@@ -47,20 +47,19 @@ defmodule VintageNetMobile.Chatscript do
   end
 
   @doc """
-  Output a basic default chatscript.
+  Output a basic default chatscript which connects to the first provider
 
   This is useful if all you need is a basic chatscript. If you have more
   complex and custom needs you will not want to use this.
   """
   @spec default([VintageNetMobile.service_provider_info()]) :: String.t()
   def default(service_providers) do
+    pdp_index = 1
+
     [
       prologue(),
-      """
-      OK ATQ0
-      #{pdp_contexts(service_providers)}
-      """,
-      connect()
+      set_pdp_context(pdp_index, hd(service_providers)),
+      connect(pdp_index)
     ]
     |> IO.iodata_to_binary()
   end
@@ -68,25 +67,14 @@ defmodule VintageNetMobile.Chatscript do
   @doc """
   Make the chatscript path for the interface
   """
-  @spec path(binary(), keyword()) :: binary()
+  @spec path(String.t(), keyword()) :: String.t()
   def path(ifname, opts) do
     Path.join(Keyword.fetch!(opts, :tmpdir), "chatscript.#{ifname}")
   end
 
-  defp pdp_contexts(service_providers) do
-    {pdp_context_str, _} =
-      Enum.reduce(service_providers, {"", 1}, fn provider, {pdp_context_str, pdp_id} ->
-        %{apn: apn} = provider
-
-        pdp_context_str =
-          pdp_context_str <>
-            """
-            OK AT+CGDCONT=#{pdp_id},"IP","#{apn}"
-            """
-
-        {pdp_context_str, pdp_id + 1}
-      end)
-
-    pdp_context_str
+  defp set_pdp_context(id, service_provider) do
+    """
+    OK AT+CGDCONT=#{id},"IP","#{service_provider.apn}"
+    """
   end
 end

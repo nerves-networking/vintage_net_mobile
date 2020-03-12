@@ -23,7 +23,6 @@ defmodule VintageNetMobile.ChatscriptTest do
     OK ATZ
     OK ATQ0
     OK AT+CGDCONT=1,"IP","fake.apn.com"
-
     OK ATDT*99***1#
     CONNECT ''
     """
