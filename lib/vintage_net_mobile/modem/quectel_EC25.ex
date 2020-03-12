@@ -39,10 +39,6 @@ defmodule VintageNetMobile.Modem.QuectelEC25 do
 
     files = [{Chatscript.path(ifname, opts), Chatscript.default(config.service_providers)}]
 
-    up_cmds = [
-      {:run_ignore_errors, "mknod", ["/dev/ppp", "c", "108", "0"]}
-    ]
-
     child_specs = [
       {ATRunner, [tty: "ttyUSB2", speed: 9600]},
       {SignalMonitor, [ifname: ifname, tty: "ttyUSB2"]}
@@ -51,7 +47,6 @@ defmodule VintageNetMobile.Modem.QuectelEC25 do
     %RawConfig{
       raw_config
       | files: files,
-        up_cmds: up_cmds,
         require_interface: false,
         child_specs: child_specs
     }

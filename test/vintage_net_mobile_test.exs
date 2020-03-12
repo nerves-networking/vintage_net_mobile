@@ -16,7 +16,10 @@ defmodule VintageNetMobileTest do
       type: VintageNetMobile,
       source_config: input,
       files: [{"chatscript.ppp0", "The service providers are [%{apn: \"free_lte\"}]"}],
-      up_cmds: [{:fun, CustomModem, :ready, []}],
+      up_cmds: [
+        {:fun, CustomModem, :ready, []},
+        {:run_ignore_errors, "mknod", ["/dev/ppp", "c", "108", "0"]}
+      ],
       down_cmds: [
         {:fun, VintageNet.PropertyTable, :clear_prefix,
          [VintageNet, ["interface", "ppp0", "mobile"]]}

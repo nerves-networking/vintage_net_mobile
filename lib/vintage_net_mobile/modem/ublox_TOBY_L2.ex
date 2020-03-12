@@ -45,10 +45,6 @@ defmodule VintageNetMobile.Modem.UbloxTOBYL2 do
 
     files = [{Chatscript.path(ifname, opts), chatscript(config.service_providers)}]
 
-    up_cmds = [
-      {:run_ignore_errors, "mknod", ["/dev/ppp", "c", "108", "0"]}
-    ]
-
     child_specs = [
       {ATRunner, [tty: "ttyACM1", speed: 115_200]},
       {SignalMonitor, [ifname: ifname, tty: "ttyACM1"]}
@@ -57,7 +53,6 @@ defmodule VintageNetMobile.Modem.UbloxTOBYL2 do
     %RawConfig{
       raw_config
       | files: files,
-        up_cmds: up_cmds,
         require_interface: false,
         child_specs: child_specs
     }
