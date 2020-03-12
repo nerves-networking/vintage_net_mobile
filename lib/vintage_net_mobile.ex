@@ -100,7 +100,7 @@ defmodule VintageNetMobile do
           source_config: config
         }
         |> modem.add_raw_config(config, opts)
-        |> add_ready_command(modem)
+        |> add_start_commands(modem)
         |> add_cleanup_command()
 
       {:error, reason} ->
@@ -120,8 +120,13 @@ defmodule VintageNetMobile do
   @impl true
   def check_system(_), do: :ok
 
-  defp add_ready_command(raw_config, modem) do
-    new_up_cmds = [{:fun, modem, :ready, []} | raw_config.up_cmds]
+  defp add_start_commands(raw_config, modem) do
+    # The modem.ready call checks whether the modem exists and can be started.
+    # The mknod creates `/dev/ppp` if it doesn't exist.
+    new_up_cmds = [
+      {:fun, modem, :ready, []},
+      {:run_ignore_errors, "mknod", ["/dev/ppp", "c", "108", "0"]} | raw_config.up_cmds
+    ]
 
     %RawConfig{raw_config | up_cmds: new_up_cmds}
   end
