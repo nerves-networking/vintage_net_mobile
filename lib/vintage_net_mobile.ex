@@ -101,6 +101,7 @@ defmodule VintageNetMobile do
         }
         |> modem.add_raw_config(config, opts)
         |> add_ready_command(modem)
+        |> add_cleanup_command()
 
       {:error, reason} ->
         raise ArgumentError, """
@@ -123,5 +124,15 @@ defmodule VintageNetMobile do
     new_up_cmds = [{:fun, modem, :ready, []} | raw_config.up_cmds]
 
     %RawConfig{raw_config | up_cmds: new_up_cmds}
+  end
+
+  defp add_cleanup_command(raw_config) do
+    cmds = [
+      {:fun, VintageNet.PropertyTable, :clear_prefix,
+       [VintageNet, ["interface", raw_config.ifname, "mobile"]]}
+      | raw_config.down_cmds
+    ]
+
+    %RawConfig{raw_config | down_cmds: cmds}
   end
 end
