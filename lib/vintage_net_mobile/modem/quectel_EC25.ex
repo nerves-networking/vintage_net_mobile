@@ -20,6 +20,14 @@ defmodule VintageNetMobile.Modem.QuectelEC25 do
 
   If multiple service providers are configured, this implementation only
   attempts to connect to the first one.
+
+  ## Required Linux kernel options
+
+  * CONFIG_USB_SERIAL=m
+  * CONFIG_USB_SERIAL_WWAN=m
+  * CONFIG_USB_SERIAL_OPTION=m
+  * CONFIG_USB_WDM=m
+  * CONFIG_USB_NET_QMI_WWAN=m
   """
 
   alias VintageNetMobile.{ATRunner, SignalMonitor, PPPDConfig, Chatscript}

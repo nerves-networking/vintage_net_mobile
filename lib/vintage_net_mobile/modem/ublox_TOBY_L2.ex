@@ -23,6 +23,12 @@ defmodule VintageNetMobile.Modem.UbloxTOBYL2 do
 
   This implementation currently requires APNs to be annotated for whether
   they are to be used on LTE (`:eps_bearer`) or on UMTS/GPRS (`:pdp`).
+
+  ## Required Linux kernel options
+
+  * CONFIG_USB_SERIAL=m
+  * CONFIG_USB_SERIAL_WWAN=m
+  * CONFIG_USB_SERIAL_OPTION=m
   """
 
   # Useful references:
