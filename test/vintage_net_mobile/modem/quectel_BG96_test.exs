@@ -22,6 +22,10 @@ defmodule VintageNetMobile.Modem.QuectelBG96Test do
         {:fun, QuectelBG96, :ready, []},
         {:run_ignore_errors, "mknod", ["/dev/ppp", "c", "108", "0"]}
       ],
+      down_cmds: [
+        {:fun, VintageNet.PropertyTable, :clear_prefix,
+         [VintageNet, ["interface", "ppp0", "mobile"]]}
+      ],
       files: [
         {"/tmp/vintage_net/chatscript.ppp0",
          """
