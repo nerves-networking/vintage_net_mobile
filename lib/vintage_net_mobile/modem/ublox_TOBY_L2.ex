@@ -69,45 +69,24 @@ defmodule VintageNetMobile.Modem.UbloxTOBYL2 do
     lte_provider = eps_bearer(service_providers)
     other_provider = pdp(service_providers)
 
-    """
-    # Exit execution if module receives any of the following strings:
-    ABORT 'BUSY'
-    ABORT 'NO CARRIER'
-    ABORT 'NO DIALTONE'
-    ABORT 'NO DIAL TONE'
-    ABORT 'NO ANSWER'
-    ABORT 'DELAYED'
-    TIMEOUT 120
-    REPORT CONNECT
+    [
+      Chatscript.prologue(120),
+      """
+      # Enter airplane mode
+      OK AT+CFUN=4
 
-    "" +++
+      # Delete existing contexts
+      OK AT+CGDEL
 
-    # Module will send the string AT regardless of the string it receives
-    "" AT
+      # Define PDP context
+      OK AT+UCGDFLT=1,"IP","#{lte_provider.apn}"
+      OK AT+CGDCONT=1,"IP","#{other_provider.apn}"
 
-    # Instructs the modem to disconnect from the line, terminating any call in progress. All of the functions of the command shall be completed before the modem returns a result code.
-    OK ATH
-
-    # Instructs the modem to set all parameters to the factory defaults.
-    OK ATZ
-
-    # Enter airplane mode
-    OK AT+CFUN=4
-
-    # Delete existing contexts
-    OK AT+CGDEL
-
-    # Define PDP context
-    OK AT+UCGDFLT=1,"IP","#{lte_provider.apn}"
-    OK AT+CGDCONT=1,"IP","#{other_provider.apn}"
-
-    OK AT+CFUN=1
-
-    # Enter PPPD mode
-    OK ATD*99***1#
-
-    CONNECT ''
-    """
+      OK AT+CFUN=1
+      """,
+      Chatscript.connect()
+    ]
+    |> IO.iodata_to_binary()
   end
 
   @impl true

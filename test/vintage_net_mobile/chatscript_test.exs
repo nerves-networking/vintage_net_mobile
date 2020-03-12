@@ -17,19 +17,14 @@ defmodule VintageNetMobile.ChatscriptTest do
     ABORT 'DELAYED'
     TIMEOUT 10
     REPORT CONNECT
-
+    "" +++
     "" AT
-
     OK ATH
-
     OK ATZ
-
     OK ATQ0
-
     OK AT+CGDCONT=1,"IP","fake.apn.com"
 
     OK ATDT*99***1#
-
     CONNECT ''
     """
 

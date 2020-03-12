@@ -43,7 +43,34 @@ defmodule VintageNetMobile.Modem.UbloxTOBYL2Test do
       files: [
         {
           "/tmp/vintage_net/chatscript.ppp0",
-          "# Exit execution if module receives any of the following strings:\nABORT 'BUSY'\nABORT 'NO CARRIER'\nABORT 'NO DIALTONE'\nABORT 'NO DIAL TONE'\nABORT 'NO ANSWER'\nABORT 'DELAYED'\nTIMEOUT 120\nREPORT CONNECT\n\n\"\" +++\n\n# Module will send the string AT regardless of the string it receives\n\"\" AT\n\n# Instructs the modem to disconnect from the line, terminating any call in progress. All of the functions of the command shall be completed before the modem returns a result code.\nOK ATH\n\n# Instructs the modem to set all parameters to the factory defaults.\nOK ATZ\n\n# Enter airplane mode\nOK AT+CFUN=4\n\n# Delete existing contexts\nOK AT+CGDEL\n\n# Define PDP context\nOK AT+UCGDFLT=1,\"IP\",\"lte-apn\"\nOK AT+CGDCONT=1,\"IP\",\"old-apn\"\n\nOK AT+CFUN=1\n\n# Enter PPPD mode\nOK ATD*99***1#\n\nCONNECT ''\n"
+          """
+          ABORT 'BUSY'
+          ABORT 'NO CARRIER'
+          ABORT 'NO DIALTONE'
+          ABORT 'NO DIAL TONE'
+          ABORT 'NO ANSWER'
+          ABORT 'DELAYED'
+          TIMEOUT 120
+          REPORT CONNECT
+          "" +++
+          "" AT
+          OK ATH
+          OK ATZ
+          OK ATQ0
+          # Enter airplane mode
+          OK AT+CFUN=4
+
+          # Delete existing contexts
+          OK AT+CGDEL
+
+          # Define PDP context
+          OK AT+UCGDFLT=1,"IP","lte-apn"
+          OK AT+CGDCONT=1,"IP","old-apn"
+
+          OK AT+CFUN=1
+          OK ATDT*99***1#
+          CONNECT ''
+          """
         }
       ],
       ifname: "ppp0",

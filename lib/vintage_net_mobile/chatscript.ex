@@ -2,13 +2,22 @@ defmodule VintageNetMobile.Chatscript do
   @moduledoc false
 
   @doc """
-  Output a basic default chatscript.
+  Return the standard chatscript prologue
 
-  This is useful if all you need is a basic chatscript. If you have more
-  complex and custom needs you will not want to use this.
+  This includes:
+
+  1. Abort conditions
+  2. Timeout
+  3. Connection report
+  4. Command mode entry (+++ and AT command check)
+  5. Disconnect (ATH)
+  6. Reset to factory defaults (ATZ)
+  7. Send result codes (ATQ0) - NOTE: This should be redundant since ATZ resets to defaults
+
+  Nearly all chatscripts start with this sequence or something very similar
   """
-  @spec default([VintageNetMobile.service_provider_info()]) :: binary()
-  def default(service_providers) do
+  @spec prologue(non_neg_integer()) :: String.t()
+  def prologue(timeout \\ 10) do
     """
     ABORT 'BUSY'
     ABORT 'NO CARRIER'
@@ -16,22 +25,44 @@ defmodule VintageNetMobile.Chatscript do
     ABORT 'NO DIAL TONE'
     ABORT 'NO ANSWER'
     ABORT 'DELAYED'
-    TIMEOUT 10
+    TIMEOUT #{timeout}
     REPORT CONNECT
-
+    "" +++
     "" AT
-
     OK ATH
-
     OK ATZ
-
     OK ATQ0
+    """
+  end
 
-    #{pdp_contexts(service_providers)}
-    OK ATDT*99***1#
-
+  @doc """
+  Return the text to switch into ppp mode
+  """
+  @spec connect(non_neg_integer()) :: String.t()
+  def connect(pdp_context \\ 1) do
+    """
+    OK ATDT*99***#{pdp_context}#
     CONNECT ''
     """
+  end
+
+  @doc """
+  Output a basic default chatscript.
+
+  This is useful if all you need is a basic chatscript. If you have more
+  complex and custom needs you will not want to use this.
+  """
+  @spec default([VintageNetMobile.service_provider_info()]) :: String.t()
+  def default(service_providers) do
+    [
+      prologue(),
+      """
+      OK ATQ0
+      #{pdp_contexts(service_providers)}
+      """,
+      connect()
+    ]
+    |> IO.iodata_to_binary()
   end
 
   @doc """
