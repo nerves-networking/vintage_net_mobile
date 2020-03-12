@@ -8,15 +8,17 @@ defmodule VintageNetMobile.Modem.UbloxTOBYL2 do
   fallback. Here's an example configuration:
 
   ```elixir
-  {"ppp0",
-   %{
-     type: VintageNetMobile,
-     modem: VintageNetMobile.Modem.UbloxTOBYL2,
-     service_providers: [
-       %{apn: "lte-apn", usage: :eps_bearer},
-       %{apn: "old-apn", usage: :pdp}
-     ]
-   }}
+  VintageNet.configure(
+    "ppp0",
+    %{
+      type: VintageNetMobile,
+       modem: VintageNetMobile.Modem.UbloxTOBYL2,
+       service_providers: [
+         %{apn: "lte-apn", usage: :eps_bearer},
+         %{apn: "old-apn", usage: :pdp}
+       ]
+    }
+  )
   ```
 
   This implementation currently requires APNs to be annotated for whether
@@ -65,7 +67,7 @@ defmodule VintageNetMobile.Modem.UbloxTOBYL2 do
     end
   end
 
-  def chatscript(service_providers) do
+  defp chatscript(service_providers) do
     lte_provider = eps_bearer(service_providers)
     other_provider = pdp(service_providers)
 

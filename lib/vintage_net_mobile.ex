@@ -6,57 +6,84 @@ defmodule VintageNetMobile do
   @moduledoc """
   Use cellular modems with VintageNet
 
-  Examples:
+  This module is not intended to be called directly but via calls to `VintageNet`. Here's a
+  typical example:
 
   ```elixir
-      VintageNet.configure(
-        "ppp0",
-        %{
-          type: VintageNetMobile,
-          modem: your_modem,
-          service_provider: your_service_provider
-        }
-      )
+  VintageNet.configure(
+    "ppp0",
+    %{
+      type: VintageNetMobile,
+      modem: your_modem,
+      service_providers: your_service_providers
+    }
+  )
   ```
 
-  or add this to your `config.exs`:
+  The `:modem` key should be set to your modem implementation. Cellular modems
+  tend to be very similar. If `vintage_net_mobile` doesn't list your modem, see
+  the customizing section. It may just be a copy/paste away.
+
+  The `:service_providers` key should be set to information provided by each of
+  your service providers. It is common that this is a list of one item.
+  Circumstances may require you to list more than one, though. Additionally, modem
+  implementations may require more or less information depending on their
+  implementation. (It's possible to hard-code the service provider in the modem
+  implementation. In that case, this key isn't used and should be set to an empty
+  list. This is useful when your cellular modem provides instructions that
+  magically work and the AT commands that they give are confusing.)
+
+  Information for each service provider is a map with some or all of the following
+  fields:
+
+  * `:apn` (required) - e.g., `"access_point_name"`
+  * `:usage` (optional) - `:eps_bearer` (LTE) or `:pdp` (UMTS/GPRS)
+
+  Your service provider should provide you with the information that you need to
+  connect. Often it is just an APN. The Gnome project provides a database of
+  [service provider
+  information](https://wiki.gnome.org/Projects/NetworkManager/MobileBroadband/ServiceProviders)
+  that may also be useful.
+
+  Here's an example with a service provider list:
 
   ```elixir
-  config :vintage_net,
-    config: [
-      {"ppp0", %{type: VintageNetMobile, modem: your_modem, service_provider: your_service_provider}}
-    ]
+    %{
+      type: VintageNetMobile,
+      modem: your_modem,
+      service_providers: [
+        %{apn: "wireless.twilio.com"}
+      ]
+    }
   ```
 
-  ## Custom Modems
+  ## Custom modems
 
   `VintageNetMobile` allows you add custom modem implementations if the built-in
-  implementations don't work for you:
+  ones don't work for you. See the `VintageNetMobile.Modem` behaviour.
 
-  ```elixir
-  config :vintage_net_mobile,
-    extra_modems: [MyBestLTEEverModem]
-  ```
+  In order to implement a modem, you will need:
 
-  Modem implementations need to implement the `VintageNetMobile.Modem` behaviour.
+  1. Instructions for connecting to the modem via your Linux. Sometimes this
+    involves `usb_modeswitch` or knowing which serial ports the modem exposes.
+  2. Example chat scripts. These are lists of `AT` commands and their expected
+    responses for configuring the service provider and entering `PPP` mode.
+  3. (Optional) Instructions for checking the signal strength when connected.
+
+  One strategy is to see if there's an existing modem that looks similar to yours
+  and modify it.
   """
 
   @typedoc """
   Information about a service provider
 
-  For example:
-
-  `%{apn: "apn.provider.net"}`
+  * `:apn` (required) - e.g., `"access_point_name"`
+  * `:usage` (optional) - `:eps_bearer` (LTE) or `:pdp` (UMTS/GPRS)
   """
-  @type service_provider_info :: %{apn: String.t()}
-
-  @typedoc """
-  VintageNetMobile options
-
-  * `:extra_modems` - list of extra modems that can tie into the `VintageNet` runtime
-     via `VintageNetMobile`
-  """
-  @type opt :: {:extra_modems, [module()]}
+  @type service_provider_info :: %{
+          required(:apn) => String.t(),
+          optional(:usage) => :eps_bearer | :pdp
+        }
 
   @impl true
   def normalize(config), do: config

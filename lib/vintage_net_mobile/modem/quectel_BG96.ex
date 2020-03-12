@@ -8,12 +8,14 @@ defmodule VintageNetMobile.Modem.QuectelBG96 do
   configuration:
 
   ```elixir
-  {"ppp0",
-   %{
-     type: VintageNetMobile,
-     modem: VintageNetMobile.Modem.QuectelBG96,
-     service_providers: [%{apn: "super"}]
-   }}
+  VintageNet.configure(
+    "ppp0",
+    %{
+      type: VintageNetMobile,
+      modem: VintageNetMobile.Modem.QuectelBG96,
+      service_providers: [%{apn: "super"}]
+    }
+  )
   ```
 
   If multiple service providers are configured, this implementation only
