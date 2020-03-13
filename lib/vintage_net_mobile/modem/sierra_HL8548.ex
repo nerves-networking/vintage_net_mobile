@@ -7,17 +7,18 @@ defmodule VintageNetMobile.Modem.SierraHL8548 do
   The Sierra Wireless HL8548 is an industrial grade Embedded Wireless Module
   that provides voice and data connectivity on GPRS, EDGE, WCDMA, HSDPA and
   HSUPA networks.
+
   Here's an example configuration:
 
   ```elixir
-  {"ppp0",
-   %{
-     type: VintageNetMobile,
-     modem: VintageNetMobile.Modem.SierraHL8548,
-     service_providers: [
-       %{apn: "BROADBAND"}
-     ]
-   }}
+  VintageNet.configure(
+    "ppp0",
+    %{
+      type: VintageNetMobile,
+      modem: VintageNetMobile.Modem.SierraHL8548,
+      service_providers: [%{apn: "BROADBAND"}]
+    }
+  )
   ```
   """
 
@@ -28,8 +29,6 @@ defmodule VintageNetMobile.Modem.SierraHL8548 do
 
   alias VintageNetMobile.{ATRunner, SignalMonitor, PPPDConfig, Chatscript}
   alias VintageNet.Interface.RawConfig
-
-  require Logger
 
   @impl true
   def add_raw_config(raw_config, config, opts) do
