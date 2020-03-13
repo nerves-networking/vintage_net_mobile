@@ -47,6 +47,16 @@ defmodule VintageNetMobile.Chatscript do
   end
 
   @doc """
+  Set a PDP context to the specified provider
+  """
+  @spec set_pdp_context(non_neg_integer(), VintageNetMobile.service_provider_info()) :: String.t()
+  def set_pdp_context(id, service_provider) do
+    """
+    OK AT+CGDCONT=#{id},"IP","#{service_provider.apn}"
+    """
+  end
+
+  @doc """
   Output a basic default chatscript which connects to the first provider
 
   This is useful if all you need is a basic chatscript. If you have more
@@ -70,11 +80,5 @@ defmodule VintageNetMobile.Chatscript do
   @spec path(String.t(), keyword()) :: String.t()
   def path(ifname, opts) do
     Path.join(Keyword.fetch!(opts, :tmpdir), "chatscript.#{ifname}")
-  end
-
-  defp set_pdp_context(id, service_provider) do
-    """
-    OK AT+CGDCONT=#{id},"IP","#{service_provider.apn}"
-    """
   end
 end

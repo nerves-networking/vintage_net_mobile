@@ -15,6 +15,7 @@ defmodule VintageNetMobile do
     %{
       type: VintageNetMobile,
       modem: your_modem,
+      modem_opts: %{},
       service_providers: your_service_providers
     }
   )
@@ -22,7 +23,8 @@ defmodule VintageNetMobile do
 
   The `:modem` key should be set to your modem implementation. Cellular modems
   tend to be very similar. If `vintage_net_mobile` doesn't list your modem, see
-  the customizing section. It may just be a copy/paste away.
+  the customizing section. It may just be a copy/paste away. See your module for
+  your modem for what options can be passed to `:modem_opts`.
 
   The `:service_providers` key should be set to information provided by each of
   your service providers. It is common that this is a list of one item.
