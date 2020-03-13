@@ -38,6 +38,9 @@ defmodule VintageNetMobile.Modem.UbloxTOBYL2 do
   alias VintageNet.Interface.RawConfig
 
   @impl true
+  def normalize(config), do: config
+
+  @impl true
   def add_raw_config(raw_config, config, opts) do
     ifname = raw_config.ifname
 

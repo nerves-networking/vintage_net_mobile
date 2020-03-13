@@ -63,6 +63,12 @@ defmodule VintageNetMobile.Modem.QuectelBG96 do
   alias VintageNetMobile.{ATRunner, SignalMonitor, PPPDConfig, Chatscript}
 
   @impl true
+  def normalize(config) do
+    modem_opts = Map.get(config, :modem_opts, %{})
+    %{config | modem_opts: modem_opts}
+  end
+
+  @impl true
   def add_raw_config(raw_config, config, opts) do
     ifname = raw_config.ifname
 

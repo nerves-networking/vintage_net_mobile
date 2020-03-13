@@ -86,31 +86,28 @@ defmodule VintageNetMobile do
         }
 
   @impl true
-  def normalize(config), do: config
+  def normalize(config) do
+    modem = Map.fetch!(config, :modem)
+    service_providers = Map.get(config, :service_providers)
+
+    validate_service_providers!(modem, service_providers)
+
+    modem.normalize(config)
+  end
 
   @impl true
   def to_raw_config(ifname, %{type: __MODULE__, modem: modem} = config, opts) do
     service_providers = Map.get(config, :service_providers)
+    validate_service_providers!(modem, service_providers)
 
-    case modem.validate_service_providers(service_providers) do
-      :ok ->
-        %RawConfig{
-          ifname: ifname,
-          type: __MODULE__,
-          source_config: config
-        }
-        |> modem.add_raw_config(config, opts)
-        |> add_start_commands(modem)
-        |> add_cleanup_command()
-
-      {:error, reason} ->
-        raise ArgumentError, """
-        Looks like you provided invalid service providers because #{inspect(reason)}.
-
-        Please see your modem's documentation in regards to what it expects from
-        the configured service providers
-        """
-    end
+    %RawConfig{
+      ifname: ifname,
+      type: __MODULE__,
+      source_config: config
+    }
+    |> modem.add_raw_config(config, opts)
+    |> add_start_commands(modem)
+    |> add_cleanup_command()
   end
 
   @impl true
@@ -119,6 +116,21 @@ defmodule VintageNetMobile do
   # TODO: implement
   @impl true
   def check_system(_), do: :ok
+
+  defp validate_service_providers!(modem, service_providers) do
+    case modem.validate_service_providers(service_providers) do
+      :ok ->
+        :ok
+
+      {:error, reason} ->
+        raise ArgumentError, """
+        Looks like you provided invalid service providers because #{inspect(reason)}.
+
+        Please see your modem's documentation in regards to what it expects from
+        the configured service providers.
+        """
+    end
+  end
 
   defp add_start_commands(raw_config, modem) do
     # The modem.ready call checks whether the modem exists and can be started.

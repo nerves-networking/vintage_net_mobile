@@ -4,6 +4,14 @@ defmodule VintageNetMobileTest.CustomModem do
   alias VintageNet.Interface.RawConfig
 
   @impl true
+  def normalize(config) do
+    case Map.get(config, :modem_opts, %{}) do
+      %{complain: true} -> raise ArgumentError, "CustomModem is not happy!"
+      _ -> config
+    end
+  end
+
+  @impl true
   def add_raw_config(raw_config, config, _opts) do
     ifname = raw_config.ifname
 
