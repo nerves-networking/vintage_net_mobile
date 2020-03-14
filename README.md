@@ -84,6 +84,9 @@ technology reports one or more of the following:
 
 | Property      | Values         | Description                   |
 | ------------- | -------------- | ----------------------------- |
+| `signal_asu`  | `0-31,99`      | Reported Arbitrary Strength Unit (ASU) |
+| `signal_4bars` | `0-4`         | The signal level in "bars"    |
+| `signal_dbm`  | `-144 - -44`   | The signal level in dBm. Interpretation depends on the connection technology. |
 | `signal_rssi` | `0-31` or `99` | An integer between 0-31 or 99 |
 | `lac`         | `0-65533`      | The Location Area Code (lac) for the current cell |
 | `cid`         | `0-268435455`  | The Cell ID (cid) for the current cell |

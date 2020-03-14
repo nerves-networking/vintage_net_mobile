@@ -40,13 +40,6 @@ defmodule VintageNetMobile.Modem.QuectelBG96 do
   * CONFIG_USB_NET_QMI_WWAN=m
   """
 
-  @typedoc """
-  Radio Access Technology (RAT)
-
-  These define how to connect to the cellular network.
-  """
-  @type rat :: :gsm | :td_scdma | :wcdma | :lte | :cdma | :lte_cat_nb1 | :lte_cat_m1
-
   alias VintageNet.Interface.RawConfig
   alias VintageNetMobile.{ExChat, SignalMonitor, PPPDConfig, Chatscript}
   alias VintageNetMobile.Modem.Utils
@@ -64,6 +57,7 @@ defmodule VintageNetMobile.Modem.QuectelBG96 do
     %{config | vintage_net_mobile: new_mobile}
   end
 
+  @spec normalize_scan(nil | [VintageNetMobile.rat()]) :: [VintageNetMobile.rat()]
   defp normalize_scan(nil), do: nil
 
   defp normalize_scan(rat_list) when is_list(rat_list) do

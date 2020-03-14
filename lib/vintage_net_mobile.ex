@@ -87,6 +87,13 @@ defmodule VintageNetMobile do
           optional(:usage) => :eps_bearer | :pdp
         }
 
+  @typedoc """
+  Radio Access Technology (RAT)
+
+  These define how to connect to the cellular network.
+  """
+  @type rat :: :gsm | :td_scdma | :wcdma | :lte | :cdma | :lte_cat_nb1 | :lte_cat_m1
+
   @impl true
   def normalize(%{type: __MODULE__, vintage_net_mobile: mobile} = config) do
     modem = Map.fetch!(mobile, :modem)

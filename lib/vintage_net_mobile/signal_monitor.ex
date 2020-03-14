@@ -1,7 +1,26 @@
 defmodule VintageNetMobile.SignalMonitor do
-  @moduledoc false
+  @moduledoc """
+  Monitor the cell signal levels
 
-  @rssi_unknown 99
+  This monitor queries the modem for cell signal level information and posts it to
+  VintageNet properties.
+
+  The following properties are reported:
+
+  | Property       | Values       | Description                   |
+  | -------------- | ------------ | ----------------------------- |
+  | `signal_asu`   | `0-31,99`    | This is the raw Arbitrary Strength Unit (ASU) reported. It's interpretation depends on the modem and possibly the connection technology. |
+  | `signal_4bars` | `0-4`        | The signal level in "bars" for presentation to a user. |
+  | `signal_dbm`   | `-144 - -44` | The signal level in dBm. Interpretation depends on the connection technology. |
+  """
+
+  use GenServer
+  require Logger
+
+  alias VintageNet.PropertyTable
+  alias VintageNetMobile.{ExChat, ATParser, ASUCalculator}
+
+  @rssi_unknown ASUCalculator.from_gsm_asu(99)
 
   @typedoc """
   The options for the monitor are:
@@ -13,11 +32,6 @@ defmodule VintageNetMobile.SignalMonitor do
   """
   @type opt ::
           {:signal_check_interval, non_neg_integer()} | {:ifname, String.t()} | {:tty, String.t()}
-
-  use GenServer
-  require Logger
-  alias VintageNet.PropertyTable
-  alias VintageNetMobile.{ExChat, ATParser}
 
   defmodule State do
     @moduledoc false
@@ -68,15 +82,19 @@ defmodule VintageNetMobile.SignalMonitor do
     {:noreply, state}
   end
 
-  defp csq_response_to_rssi({:ok, _header, [rssi, _error_rate]}) when is_integer(rssi), do: rssi
+  defp csq_response_to_rssi({:ok, _header, [asu, _error_rate]}) when is_integer(asu) do
+    ASUCalculator.from_gsm_asu(asu)
+  end
 
   defp csq_response_to_rssi(anything_else) do
     _ = Logger.warn("Unexpected AT+CSQ response: #{inspect(anything_else)}")
     @rssi_unknown
   end
 
-  defp post_signal_rssi(rssi, ifname) do
-    PropertyTable.put(VintageNet, ["interface", ifname, "mobile", "signal_rssi"], rssi)
+  defp post_signal_rssi(%{asu: asu, dbm: dbm, bars: bars}, ifname) do
+    PropertyTable.put(VintageNet, ["interface", ifname, "mobile", "signal_asu"], asu)
+    PropertyTable.put(VintageNet, ["interface", ifname, "mobile", "signal_dbm"], dbm)
+    PropertyTable.put(VintageNet, ["interface", ifname, "mobile", "signal_4bars"], bars)
   end
 
   defp connected?(state) do

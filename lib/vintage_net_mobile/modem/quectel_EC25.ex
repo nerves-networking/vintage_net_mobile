@@ -48,7 +48,9 @@ defmodule VintageNetMobile.Modem.QuectelEC25 do
     {["interface", "ppp0", "mobile", "mcc"], 360},
     {["interface", "ppp0", "mobile", "mnc"], 200},
     {["interface", "ppp0", "mobile", "network"], "Twilio"},
-    {["interface", "ppp0", "mobile", "signal_rssi"], 22},
+    {["interface", "ppp0", "mobile", "signal_asu"], 21},
+    {["interface", "ppp0", "mobile", "signal_4bars"], 4},
+    {["interface", "ppp0", "mobile", "signal_dbm"], -71},
     {["interface", "ppp0", "present"], true},
     {["interface", "ppp0", "state"], :configured},
     {["interface", "ppp0", "type"], VintageNetMobile}
