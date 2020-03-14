@@ -12,8 +12,10 @@ defmodule VintageNetMobile.Modem.QuectelEC25 do
     "ppp0",
     %{
       type: VintageNetMobile,
-      modem: VintageNetMobile.Modem.QuectelEC25,
-      service_providers: [%{apn: "wireless.twilio.com"}]
+      vintage_net_mobile: %{
+        modem: VintageNetMobile.Modem.QuectelEC25,
+        service_providers: [%{apn: "wireless.twilio.com"}]
+      }
     }
   )
   ```
@@ -37,10 +39,10 @@ defmodule VintageNetMobile.Modem.QuectelEC25 do
   def normalize(config), do: config
 
   @impl true
-  def add_raw_config(raw_config, config, opts) do
+  def add_raw_config(raw_config, %{vintage_net_mobile: mobile} = _config, opts) do
     ifname = raw_config.ifname
 
-    files = [{Chatscript.path(ifname, opts), Chatscript.default(config.service_providers)}]
+    files = [{Chatscript.path(ifname, opts), Chatscript.default(mobile.service_providers)}]
 
     child_specs = [
       {ATRunner, [tty: "ttyUSB2", speed: 9600]},

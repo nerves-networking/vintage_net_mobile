@@ -9,8 +9,10 @@ defmodule VintageNetMobile.Modem.QuectelBG96Test do
 
     input = %{
       type: VintageNetMobile,
-      modem: QuectelBG96,
-      service_providers: [%{apn: "m1_service"}]
+      vintage_net_mobile: %{
+        modem: QuectelBG96,
+        service_providers: [%{apn: "m1_service"}]
+      }
     }
 
     output = %RawConfig{
@@ -78,9 +80,11 @@ defmodule VintageNetMobile.Modem.QuectelBG96Test do
 
     input = %{
       type: VintageNetMobile,
-      modem: QuectelBG96,
-      modem_opts: %{scan: [:lte_cat_m1]},
-      service_providers: [%{apn: "m1_service"}]
+      vintage_net_mobile: %{
+        modem: QuectelBG96,
+        service_providers: [%{apn: "m1_service"}],
+        scan: [:lte_cat_m1]
+      }
     }
 
     output = %RawConfig{
@@ -149,16 +153,20 @@ defmodule VintageNetMobile.Modem.QuectelBG96Test do
   test "normalize filters unsupported rats" do
     input = %{
       type: VintageNetMobile,
-      modem: QuectelBG96,
-      modem_opts: %{scan: [:lte_cat_m1, :gsm, :lte]},
-      service_providers: [%{apn: "m1_service"}]
+      vintage_net_mobile: %{
+        modem: QuectelBG96,
+        service_providers: [%{apn: "m1_service"}],
+        scan: [:lte_cat_m1, :gsm, :lte]
+      }
     }
 
     output = %{
       type: VintageNetMobile,
-      modem: QuectelBG96,
-      modem_opts: %{scan: [:lte_cat_m1, :gsm]},
-      service_providers: [%{apn: "m1_service"}]
+      vintage_net_mobile: %{
+        modem: QuectelBG96,
+        scan: [:lte_cat_m1, :gsm],
+        service_providers: [%{apn: "m1_service"}]
+      }
     }
 
     assert VintageNetMobile.normalize(input) == output
@@ -167,9 +175,11 @@ defmodule VintageNetMobile.Modem.QuectelBG96Test do
   test "normalize raises if no supported rats" do
     input = %{
       type: VintageNetMobile,
-      modem: QuectelBG96,
-      modem_opts: %{scan: [:lte]},
-      service_providers: [%{apn: "m1_service"}]
+      vintage_net_mobile: %{
+        modem: QuectelBG96,
+        scan: [:lte],
+        service_providers: [%{apn: "m1_service"}]
+      }
     }
 
     assert_raise ArgumentError, fn -> VintageNetMobile.normalize(input) end

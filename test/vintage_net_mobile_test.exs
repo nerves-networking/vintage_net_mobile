@@ -7,18 +7,35 @@ defmodule VintageNetMobileTest do
   test "normalizes configurations" do
     input = %{
       type: VintageNetMobile,
-      modem: VintageNetMobileTest.CustomModem,
-      service_providers: [%{apn: "free_lte"}]
+      vintage_net_mobile: %{
+        modem: VintageNetMobileTest.CustomModem,
+        service_providers: [%{apn: "free_lte"}]
+      }
     }
 
     assert VintageNetMobile.normalize(input) == input
   end
 
+  test "raises if normalize raises" do
+    input = %{
+      type: VintageNetMobile,
+      vintage_net_mobile: %{
+        modem: VintageNetMobileTest.CustomModem,
+        service_providers: [%{apn: "free_lte"}],
+        complain: true
+      }
+    }
+
+    assert_raise ArgumentError, fn -> VintageNetMobile.normalize(input) end
+  end
+
   test "create a configuration for a custom mode" do
     input = %{
       type: VintageNetMobile,
-      modem: VintageNetMobileTest.CustomModem,
-      service_providers: [%{apn: "free_lte"}]
+      vintage_net_mobile: %{
+        modem: VintageNetMobileTest.CustomModem,
+        service_providers: [%{apn: "free_lte"}]
+      }
     }
 
     output = %RawConfig{
@@ -42,8 +59,10 @@ defmodule VintageNetMobileTest do
   test "raises when service providers list is invalid" do
     input = %{
       type: VintageNetMobile,
-      modem: VintageNetMobile.Modem.QuectelBG96,
-      service_providers: []
+      vintage_net_mobile: %{
+        modem: VintageNetMobile.Modem.QuectelBG96,
+        service_providers: []
+      }
     }
 
     assert_raise ArgumentError, fn ->
@@ -58,8 +77,10 @@ defmodule VintageNetMobileTest do
   test "raises when unknown modem" do
     input = %{
       type: VintageNetMobile,
-      modem: VintageNetMobile.Modem.DoesNotExist,
-      service_providers: [%{apn: "apn"}]
+      vintage_net_mobile: %{
+        modem: VintageNetMobile.Modem.DoesNotExist,
+        service_providers: [%{apn: "apn"}]
+      }
     }
 
     assert_raise UndefinedFunctionError, fn ->

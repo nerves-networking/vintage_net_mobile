@@ -29,28 +29,27 @@ You will then need to configure `VintageNet`. All cellular modems currently show
 up on "ppp0", so configurations look like this:
 
 ```elixir
-VintageNet.configure(
-  "ppp0",
-  %{
-    type: VintageNetMobile,
-    modem: your_modem,
-    service_providers: your_service_providers
-  }
-)
+VintageNet.configure("ppp0", %{
+      type: VintageNetMobile,
+      vintage_net_mobile: %{
+        modem: your_modem,
+        service_providers: your_service_providers
+      }
+    })
 ```
 
 The `:modem` key should be set to your modem implementation. Cellular modems
-tend to be very similar. If `vintage_net_mobile` doesn't list your modem, see
+tend to be very similar. If `vintage_net_mobile` doesn't support your modem, see
 the customizing section. It may just be a copy/paste away.
 
 The `:service_providers` key should be set to information provided by each of
 your service providers. It is common that this is a list of one item.
 Circumstances may require you to list more than one, though. Additionally, modem
-implementations may require more or less information depending on their
-implementation. (It's possible to hard-code the service provider in the modem
-implementation. In that case, this key isn't used and should be set to an empty
-list. This is useful when your cellular modem provides instructions that
-magically work and the AT commands that they give are confusing.)
+implementations may require more information. (It's also possible to hard-code
+the service provider in the modem implementation as a hack. In that case, this
+key isn't used and should be set to an empty list. This is useful when your
+cellular modem provides instructions that magically work and the AT commands
+that they give are confusing.)
 
 Information for each service provider is a map with some or all of the following
 fields:
@@ -69,10 +68,12 @@ Here's an example with a service provider list:
 ```elixir
   %{
     type: VintageNetMobile,
-    modem: your_modem,
-    service_providers: [
-      %{apn: "wireless.twilio.com"}
-    ]
+    vintage_net_mobile: %{
+      modem: your_modem,
+      service_providers: [
+        %{apn: "wireless.twilio.com"}
+      ]
+    }
   }
 ```
 

@@ -9,8 +9,10 @@ defmodule VintageNetMobile.Modem.QuectelEC25Test do
 
     input = %{
       type: VintageNetMobile,
-      modem: QuectelEC25,
-      service_providers: [%{apn: "choosethislteitissafe"}, %{apn: "wireless.twilio.com"}]
+      vintage_net_mobile: %{
+        modem: QuectelEC25,
+        service_providers: [%{apn: "choosethislteitissafe"}, %{apn: "wireless.twilio.com"}]
+      }
     }
 
     output = %RawConfig{

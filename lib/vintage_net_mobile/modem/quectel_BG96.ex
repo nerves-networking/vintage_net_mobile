@@ -12,9 +12,10 @@ defmodule VintageNetMobile.Modem.QuectelBG96 do
     "ppp0",
     %{
       type: VintageNetMobile,
-      modem: VintageNetMobile.Modem.QuectelBG96,
-      modem_opts: %{},
-      service_providers: [%{apn: "super"}]
+      vintage_net_mobile: %{
+        modem: VintageNetMobile.Modem.QuectelBG96,
+        service_providers: [%{apn: "super"}]
+      }
     }
   )
   ```
@@ -22,8 +23,8 @@ defmodule VintageNetMobile.Modem.QuectelBG96 do
   If multiple service providers are configured, this implementation only
   attempts to connect to the first one.
 
-  The `:modem_opts` key is optional and the following device-specific options
-  are supported:
+  The following modem-specific keys are also supported in the
+  `:vintage_net_mobile` map:
 
   * `:scan` - Set this to the order that radio access technologies should be
     attempted when trying to connect. For example, `[:lte_cat_m1, :gsm]`
@@ -50,17 +51,15 @@ defmodule VintageNetMobile.Modem.QuectelBG96 do
   alias VintageNetMobile.{ATRunner, SignalMonitor, PPPDConfig, Chatscript}
 
   @impl true
-  def normalize(config) do
-    modem_opts =
-      Map.get(config, :modem_opts, %{})
-      |> normalize_modem_opts()
+  def normalize(%{vintage_net_mobile: mobile} = config) do
+    new_mobile = normalize_mobile_opts(mobile)
 
-    %{config | modem_opts: modem_opts}
+    %{config | vintage_net_mobile: new_mobile}
   end
 
-  defp normalize_modem_opts(modem_opts) do
-    scan = normalize_scan(Map.get(modem_opts, :scan))
-    %{scan: scan}
+  defp normalize_mobile_opts(mobile) do
+    scan = normalize_scan(Map.get(mobile, :scan))
+    %{mobile | scan: scan}
   end
 
   defp normalize_scan(nil), do: nil
@@ -80,12 +79,11 @@ defmodule VintageNetMobile.Modem.QuectelBG96 do
   end
 
   @impl true
-  def add_raw_config(raw_config, config, opts) do
+  def add_raw_config(raw_config, %{vintage_net_mobile: mobile} = _config, opts) do
     ifname = raw_config.ifname
 
     files = [
-      {Chatscript.path(ifname, opts),
-       chatscript(config.service_providers, Map.get(config, :modem_opts))}
+      {Chatscript.path(ifname, opts), chatscript(mobile)}
     ]
 
     child_specs = [
@@ -115,13 +113,13 @@ defmodule VintageNetMobile.Modem.QuectelBG96 do
   def validate_service_providers([]), do: {:error, :empty}
   def validate_service_providers(_), do: :ok
 
-  defp chatscript(service_providers, modem_opts) do
+  defp chatscript(mobile) do
     pdp_index = 1
 
     [
       Chatscript.prologue(),
-      Chatscript.set_pdp_context(pdp_index, hd(service_providers)),
-      script_additions(modem_opts),
+      Chatscript.set_pdp_context(pdp_index, hd(mobile.service_providers)),
+      script_additions(mobile),
       Chatscript.connect(pdp_index)
     ]
     |> IO.iodata_to_binary()
@@ -129,13 +127,15 @@ defmodule VintageNetMobile.Modem.QuectelBG96 do
 
   defp script_additions(nil), do: []
 
-  defp script_additions(modem_opts) when is_map(modem_opts) do
+  defp script_additions(mobile) when is_map(mobile) do
     [
-      scan_additions(Map.get(modem_opts, :scan))
+      scan_additions(Map.get(mobile, :scan))
     ]
   end
 
-  defp scan_additions(scan_list) do
+  defp scan_additions(nil), do: []
+
+  defp scan_additions(scan_list) when is_list(scan_list) do
     # This sets the sequence as specified and resets nwscanmode and iotop to be permissive
     [
       "OK AT+QCFG=\"nwscanseq\",",

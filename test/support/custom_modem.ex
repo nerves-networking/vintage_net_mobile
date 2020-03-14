@@ -4,11 +4,12 @@ defmodule VintageNetMobileTest.CustomModem do
   alias VintageNet.Interface.RawConfig
 
   @impl true
-  def normalize(config) do
-    case Map.get(config, :modem_opts, %{}) do
-      %{complain: true} -> raise ArgumentError, "CustomModem is not happy!"
-      _ -> config
+  def normalize(%{vintage_net_mobile: mobile} = config) do
+    if Map.get(mobile, :complain, false) do
+      raise ArgumentError, "CustomModem is not happy!"
     end
+
+    config
   end
 
   @impl true
@@ -19,7 +20,7 @@ defmodule VintageNetMobileTest.CustomModem do
       raw_config
       | files: [
           {"chatscript.#{ifname}",
-           "The service providers are #{inspect(config.service_providers)}"}
+           "The service providers are #{inspect(config.vintage_net_mobile.service_providers)}"}
         ]
     }
   end

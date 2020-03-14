@@ -88,18 +88,18 @@ defmodule VintageNetMobile do
         }
 
   @impl true
-  def normalize(config) do
-    modem = Map.fetch!(config, :modem)
-    service_providers = Map.get(config, :service_providers)
-
+  def normalize(%{type: __MODULE__, vintage_net_mobile: mobile} = config) do
+    modem = Map.fetch!(mobile, :modem)
+    service_providers = Map.get(mobile, :service_providers)
     validate_service_providers!(modem, service_providers)
 
     modem.normalize(config)
   end
 
   @impl true
-  def to_raw_config(ifname, %{type: __MODULE__, modem: modem} = config, opts) do
-    service_providers = Map.get(config, :service_providers)
+  def to_raw_config(ifname, %{type: __MODULE__, vintage_net_mobile: mobile} = config, opts) do
+    modem = Map.fetch!(mobile, :modem)
+    service_providers = Map.get(mobile, :service_providers)
     validate_service_providers!(modem, service_providers)
 
     %RawConfig{

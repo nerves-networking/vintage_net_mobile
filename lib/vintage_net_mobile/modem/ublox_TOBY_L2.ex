@@ -12,11 +12,13 @@ defmodule VintageNetMobile.Modem.UbloxTOBYL2 do
     "ppp0",
     %{
       type: VintageNetMobile,
-       modem: VintageNetMobile.Modem.UbloxTOBYL2,
-       service_providers: [
-         %{apn: "lte-apn", usage: :eps_bearer},
-         %{apn: "old-apn", usage: :pdp}
-       ]
+      vintage_net_mobile: %{
+        modem: VintageNetMobile.Modem.UbloxTOBYL2,
+        service_providers: [
+          %{apn: "lte-apn", usage: :eps_bearer},
+          %{apn: "old-apn", usage: :pdp}
+        ]
+      }
     }
   )
   ```
@@ -41,10 +43,10 @@ defmodule VintageNetMobile.Modem.UbloxTOBYL2 do
   def normalize(config), do: config
 
   @impl true
-  def add_raw_config(raw_config, config, opts) do
+  def add_raw_config(raw_config, %{vintage_net_mobile: mobile} = _config, opts) do
     ifname = raw_config.ifname
 
-    files = [{Chatscript.path(ifname, opts), chatscript(config.service_providers)}]
+    files = [{Chatscript.path(ifname, opts), chatscript(mobile.service_providers)}]
 
     child_specs = [
       {ATRunner, [tty: "ttyACM1", speed: 115_200]},
