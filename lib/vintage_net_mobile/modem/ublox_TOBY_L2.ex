@@ -36,7 +36,7 @@ defmodule VintageNetMobile.Modem.UbloxTOBYL2 do
   # Useful references:
   #  * AT commands - https://www.u-blox.com/en/docs/UBX-13002752
 
-  alias VintageNetMobile.{ATRunner, SignalMonitor, PPPDConfig, Chatscript}
+  alias VintageNetMobile.{ExChat, SignalMonitor, PPPDConfig, Chatscript}
   alias VintageNet.Interface.RawConfig
 
   @impl true
@@ -49,7 +49,7 @@ defmodule VintageNetMobile.Modem.UbloxTOBYL2 do
     files = [{Chatscript.path(ifname, opts), chatscript(mobile.service_providers)}]
 
     child_specs = [
-      {ATRunner, [tty: "ttyACM1", speed: 115_200]},
+      {ExChat, [tty: "ttyACM1", speed: 115_200]},
       {SignalMonitor, [ifname: ifname, tty: "ttyACM1"]}
     ]
 

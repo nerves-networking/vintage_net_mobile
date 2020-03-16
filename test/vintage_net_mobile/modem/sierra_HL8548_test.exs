@@ -67,7 +67,7 @@ defmodule VintageNetMobile.Modem.SierraHL8548Test do
            ],
            [env: [{"PRIV_DIR", priv_dir}, {"LD_PRELOAD", Path.join(priv_dir, "pppd_shim.so")}]]
          ]},
-        {VintageNetMobile.ATRunner, [tty: "ttyACM3", speed: 115_200]},
+        {VintageNetMobile.ExChat, [tty: "ttyACM3", speed: 115_200]},
         {VintageNetMobile.SignalMonitor, [ifname: "ppp0", tty: "ttyACM3"]}
       ]
     }

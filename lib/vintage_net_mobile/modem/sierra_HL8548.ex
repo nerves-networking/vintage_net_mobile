@@ -29,7 +29,7 @@ defmodule VintageNetMobile.Modem.SierraHL8548 do
 
   @behaviour VintageNetMobile.Modem
 
-  alias VintageNetMobile.{ATRunner, SignalMonitor, PPPDConfig, Chatscript}
+  alias VintageNetMobile.{ExChat, SignalMonitor, PPPDConfig, Chatscript}
   alias VintageNet.Interface.RawConfig
 
   @impl true
@@ -42,7 +42,7 @@ defmodule VintageNetMobile.Modem.SierraHL8548 do
     files = [{Chatscript.path(ifname, opts), Chatscript.default(mobile.service_providers)}]
 
     child_specs = [
-      {ATRunner, [tty: "ttyACM3", speed: 115_200]},
+      {ExChat, [tty: "ttyACM3", speed: 115_200]},
       {SignalMonitor, [ifname: ifname, tty: "ttyACM3"]}
     ]
 

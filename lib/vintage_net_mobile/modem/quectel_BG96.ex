@@ -48,7 +48,7 @@ defmodule VintageNetMobile.Modem.QuectelBG96 do
   @type rat :: :gsm | :td_scdma | :wcdma | :lte | :cdma | :lte_cat_nb1 | :lte_cat_m1
 
   alias VintageNet.Interface.RawConfig
-  alias VintageNetMobile.{ATRunner, SignalMonitor, PPPDConfig, Chatscript}
+  alias VintageNetMobile.{ExChat, SignalMonitor, PPPDConfig, Chatscript}
 
   @impl true
   def normalize(%{vintage_net_mobile: mobile} = config) do
@@ -87,7 +87,7 @@ defmodule VintageNetMobile.Modem.QuectelBG96 do
     ]
 
     child_specs = [
-      {ATRunner, [tty: "ttyUSB2", speed: 9600]},
+      {ExChat, [tty: "ttyUSB2", speed: 9600]},
       {SignalMonitor, [ifname: ifname, tty: "ttyUSB2"]}
     ]
 

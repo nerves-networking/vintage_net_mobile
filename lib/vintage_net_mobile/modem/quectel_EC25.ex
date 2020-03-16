@@ -8,16 +8,7 @@ defmodule VintageNetMobile.Modem.QuectelEC25 do
   configuration:
 
   ```elixir
-  VintageNet.configure(
-    "ppp0",
-    %{
-      type: VintageNetMobile,
-      vintage_net_mobile: %{
-        modem: VintageNetMobile.Modem.QuectelEC25,
-        service_providers: [%{apn: "wireless.twilio.com"}]
-      }
-    }
-  )
+  m
   ```
 
   If multiple service providers are configured, this implementation only
@@ -32,7 +23,7 @@ defmodule VintageNetMobile.Modem.QuectelEC25 do
   * CONFIG_USB_NET_QMI_WWAN=m
   """
 
-  alias VintageNetMobile.{ATRunner, SignalMonitor, PPPDConfig, Chatscript}
+  alias VintageNetMobile.{ExChat, SignalMonitor, PPPDConfig, Chatscript}
   alias VintageNet.Interface.RawConfig
 
   @impl true
@@ -45,7 +36,7 @@ defmodule VintageNetMobile.Modem.QuectelEC25 do
     files = [{Chatscript.path(ifname, opts), Chatscript.default(mobile.service_providers)}]
 
     child_specs = [
-      {ATRunner, [tty: "ttyUSB2", speed: 9600]},
+      {ExChat, [tty: "ttyUSB2", speed: 9600]},
       {SignalMonitor, [ifname: ifname, tty: "ttyUSB2"]}
     ]
 

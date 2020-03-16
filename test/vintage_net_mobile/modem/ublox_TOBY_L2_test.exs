@@ -80,7 +80,7 @@ defmodule VintageNetMobile.Modem.UbloxTOBYL2Test do
            ],
            [env: [{"PRIV_DIR", priv_dir}, {"LD_PRELOAD", Path.join(priv_dir, "pppd_shim.so")}]]
          ]},
-        {VintageNetMobile.ATRunner, [tty: "ttyACM1", speed: 115_200]},
+        {VintageNetMobile.ExChat, [tty: "ttyACM1", speed: 115_200]},
         {VintageNetMobile.SignalMonitor, [ifname: "ppp0", tty: "ttyACM1"]}
       ]
     }

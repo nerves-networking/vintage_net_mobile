@@ -13,9 +13,9 @@ defmodule VintageNetMobile.SignalMonitor do
           {:signal_check_interval, non_neg_integer()} | {:ifname, String.t()} | {:tty, String.t()}
 
   use GenServer
-
+  require Logger
   alias VintageNet.PropertyTable
-  alias VintageNetMobile.{ATRunner, ATParser}
+  alias VintageNetMobile.{ExChat, ATParser}
 
   defmodule State do
     @moduledoc false
@@ -34,31 +34,38 @@ defmodule VintageNetMobile.SignalMonitor do
     ifname = Keyword.fetch!(opts, :ifname)
     tty = Keyword.fetch!(opts, :tty)
 
-    _ = signal_check_timer(interval)
+    Process.send_after(self(), :signal_check, interval)
 
+    us = self()
+    ExChat.register(tty, "+CSQ", fn message -> send(us, {:handle_csq, message}) end)
     {:ok, %State{signal_check_interval: interval, ifname: ifname, tty: tty}}
   end
 
   @impl true
   def handle_info(:signal_check, state) do
-    {:ok, messages} = ATRunner.send(state.tty, "AT+CSQ", "OK")
+    if connected?(state) do
+      # Only poll if connected, since some modems don't like it when they're not connected
 
-    case Enum.find(messages, &String.starts_with?(&1, "+CSQ")) do
-      nil ->
-        {:noreply, state}
-
-      at_response ->
-        {:csq, {rssi, _bit_error_rate}} = ATParser.parse_at_response(at_response)
-
-        PropertyTable.put(VintageNet, ["interface", state.ifname, "mobile", "signal_rssi"], rssi)
-
-        _ = signal_check_timer(state.signal_check_interval)
-
-        {:noreply, state}
+      # Spec says AT+CSQ max response time is 300 ms.
+      _ = ExChat.send(state.tty, "AT+CSQ", timeout: 500)
+      :ok
+    else
+      PropertyTable.put(VintageNet, ["interface", state.ifname, "mobile", "signal_rssi"], 99)
     end
+
+    Process.send_after(self(), :signal_check, state.signal_check_interval)
+    {:noreply, state}
   end
 
-  defp signal_check_timer(interval) do
-    Process.send_after(self(), :signal_check, interval)
+  def handle_info({:handle_csq, message}, state) do
+    {:csq, {rssi, _bit_error_rate}} = ATParser.parse_at_response(message)
+
+    PropertyTable.put(VintageNet, ["interface", state.ifname, "mobile", "signal_rssi"], rssi)
+
+    {:noreply, state}
+  end
+
+  defp connected?(state) do
+    VintageNet.get(["interface", state.ifname, "connection"]) == :internet
   end
 end
