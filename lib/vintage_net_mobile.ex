@@ -90,8 +90,6 @@ defmodule VintageNetMobile do
   @impl true
   def normalize(%{type: __MODULE__, vintage_net_mobile: mobile} = config) do
     modem = Map.fetch!(mobile, :modem)
-    service_providers = Map.get(mobile, :service_providers)
-    validate_service_providers!(modem, service_providers)
 
     modem.normalize(config)
   end
@@ -99,8 +97,6 @@ defmodule VintageNetMobile do
   @impl true
   def to_raw_config(ifname, %{type: __MODULE__, vintage_net_mobile: mobile} = config, opts) do
     modem = Map.fetch!(mobile, :modem)
-    service_providers = Map.get(mobile, :service_providers)
-    validate_service_providers!(modem, service_providers)
 
     %RawConfig{
       ifname: ifname,
@@ -118,21 +114,6 @@ defmodule VintageNetMobile do
   # TODO: implement
   @impl true
   def check_system(_), do: :ok
-
-  defp validate_service_providers!(modem, service_providers) do
-    case modem.validate_service_providers(service_providers) do
-      :ok ->
-        :ok
-
-      {:error, reason} ->
-        raise ArgumentError, """
-        Looks like you provided invalid service providers because #{inspect(reason)}.
-
-        Please see your modem's documentation in regards to what it expects from
-        the configured service providers.
-        """
-    end
-  end
 
   defp add_start_commands(raw_config, modem) do
     # The modem.ready call checks whether the modem exists and can be started.

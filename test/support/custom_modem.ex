@@ -27,7 +27,4 @@ defmodule VintageNetMobileTest.CustomModem do
 
   @impl true
   def ready(), do: :ok
-
-  @impl true
-  def validate_service_providers(_), do: :ok
 end

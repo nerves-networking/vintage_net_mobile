@@ -74,12 +74,4 @@ defmodule VintageNetMobile.Modem.QuectelEC25Test do
 
     assert output == VintageNetMobile.to_raw_config("ppp0", input, Utils.default_opts())
   end
-
-  test "don't allow empty providers list" do
-    assert {:error, :empty} == QuectelEC25.validate_service_providers([])
-  end
-
-  test "allow for one or more service providers" do
-    assert :ok == QuectelEC25.validate_service_providers([1, 2])
-  end
 end
