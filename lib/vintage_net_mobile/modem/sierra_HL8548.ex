@@ -30,10 +30,14 @@ defmodule VintageNetMobile.Modem.SierraHL8548 do
   @behaviour VintageNetMobile.Modem
 
   alias VintageNetMobile.{ExChat, SignalMonitor, PPPDConfig, Chatscript}
+  alias VintageNetMobile.Modem.Utils
   alias VintageNet.Interface.RawConfig
 
   @impl true
-  def normalize(config), do: config
+  def normalize(config) do
+    config
+    |> Utils.require_a_service_provider()
+  end
 
   @impl true
   def add_raw_config(raw_config, %{vintage_net_mobile: mobile} = _config, opts) do
@@ -63,8 +67,4 @@ defmodule VintageNetMobile.Modem.SierraHL8548 do
       {:error, :missing_modem}
     end
   end
-
-  @impl true
-  def validate_service_providers([]), do: {:error, :empty}
-  def validate_service_providers(_), do: :ok
 end

@@ -40,7 +40,21 @@ defmodule VintageNetMobile.Modem.UbloxTOBYL2 do
   alias VintageNet.Interface.RawConfig
 
   @impl true
-  def normalize(config), do: config
+  def normalize(config) do
+    config
+    |> require_service_providers()
+  end
+
+  defp require_service_providers(%{type: VintageNetMobile, vintage_net_mobile: mobile} = config) do
+    providers = Map.get(mobile, :service_providers, [])
+
+    if eps_bearer(providers) == nil or pdp(providers) == nil do
+      raise ArgumentError,
+            "Must provide at least two service_providers and annotate APNs with their usage (:eps_bearer and :pdp)"
+    end
+
+    config
+  end
 
   @impl true
   def add_raw_config(raw_config, %{vintage_net_mobile: mobile} = _config, opts) do
@@ -93,17 +107,6 @@ defmodule VintageNetMobile.Modem.UbloxTOBYL2 do
       Chatscript.connect()
     ]
     |> IO.iodata_to_binary()
-  end
-
-  @impl true
-  def validate_service_providers([]), do: {:error, "No service providers"}
-
-  def validate_service_providers(providers) do
-    if eps_bearer(providers) != nil and pdp(providers) != nil do
-      :ok
-    else
-      {:error, "Must annotate APNs with their usage (:eps_bearer and :pdp)"}
-    end
   end
 
   defp find_by_usage(service_providers, what) do

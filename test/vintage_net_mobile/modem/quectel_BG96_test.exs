@@ -185,11 +185,27 @@ defmodule VintageNetMobile.Modem.QuectelBG96Test do
     assert_raise ArgumentError, fn -> VintageNetMobile.normalize(input) end
   end
 
-  test "don't allow empty providers list" do
-    assert {:error, :empty} == QuectelBG96.validate_service_providers([])
+  test "requires one provider" do
+    input = %{
+      type: VintageNetMobile,
+      vintage_net_mobile: %{
+        modem: QuectelBG96,
+        service_providers: []
+      }
+    }
+
+    assert_raise ArgumentError, fn -> QuectelBG96.normalize(input) end
   end
 
-  test "allow for one or more service providers" do
-    assert :ok == QuectelBG96.validate_service_providers([1, 2])
+  test "requires provider to have an apn" do
+    input = %{
+      type: VintageNetMobile,
+      vintage_net_mobile: %{
+        modem: QuectelBG96,
+        service_providers: [%{not_apn: "asdf"}]
+      }
+    }
+
+    assert_raise ArgumentError, fn -> QuectelBG96.normalize(input) end
   end
 end

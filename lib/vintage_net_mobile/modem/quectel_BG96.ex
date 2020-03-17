@@ -49,17 +49,19 @@ defmodule VintageNetMobile.Modem.QuectelBG96 do
 
   alias VintageNet.Interface.RawConfig
   alias VintageNetMobile.{ExChat, SignalMonitor, PPPDConfig, Chatscript}
+  alias VintageNetMobile.Modem.Utils
 
   @impl true
-  def normalize(%{vintage_net_mobile: mobile} = config) do
-    new_mobile = normalize_mobile_opts(mobile)
-
-    %{config | vintage_net_mobile: new_mobile}
+  def normalize(config) do
+    config
+    |> Utils.require_a_service_provider()
+    |> normalize_mobile_opts()
   end
 
-  defp normalize_mobile_opts(mobile) do
+  defp normalize_mobile_opts(%{vintage_net_mobile: mobile} = config) do
     scan = normalize_scan(Map.get(mobile, :scan))
-    %{mobile | scan: scan}
+    new_mobile = %{mobile | scan: scan}
+    %{config | vintage_net_mobile: new_mobile}
   end
 
   defp normalize_scan(nil), do: nil
@@ -108,10 +110,6 @@ defmodule VintageNetMobile.Modem.QuectelBG96 do
       {:error, :missing_modem}
     end
   end
-
-  @impl true
-  def validate_service_providers([]), do: {:error, :empty}
-  def validate_service_providers(_), do: :ok
 
   defp chatscript(mobile) do
     pdp_index = 1

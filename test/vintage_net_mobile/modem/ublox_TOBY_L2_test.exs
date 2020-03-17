@@ -101,7 +101,7 @@ defmodule VintageNetMobile.Modem.UbloxTOBYL2Test do
     }
 
     assert_raise ArgumentError, fn ->
-      VintageNetMobile.to_raw_config("ppp0", input, Utils.default_opts())
+      VintageNetMobile.normalize(input)
     end
   end
 end
