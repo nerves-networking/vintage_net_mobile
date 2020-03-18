@@ -1,6 +1,8 @@
 defmodule VintageNetMobile.SignalMonitor do
   @moduledoc false
 
+  @rssi_unknown 99
+
   @typedoc """
   The options for the monitor are:
 
@@ -50,8 +52,7 @@ defmodule VintageNetMobile.SignalMonitor do
       _ = ExChat.send(state.tty, "AT+CSQ", timeout: 500)
       :ok
     else
-      # 99 is the number of unknown or not detectable
-      PropertyTable.put(VintageNet, ["interface", state.ifname, "mobile", "signal_rssi"], 99)
+      post_signal_rssi(@rssi_unknown, state.ifname)
     end
 
     Process.send_after(self(), :signal_check, state.signal_check_interval)
@@ -59,11 +60,23 @@ defmodule VintageNetMobile.SignalMonitor do
   end
 
   def handle_info({:handle_csq, message}, state) do
-    {:csq, {rssi, _bit_error_rate}} = ATParser.parse_at_response(message)
-
-    PropertyTable.put(VintageNet, ["interface", state.ifname, "mobile", "signal_rssi"], rssi)
+    message
+    |> ATParser.parse()
+    |> csq_response_to_rssi()
+    |> post_signal_rssi(state.ifname)
 
     {:noreply, state}
+  end
+
+  defp csq_response_to_rssi({:ok, _header, [rssi, _error_rate]}) when is_integer(rssi), do: rssi
+
+  defp csq_response_to_rssi(anything_else) do
+    _ = Logger.warn("Unexpected AT+CSQ response: #{inspect(anything_else)}")
+    @rssi_unknown
+  end
+
+  defp post_signal_rssi(rssi, ifname) do
+    PropertyTable.put(VintageNet, ["interface", ifname, "mobile", "signal_rssi"], rssi)
   end
 
   defp connected?(state) do

@@ -24,3 +24,5 @@ vintage_net_lte-*.tar
 
 /.elixir_ls/
 
+# Ignore leex's generated Erlang file
+/src/at_lexer.erl

@@ -1,21 +1,33 @@
 defmodule VintageNetMobile.ATParser do
   @moduledoc false
 
+  @type args :: integer() | binary()
+
   @doc """
-  Parse the at response
-
-  This returns a two tuple that will contain the `response_type()` as the first
-  element and the data for that response in the second response
-
-  Current this only supports parsing the CSQ AT response
+  Parse an AT notification
   """
-  @spec parse_at_response(binary()) ::
-          {:csq, {rssi :: non_neg_integer(), bit_error_rate :: non_neg_integer()}}
-  def parse_at_response("+CSQ: " <> data) do
-    [rssi, error_rate] = String.split(data, ",")
-    rssi_int = String.to_integer(rssi)
-    error_rate_int = String.to_integer(error_rate)
+  @spec parse(binary()) ::
+          {:ok, header :: binary(), [args()]} | {:error, any()}
+  def parse("+QCCID: " <> id) do
+    {:ok, "+QCCID: ", [id]}
+  end
 
-    {:csq, {rssi_int, error_rate_int}}
+  def parse(line) do
+    line
+    |> to_charlist()
+    |> :at_lexer.string()
+    |> to_return_value()
+  end
+
+  defp to_return_value({:ok, [{:header, header} | args], _line_number}) do
+    {:ok, header, args}
+  end
+
+  defp to_return_value({:ok, _other, _line_number}) do
+    {:error, :missing_at_type}
+  end
+
+  defp to_return_value({:error, {1, :at_lexer, reason}, 1}) do
+    {:error, reason}
   end
 end
