@@ -50,6 +50,7 @@ defmodule VintageNetMobile.SignalMonitor do
       _ = ExChat.send(state.tty, "AT+CSQ", timeout: 500)
       :ok
     else
+      # 99 is the number of unknown or not detectable
       PropertyTable.put(VintageNet, ["interface", state.ifname, "mobile", "signal_rssi"], 99)
     end
 

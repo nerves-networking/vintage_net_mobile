@@ -8,7 +8,16 @@ defmodule VintageNetMobile.Modem.QuectelEC25 do
   configuration:
 
   ```elixir
-  m
+  VintageNet.configure(
+    "ppp0",
+    %{
+      type: VintageNetMobile,
+      vintage_net_mobile: %{
+        modem: VintageNetMobile.Modem.QuectelEC25,
+        service_providers: [%{apn: "wireless.twilio.com"}]
+      }
+    }
+  )
   ```
 
   If multiple service providers are configured, this implementation only
