@@ -23,6 +23,38 @@ defmodule VintageNetMobile.Modem.QuectelEC25 do
   If multiple service providers are configured, this implementation only
   attempts to connect to the first one.
 
+  Example of supported properties:
+
+  ```elixir
+  iex> VintageNet.get_by_prefix(["interface", "ppp0"])
+  [
+    {["interface", "ppp0", "addresses"],
+    [
+      %{
+        address: {10, 64, 64, 64},
+        family: :inet,
+        netmask: {255, 255, 255, 255},
+        prefix_length: 32,
+        scope: :universe
+      }
+    ]},
+    {["interface", "ppp0", "connection"], :internet},
+    {["interface", "ppp0", "lower_up"], true},
+    {["interface", "ppp0", "mobile", "access_technology"], "FDD LTE"},
+    {["interface", "ppp0", "mobile", "band"], "LTE BAND 4"},
+    {["interface", "ppp0", "mobile", "channel"], 2300},
+    {["interface", "ppp0", "mobile", "cid"], 11303407},
+    {["interface", "ppp0", "mobile", "lac"], 10234},
+    {["interface", "ppp0", "mobile", "mcc"], 360},
+    {["interface", "ppp0", "mobile", "mnc"], 200},
+    {["interface", "ppp0", "mobile", "network"], "Twilio"},
+    {["interface", "ppp0", "mobile", "signal_rssi"], 22},
+    {["interface", "ppp0", "present"], true},
+    {["interface", "ppp0", "state"], :configured},
+    {["interface", "ppp0", "type"], VintageNetMobile}
+  ]
+  ```
+
   ## Required Linux kernel options
 
   * CONFIG_USB_SERIAL=m
@@ -32,7 +64,7 @@ defmodule VintageNetMobile.Modem.QuectelEC25 do
   * CONFIG_USB_NET_QMI_WWAN=m
   """
 
-  alias VintageNetMobile.{ExChat, SignalMonitor, PPPDConfig, Chatscript}
+  alias VintageNetMobile.{ExChat, SignalMonitor, CellMonitor, PPPDConfig, Chatscript}
   alias VintageNetMobile.Modem.Utils
   alias VintageNet.Interface.RawConfig
 
@@ -50,7 +82,8 @@ defmodule VintageNetMobile.Modem.QuectelEC25 do
 
     child_specs = [
       {ExChat, [tty: "ttyUSB2", speed: 9600]},
-      {SignalMonitor, [ifname: ifname, tty: "ttyUSB2"]}
+      {SignalMonitor, [ifname: ifname, tty: "ttyUSB2"]},
+      {CellMonitor, [ifname: ifname, tty: "ttyUSB2"]}
     ]
 
     %RawConfig{
