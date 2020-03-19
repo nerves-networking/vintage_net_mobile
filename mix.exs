@@ -50,6 +50,7 @@ defmodule VintageNetMobile.MixProject do
         "Makefile",
         "README.md",
         "c_src",
+        "src/at_lexer.xrl",
         "LICENSE",
         "CHANGELOG.md"
       ],
