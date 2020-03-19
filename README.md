@@ -77,6 +77,26 @@ Here's an example with a service provider list:
   }
 ```
 
+## VintageNet Properties
+
+In addition to the common `vintage_net` properties for all interface types, this
+technology reports one or more of the following:
+
+| Property      | Values         | Description                   |
+| ------------- | -------------- | ----------------------------- |
+| `signal_rssi` | `0-31` or `99` | An integer between 0-31 or 99 |
+| `lac`         | `0-65533`      | The Location Area Code (lac) for the current cell |
+| `cid`         | `0-268435455`  | The Cell ID (cid) for the current cell |
+| `mcc`         | `0-999`        | Mobile Country Code for the network |
+| `mnc`         | `0-999`        | Mobile Network Code for the network |
+| `network`     | string         | The network operator's name |
+| `access_technology` | string   | The technology currently in use to connect to the network |
+| `band`        | string         | The frequency band in use |
+| `channel`     | integer        | An integer that indicates the channel that's in use |
+
+Please check your modem implementation for which properties it supports or run
+`VintageNet.get_by_prefix(["interface", "ppp0"])` and see what happens.
+
 ## Custom modems
 
 `VintageNetMobile` allows you add custom modem implementations if the built-in
@@ -92,6 +112,38 @@ In order to implement a modem, you will need:
 
 One strategy is to see if there's an existing modem that looks similar to yours
 and modify it.
+
+## Serial AT command debugging
+
+When porting `vintage_net_mobile` to a new cell modem, it can be useful to
+experiment with the modem directly. To do this, add a dependency to
+[elixircom](https://github.com/mattludwigs/elixircom), rebuild, and then on the
+device, you can do things like this:
+
+```elixir
+iex> Elixircom.run("/dev/ttyUSB2", speed: 115200)
+```
+
+Will allow you to run AT commands. To test everything is okay:
+
+```elixir
+iex> Elixircom.run("/dev/ttyUSB2", speed: 115200)
+# type at and press enter
+
+OK
+```
+
+Your modem should supply a complete list of AT commands. The following may be
+useful:
+
+| Command   | Description                                      |
+| --------- | ------------------------------------------------ |
+| at+csq    | Signal Strength                                  |
+| at+csq=?  | Query supported signal strength format           |
+| at+cfun?  | Level of functionality                           |
+| at+cfun=? | Query supported functionality levels             |
+| at+creg?  | Check if the modem has registered to a provider. |
+| at+cgreg? | Same as above for some modems                    |
 
 ## System requirements
 
@@ -141,40 +193,3 @@ and then create `busybox.fragment` with the following:
 CONFIG_MKNOD=y
 CONFIG_WC=y
 ```
-
-## VintageNet Properties
-
-In addition to the common `vintage_net` properties for all interface types, this technology reports the following:
-
-| Property      | Values         | Description                   |
-| ------------- | -------------- | ----------------------------- |
-| `signal_rssi` | `0-31` or `99` | An integer between 0-31 or 99 |
-
-## Serial AT command debugging
-
-If you are running this on a nerves device and have
-[elixircom](https://github.com/mattludwigs/elixircom) installed:
-
-```elixir
-iex> Elixircom.run("/dev/ttyUSB2", speed: 115200)
-```
-
-Will allow you to run AT commands. To test everything is okay:
-
-```elixir
-iex> Elixircom.run("/dev/ttyUSB2", speed: 115200)
-# type at and press enter
-
-OK
-```
-
-| Command   | Description                                      |
-| --------- | ------------------------------------------------ |
-| at+csq    | Signal Strength                                  |
-| at+csq=?  | Query supported signal strength format           |
-| at+cfun?  | Level of functionality                           |
-| at+cfun=? | Query supported functionality levels             |
-| at+creg?  | Check if the modem has registered to a provider. |
-| at+cgreg? | Same as above for some modems                    |
-
-`VintageNetMobile` makes it easy to add cellular support to your device.
