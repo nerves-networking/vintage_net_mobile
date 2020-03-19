@@ -49,7 +49,7 @@ defmodule VintageNetMobile.MixProject do
         "mix.exs",
         "Makefile",
         "README.md",
-        "src",
+        "c_src",
         "LICENSE",
         "CHANGELOG.md"
       ],

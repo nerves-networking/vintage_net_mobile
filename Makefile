@@ -6,17 +6,17 @@ else
 PREFIX = $(MIX_APP_PATH)/priv
 
 all:
-	$(MAKE) -C src/ppp_to_elixir
-	$(MAKE) -C src/pppd_shim
-	cp -R src/etc $(PREFIX)
+	$(MAKE) -C c_src/ppp_to_elixir
+	$(MAKE) -C c_src/pppd_shim
+	cp -R c_src/etc $(PREFIX)
 
 clean:
-	$(MAKE) -C src/ppp_to_elixir clean
-	$(MAKE) -C src/pppd_shim clean
+	$(MAKE) -C c_src/ppp_to_elixir clean
+	$(MAKE) -C c_src/pppd_shim clean
 
 format:
-	$(MAKE) -C src/ppp_to_elixir format
-	$(MAKE) -C src/pppd_shim format
+	$(MAKE) -C c_src/ppp_to_elixir format
+	$(MAKE) -C c_src/pppd_shim format
 endif
 
 .PHONY: all clean calling_from_make format
