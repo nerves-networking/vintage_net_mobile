@@ -2,9 +2,9 @@ defmodule VintageNetMobile.Modem.UbloxTOBYL2 do
   @behaviour VintageNetMobile.Modem
 
   @moduledoc """
-  ublox TOBY-L2 support
+  # u-blox TOBY-L2 support
 
-  The ublox TOBY-L2 is a series of LTE Cat 4 modules with HSPA+ and/or 2G
+  The u-blox TOBY-L2 is a series of LTE Cat 4 modules with HSPA+ and/or 2G
   fallback. Here's an example configuration:
 
   ```elixir
