@@ -31,6 +31,40 @@ defmodule VintageNetMobile.Modem.QuectelBG96 do
     would prevent the modem from trying LTE Cat NB1 and potentially save some
     time if you're guaranteed to not have Cat NB1 service.
 
+  Example of supported properties:
+
+  ```elixir
+  iex> VintageNet.get_by_prefix(["interface", "ppp0"])
+  [
+    {["interface", "ppp0", "addresses"],
+    [
+      %{
+        address: {10, 64, 64, 64},
+        family: :inet,
+        netmask: {255, 255, 255, 255},
+        prefix_length: 32,
+        scope: :universe
+      }
+    ]},
+    {["interface", "ppp0", "connection"], :internet},
+    {["interface", "ppp0", "lower_up"], true},
+    {["interface", "ppp0", "mobile", "access_technology"], "CAT-M1"},
+    {["interface", "ppp0", "mobile", "band"], "LTE BAND 12"},
+    {["interface", "ppp0", "mobile", "channel"], 5110},
+    {["interface", "ppp0", "mobile", "cid"], 18677159},
+    {["interface", "ppp0", "mobile", "lac"], 4319},
+    {["interface", "ppp0", "mobile", "mcc"], 310},
+    {["interface", "ppp0", "mobile", "mnc"], 410},
+    {["interface", "ppp0", "mobile", "network"], "AT&T"},
+    {["interface", "ppp0", "mobile", "signal_4bars"], 4},
+    {["interface", "ppp0", "mobile", "signal_asu"], 25},
+    {["interface", "ppp0", "mobile", "signal_dbm"], -63},
+    {["interface", "ppp0", "present"], true},
+    {["interface", "ppp0", "state"], :configured},
+    {["interface", "ppp0", "type"], VintageNetMobile}
+  ]
+  ```
+
   ## Required Linux kernel options
 
   * CONFIG_USB_SERIAL=m
