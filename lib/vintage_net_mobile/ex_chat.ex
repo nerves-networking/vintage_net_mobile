@@ -1,5 +1,24 @@
 defmodule VintageNetMobile.ExChat do
-  @moduledoc false
+  @moduledoc """
+  Send commands to your modem and get notifications
+
+  This module is used by the "monitor" modules for reporting modem and
+  connection status.
+
+  It can be handy to debug modems too. If you'd like to send commands and
+  receive notifications from the IEx prompt, here's what to do:
+
+  ```elixir
+  require Logger
+  RingLogger.attach
+  tty_name = "ttyUSB2" # set to your AT command interface
+  VintageNetMobile.ExChat.register(tty_name, "+", fn m -> Logger.debug("Got: " <> inspect(m)) end)
+  VintageNetMobile.ExChat.send(tty_name, "AT+CSQ")
+  ```
+
+  To reset the registrations, `VintageNet.deconfigure/2` and
+  `VintageNet.configure/3` your modem.
+  """
 
   alias VintageNetMobile.ExChat.Core
 
