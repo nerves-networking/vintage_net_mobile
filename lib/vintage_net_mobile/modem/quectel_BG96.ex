@@ -52,15 +52,14 @@ defmodule VintageNetMobile.Modem.QuectelBG96 do
   end
 
   defp normalize_mobile_opts(%{vintage_net_mobile: mobile} = config) do
-    scan = normalize_scan(Map.get(mobile, :scan))
-    new_mobile = %{mobile | scan: scan}
+    new_mobile =
+      mobile
+      |> normalize_scan()
+
     %{config | vintage_net_mobile: new_mobile}
   end
 
-  @spec normalize_scan(nil | [VintageNetMobile.rat()]) :: [VintageNetMobile.rat()]
-  defp normalize_scan(nil), do: nil
-
-  defp normalize_scan(rat_list) when is_list(rat_list) do
+  defp normalize_scan(%{scan: rat_list} = mobile) when is_list(rat_list) do
     supported_list = [:lte_cat_m1, :lte_cat_nb, :gsm]
     ok_rat_list = Enum.filter(rat_list, fn rat -> rat in supported_list end)
 
@@ -71,8 +70,10 @@ defmodule VintageNetMobile.Modem.QuectelBG96 do
             } "
     end
 
-    ok_rat_list
+    %{mobile | scan: ok_rat_list}
   end
+
+  defp normalize_scan(mobile), do: mobile
 
   @impl true
   def add_raw_config(raw_config, %{vintage_net_mobile: mobile} = _config, opts) do

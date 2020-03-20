@@ -4,6 +4,18 @@ defmodule VintageNetMobile.Modem.QuectelBG96Test do
   alias VintageNetMobile.Modem.QuectelBG96
   alias VintageNet.Interface.RawConfig
 
+  test "normalize works with minimal options" do
+    input = %{
+      type: VintageNetMobile,
+      vintage_net_mobile: %{
+        modem: QuectelBG96,
+        service_providers: [%{apn: "m1_service"}]
+      }
+    }
+
+    assert input == QuectelBG96.normalize(input)
+  end
+
   test "create an LTE configuration" do
     priv_dir = Application.app_dir(:vintage_net_mobile, "priv")
 
