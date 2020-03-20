@@ -31,6 +31,21 @@ defmodule VintageNetMobile.Modem.UbloxTOBYL2 do
   * CONFIG_USB_SERIAL=m
   * CONFIG_USB_SERIAL_WWAN=m
   * CONFIG_USB_SERIAL_OPTION=m
+
+  ## Required modem preparation
+
+  The Toby L2 is a composite USB device that can be configured to expose
+  various different interfaces. By default, it has one CDC ACM interface. This
+  implementation requires two, so you have to send it the following over a
+  tty interface (via `Circuits.UART` or externally):
+
+  ```
+  AT+UUSBCONF=2
+  ```
+
+  That command is saved NVRAM and only needs to be sent once.  See section
+  "19.17 USB profiles configuration +UUSBCONF" in the [u-blox AT commands
+  manual](https://www.u-blox.com/en/docs/UBX-13002752)
   """
 
   # Useful references:
