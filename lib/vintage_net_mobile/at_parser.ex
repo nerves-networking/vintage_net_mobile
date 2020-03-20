@@ -20,18 +20,18 @@ defmodule VintageNetMobile.ATParser do
     line
     |> to_charlist()
     |> :at_lexer.string()
-    |> to_return_value()
+    |> to_return_value(line)
   end
 
-  defp to_return_value({:ok, [{:header, header} | args], _line_number}) do
+  defp to_return_value({:ok, [{:header, header} | args], _line_number}, _line) do
     {:ok, header, args}
   end
 
-  defp to_return_value({:ok, _other, _line_number}) do
-    {:error, :missing_at_type}
+  defp to_return_value({:ok, _other, _line_number}, line) do
+    {:error, "Expecting string to start with '+XYZ: ', but got #{inspect(line)}"}
   end
 
-  defp to_return_value({:error, {1, :at_lexer, reason}, 1}) do
-    {:error, reason}
+  defp to_return_value({:error, {1, :at_lexer, reason}, 1}, line) do
+    {:error, "Parse error #{inspect(reason)} for #{inspect(line)}}"}
   end
 end
