@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.2.1
+
+This release has improvements and bug fixes throughout, but primarily for the
+Quectel EC25 (LTE Cat 4 modem) and Quectel BG96 (LTE Cat M1/NB1 modem)
+
+* New features
+  * Network connection stats for the EC25 and BG96 modems. This lets you see how
+    the modem connected (GSM, UMTS, LTE, etc) and to which cell tower (cell id,
+    lac, mcc, mnc). This is useful for debug and geolocation.
+  * Improved signal strength reporting. The reports are now in ASU (arbitrary
+    strength units), dBm, and bars. Bars ranges from 0 bars (no connection) to 4
+    bars (strong signal) similar to a cell phone
+
 ## v0.2.0
 
 This release has significant changes to the configuration API and
