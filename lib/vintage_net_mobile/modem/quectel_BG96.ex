@@ -60,7 +60,7 @@ defmodule VintageNetMobile.Modem.QuectelBG96 do
   end
 
   defp normalize_scan(%{scan: rat_list} = mobile) when is_list(rat_list) do
-    supported_list = [:lte_cat_m1, :lte_cat_nb, :gsm]
+    supported_list = [:lte_cat_m1, :lte_cat_nb1, :gsm]
     ok_rat_list = Enum.filter(rat_list, fn rat -> rat in supported_list end)
 
     if ok_rat_list == [] do
@@ -126,20 +126,50 @@ defmodule VintageNetMobile.Modem.QuectelBG96 do
     ]
   end
 
-  defp scan_additions(nil), do: []
+  defp scan_additions(nil) do
+    # Reset to the factory default modes and search sequence
+    scan_additions([:lte_cat_m1, :lte_cat_nb1, :gsm])
+  end
 
   defp scan_additions(scan_list) when is_list(scan_list) do
     # This sets the sequence as specified and resets nwscanmode and iotop to be permissive
     [
       "OK AT+QCFG=\"nwscanseq\",",
-      Enum.map(scan_list, &scan_to_num/1),
+      Enum.map(scan_list, &scan_to_nwscanseq/1),
       "\n",
-      "OK AT+QCFG=\"nwscanmode\",0\n",
-      "OK AT+QCFG=\"iotopmode\",2\n"
+      "OK AT+QCFG=\"nwscanmode\",",
+      scan_to_nwscanmode(scan_list),
+      "\n",
+      "OK AT+QCFG=\"iotopmode\",",
+      scan_to_iotopmode(scan_list),
+      "\n"
     ]
   end
 
-  defp scan_to_num(:gsm), do: "01"
-  defp scan_to_num(:lte_cat_m1), do: "02"
-  defp scan_to_num(:lte_cat_nb1), do: "03"
+  defp scan_to_nwscanseq(:gsm), do: "01"
+  defp scan_to_nwscanseq(:lte_cat_m1), do: "02"
+  defp scan_to_nwscanseq(:lte_cat_nb1), do: "03"
+
+  defp scan_to_nwscanmode(scan_list) do
+    has_gsm = Enum.member?(scan_list, :gsm)
+    has_lte = Enum.member?(scan_list, :lte_cat_m1) or Enum.member?(scan_list, :lte_cat_nb1)
+
+    cond do
+      has_gsm and has_lte -> "0"
+      has_gsm -> "1"
+      has_lte -> "3"
+      true -> "0"
+    end
+  end
+
+  defp scan_to_iotopmode(scan_list) do
+    has_m1 = Enum.member?(scan_list, :lte_cat_m1)
+    has_nb1 = Enum.member?(scan_list, :lte_cat_nb1)
+
+    cond do
+      has_m1 and has_nb1 -> "2"
+      has_nb1 -> "1"
+      true -> "0"
+    end
+  end
 end
