@@ -15,9 +15,34 @@ defmodule VintageNetMobile.ExChatTest do
 
     us = self()
     :ok = ExChat.register(tty_name, "+CSQ:", fn message -> send(us, {:response, message}) end)
-    :ok = ExChat.send(tty_name, "AT+CSQ")
+    assert :ok == ExChat.send(tty_name, "AT+CSQ")
 
     assert_receive {:response, "+CSQ: 99,9"}
+  end
+
+  test "error responses get returned" do
+    tty_name = "ttyUSB2"
+    responses = %{"AT+CSQ" => ["ERROR"]}
+
+    start_supervised!(
+      {ExChat,
+       [tty: tty_name, uart: VintageNetMobileTest.MockUART, uart_opts: [response_map: responses]]}
+    )
+
+    assert {:error, "ERROR"} == ExChat.send(tty_name, "AT+CSQ")
+  end
+
+  test "best effort errors are logged" do
+    tty_name = "ttyUSB2"
+    responses = %{"AT+CSQ" => ["ERROR"]}
+
+    start_supervised!(
+      {ExChat,
+       [tty: tty_name, uart: VintageNetMobileTest.MockUART, uart_opts: [response_map: responses]]}
+    )
+
+    assert capture_log(fn -> :ok = ExChat.send_best_effort(tty_name, "AT+CSQ") end) =~
+             ~r/Send "AT\+CSQ" failed/
   end
 
   test "that timeouts work" do
@@ -42,7 +67,7 @@ defmodule VintageNetMobile.ExChatTest do
     )
 
     assert capture_log(fn -> :ok = ExChat.send(tty_name, "AT+CSQ") end) =~
-             ~r/"junk from a unit test"/
+             ~r/junk from a unit test/
   end
 
   test "normalizes tty names" do

@@ -107,9 +107,9 @@ defmodule VintageNetMobile.CellMonitor do
   end
 
   defp poll(%{up: true} = state) do
-    :ok = ExChat.send(state.tty, "AT+CREG?", timeout: 1000)
-    :ok = ExChat.send(state.tty, "AT+QNWINFO", timeout: 1000)
-    :ok = ExChat.send(state.tty, "AT+QSPN", timeout: 1000)
+    ExChat.send_best_effort(state.tty, "AT+CREG?", timeout: 1000)
+    ExChat.send_best_effort(state.tty, "AT+QNWINFO", timeout: 1000)
+    ExChat.send_best_effort(state.tty, "AT+QSPN", timeout: 1000)
   end
 
   defp poll(_state), do: :ok
@@ -142,7 +142,7 @@ defmodule VintageNetMobile.CellMonitor do
   end
 
   defp qnwinfo_response_to_info(malformed) do
-    _ = Logger.warn("Unexpected AT+QWINFO response: #{inspect(malformed)}")
+    _ = Logger.warn("Unexpected AT+QNWINFO response: #{inspect(malformed)}")
     %{act: "UNKNOWN", band: "", channel: 0}
   end
 

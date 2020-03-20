@@ -57,6 +57,25 @@ defmodule VintageNetMobile.ExChat do
   end
 
   @doc """
+  Helper for sending commands to the modem as best effort
+
+  This function always succeeds. Failed commands log errors, but that's it. This
+  is useful for monitoring operations where intermittent failures should be logged,
+  but really aren't worth dealing with.
+  """
+  @spec send_best_effort(binary(), iodata(), Core.send_options()) :: :ok
+  def send_best_effort(tty_name, command, options \\ []) do
+    case send(tty_name, command, options) do
+      :ok ->
+        :ok
+
+      error ->
+        _ = Logger.warn("Send #{inspect(command)} failed: #{inspect(error)}. Ignoring...")
+        :ok
+    end
+  end
+
+  @doc """
   Register a callback function for reports
   """
   @spec register(binary(), String.t(), function()) :: :ok
