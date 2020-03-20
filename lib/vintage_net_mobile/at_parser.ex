@@ -12,6 +12,10 @@ defmodule VintageNetMobile.ATParser do
     {:ok, "+QCCID: ", [id]}
   end
 
+  def parse("+QNWINFO: No Service") do
+    {:ok, "+QNWINFO: ", ["No Service", "", "", 0]}
+  end
+
   def parse(line) do
     line
     |> to_charlist()

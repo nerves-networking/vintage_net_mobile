@@ -24,6 +24,14 @@ defmodule VintageNetMobile.ATParserTest do
             ]} = ATParser.parse("+QNWINFO: \"FDD LTE\",\"310260\",\"LTE BAND 4\",2300")
 
     assert {:ok, "+QLTS: ", ["2020/03/13,13:21:36-16,1"]} =
+    assert {:ok, "+QNWINFO: ",
+            [
+              "No Service",
+              "",
+              "",
+              0
+            ]} == ATParser.parse("+QNWINFO: No Service")
+
              ATParser.parse("+QLTS: \"2020/03/13,13:21:36-16,1\"")
 
     assert {:ok, "+QCFG: ",
