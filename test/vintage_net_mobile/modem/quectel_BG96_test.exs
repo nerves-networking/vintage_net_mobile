@@ -83,7 +83,8 @@ defmodule VintageNetMobile.Modem.QuectelBG96Test do
            [env: [{"PRIV_DIR", priv_dir}, {"LD_PRELOAD", Path.join(priv_dir, "pppd_shim.so")}]]
          ]},
         {VintageNetMobile.ExChat, [tty: "ttyUSB2", speed: 9600]},
-        {VintageNetMobile.SignalMonitor, [ifname: "ppp0", tty: "ttyUSB2"]}
+        {VintageNetMobile.SignalMonitor, [ifname: "ppp0", tty: "ttyUSB2"]},
+        {VintageNetMobile.CellMonitor, [ifname: "ppp0", tty: "ttyUSB2"]}
       ]
     }
 
@@ -158,7 +159,8 @@ defmodule VintageNetMobile.Modem.QuectelBG96Test do
            [env: [{"PRIV_DIR", priv_dir}, {"LD_PRELOAD", Path.join(priv_dir, "pppd_shim.so")}]]
          ]},
         {VintageNetMobile.ExChat, [tty: "ttyUSB2", speed: 9600]},
-        {VintageNetMobile.SignalMonitor, [ifname: "ppp0", tty: "ttyUSB2"]}
+        {VintageNetMobile.SignalMonitor, [ifname: "ppp0", tty: "ttyUSB2"]},
+        {VintageNetMobile.CellMonitor, [ifname: "ppp0", tty: "ttyUSB2"]}
       ]
     }
 

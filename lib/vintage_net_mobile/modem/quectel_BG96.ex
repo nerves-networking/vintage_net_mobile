@@ -41,7 +41,7 @@ defmodule VintageNetMobile.Modem.QuectelBG96 do
   """
 
   alias VintageNet.Interface.RawConfig
-  alias VintageNetMobile.{ExChat, SignalMonitor, PPPDConfig, Chatscript}
+  alias VintageNetMobile.{ExChat, SignalMonitor, CellMonitor, PPPDConfig, Chatscript}
   alias VintageNetMobile.Modem.Utils
 
   @impl true
@@ -85,7 +85,8 @@ defmodule VintageNetMobile.Modem.QuectelBG96 do
 
     child_specs = [
       {ExChat, [tty: "ttyUSB2", speed: 9600]},
-      {SignalMonitor, [ifname: ifname, tty: "ttyUSB2"]}
+      {SignalMonitor, [ifname: ifname, tty: "ttyUSB2"]},
+      {CellMonitor, [ifname: ifname, tty: "ttyUSB2"]}
     ]
 
     %RawConfig{
