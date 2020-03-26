@@ -96,6 +96,8 @@ technology reports one or more of the following:
 | `access_technology` | string   | The technology currently in use to connect to the network |
 | `band`        | string         | The frequency band in use |
 | `channel`     | integer        | An integer that indicates the channel that's in use |
+| `iccid `      | string          | The Integrated Circuit Card Identifier |
+
 
 Please check your modem implementation for which properties it supports or run
 `VintageNet.get_by_prefix(["interface", "ppp0"])` and see what happens.
@@ -147,6 +149,8 @@ useful:
 | at+cfun=? | Query supported functionality levels             |
 | at+creg?  | Check if the modem has registered to a provider. |
 | at+cgreg? | Same as above for some modems                    |
+| at+qccid  | Query to obtain the Integrated Circuit Card Identifier             |
+| at+cimi   | Query to obtain the International Mobile Subscriber Identity             |
 
 ## System requirements
 

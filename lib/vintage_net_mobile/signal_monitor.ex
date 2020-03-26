@@ -62,7 +62,8 @@ defmodule VintageNetMobile.SignalMonitor do
     if connected?(state) do
       # Only poll if connected, since some modems don't like it when they're not connected
 
-      # Spec says AT+CSQ max response time is 300 ms.
+      # The AT+CSQ response should be quick. Quectel specifies a max response of 300 ms for
+      # the BG96 and EC25. Other modules should be similar.
       ExChat.send_best_effort(state.tty, "AT+CSQ", timeout: 500)
       :ok
     else
