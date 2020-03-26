@@ -17,11 +17,15 @@ defmodule VintageNetMobile.CellMonitor do
   | `access_technology` | string   | The technology currently in use to connect to the network |
   | `band`        | string         | The frequency band in use |
   | `channel`     | integer        | An integer that indicates the channel that's in use |
+  | `iccid `      | string          | The Integrated Circuit Card Identifier |
+
   """
   use GenServer
   require Logger
   alias VintageNet.PropertyTable
   alias VintageNetMobile.{ExChat, ATParser}
+
+  @iccid_unknown "Not provided"
 
   defmodule State do
     @moduledoc false
@@ -44,6 +48,7 @@ defmodule VintageNetMobile.CellMonitor do
     ExChat.register(tty, "+CREG:", fn message -> send(us, {:handle_creg, message}) end)
     ExChat.register(tty, "+QSPN:", fn message -> send(us, {:handle_qspn, message}) end)
     ExChat.register(tty, "+QNWINFO:", fn message -> send(us, {:handle_qnwinfo, message}) end)
+    ExChat.register(tty, "+QCCID", fn message -> send(us, {:handle_qccid, message}) end)
 
     _ = :timer.send_interval(30_000, :poll)
 
@@ -78,6 +83,15 @@ defmodule VintageNetMobile.CellMonitor do
     {:noreply, state}
   end
 
+  def handle_info({:handle_qccid, message}, state) do
+    message
+    |> ATParser.parse()
+    |> iccid_response_to_qccid()
+    |> post_iccid(state.ifname)
+
+    {:noreply, state}
+  end
+
   def handle_info(
         {VintageNet, ["interface", ifname, "connection"], _old, :internet, _meta},
         %{ifname: ifname} = state
@@ -86,6 +100,7 @@ defmodule VintageNetMobile.CellMonitor do
 
     # Set the CREG report format just in case it hasn't been set.
     :ok = ExChat.send(new_state.tty, "AT+CREG=2", timeout: 1000)
+    :ok = ExChat.send(new_state.tty, "AT+QCCID", timeout: 500)
 
     poll(new_state)
 
@@ -146,6 +161,15 @@ defmodule VintageNetMobile.CellMonitor do
     %{act: "UNKNOWN", band: "", channel: 0}
   end
 
+  defp iccid_response_to_qccid({:ok, "+QCCID: ", [id]}) do
+    id
+  end
+
+  defp iccid_response_to_qccid(anything_else) do
+    _ = Logger.warn("Unexpected AT+QCCID response: #{inspect(anything_else)}")
+    @iccid_unknown
+  end
+
   defp plmn_to_mcc_mnc(<<mcc::3-bytes, mnc::3-bytes>>) do
     {safe_decimal_to_int(mcc), safe_decimal_to_int(mnc)}
   end
@@ -187,5 +211,9 @@ defmodule VintageNetMobile.CellMonitor do
     PropertyTable.put(VintageNet, ["interface", ifname, "mobile", "access_technology"], act)
     PropertyTable.put(VintageNet, ["interface", ifname, "mobile", "band"], band)
     PropertyTable.put(VintageNet, ["interface", ifname, "mobile", "channel"], channel)
+  end
+
+  defp post_iccid(iccid, ifname) do
+    PropertyTable.put(VintageNet, ["interface", ifname, "mobile", "iccid"], iccid)
   end
 end

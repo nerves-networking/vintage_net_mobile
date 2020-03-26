@@ -62,7 +62,7 @@ defmodule VintageNetMobile.SignalMonitor do
     if connected?(state) do
       # Only poll if connected, since some modems don't like it when they're not connected
 
-      # Spec says AT+CSQ max response time is 300 ms.
+      # Spec says AT+CSQ max response time is 500 ms.
       ExChat.send_best_effort(state.tty, "AT+CSQ", timeout: 500)
       :ok
     else
