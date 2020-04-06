@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.2.2
+
+* New features
+  * Added a "monitor" for reporting a SIM card's ICCID and IMSI. These are
+    useful for debugging issues with service providers. Currently this is
+    only available on the BG96, but can easily be added to other modems as
+    testing permits.
+
 ## v0.2.1
 
 This release has improvements and bug fixes throughout, but primarily for the
