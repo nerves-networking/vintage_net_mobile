@@ -44,7 +44,31 @@ defmodule VintageNetMobile.ExChat.CoreTest do
     {state, []} = Core.process(state, "+CSQ: 21, 99")
     {state, actions} = Core.process(state, "OK")
 
-    assert [:stop_timer, {:reply, :ok, :sender_placeholder}] = actions
+    assert [:stop_timer, {:reply, {:ok, []}, :sender_placeholder}] = actions
+    assert Core.pending_request_count(state) == 0
+  end
+
+  test "sending a command that gets a response" do
+    state = Core.init()
+    {state, actions} = Core.send(state, "ATI", :sender_placeholder)
+
+    assert [{:start_timer, 10_000, _ref}, {:send, "ATI"}] = actions
+    assert Core.pending_request_count(state) == 1
+
+    # Actual ATI response with echo on
+    {state, []} = Core.process(state, "ATI\r")
+    {state, []} = Core.process(state, "Quectel")
+    {state, []} = Core.process(state, "BG96")
+    {state, []} = Core.process(state, "Revision: BG96MAR02A07M1G")
+    {state, []} = Core.process(state, "")
+    {state, actions} = Core.process(state, "OK")
+
+    assert [
+             :stop_timer,
+             {:reply, {:ok, ["ATI\r", "Quectel", "BG96", "Revision: BG96MAR02A07M1G"]},
+              :sender_placeholder}
+           ] = actions
+
     assert Core.pending_request_count(state) == 0
   end
 
@@ -85,7 +109,7 @@ defmodule VintageNetMobile.ExChat.CoreTest do
 
     assert [
              :stop_timer,
-             {:reply, :ok, :sender_placeholder},
+             {:reply, {:ok, []}, :sender_placeholder},
              {:start_timer, 10_000, _ref},
              {:send, "AT+COPS?"}
            ] = actions
@@ -97,7 +121,7 @@ defmodule VintageNetMobile.ExChat.CoreTest do
 
     assert [
              :stop_timer,
-             {:reply, :ok, :sender_placeholder2},
+             {:reply, {:ok, []}, :sender_placeholder2},
              {:start_timer, 10_000, _ref},
              {:send, "AT+CFUN"}
            ] = actions
@@ -141,7 +165,7 @@ defmodule VintageNetMobile.ExChat.CoreTest do
 
     {state, []} = Core.process(state, "+COPS: 0,0,\"Twilio\",7")
     {state, actions} = Core.process(state, "OK")
-    assert [:stop_timer, {:reply, :ok, :sender_placeholder2}] = actions
+    assert [:stop_timer, {:reply, {:ok, []}, :sender_placeholder2}] = actions
     assert Core.pending_request_count(state) == 0
   end
 
@@ -160,15 +184,21 @@ defmodule VintageNetMobile.ExChat.CoreTest do
     assert [{:start_timer, 10_000, _ref}, {:send, "AT+CSQ"}] = actions
     assert Core.pending_request_count(state) == 1
 
-    # These next two lines should be ignored
+    # Ignored notification
     {state, []} = Core.process(state, "+RANDOM_STUFF")
+
+    # Ignored blank line
     {state, []} = Core.process(state, "")
-    {state, []} = Core.process(state, "   ")
+
+    # Not ignored "response"
     {state, []} = Core.process(state, "asdf")
+
+    # Ignored blank line
+    {state, []} = Core.process(state, "")
 
     {state, actions} = Core.process(state, "OK")
 
-    assert [:stop_timer, {:reply, :ok, :sender_placeholder}] = actions
+    assert [:stop_timer, {:reply, {:ok, ["asdf"]}, :sender_placeholder}] = actions
     assert Core.pending_request_count(state) == 0
   end
 
@@ -176,7 +206,7 @@ defmodule VintageNetMobile.ExChat.CoreTest do
     state = Core.init()
     {state, actions} = Core.send(state, "AT+NO_RESPONSE", :sender_placeholder, timeout: 0)
 
-    assert actions == [{:send, "AT+NO_RESPONSE"}, {:reply, :ok, :sender_placeholder}]
+    assert actions == [{:send, "AT+NO_RESPONSE"}, {:reply, {:ok, []}, :sender_placeholder}]
     assert Core.pending_request_count(state) == 0
   end
 
@@ -205,11 +235,11 @@ defmodule VintageNetMobile.ExChat.CoreTest do
 
     assert [
              :stop_timer,
-             {:reply, :ok, :sender_placeholder},
+             {:reply, {:ok, []}, :sender_placeholder},
              {:send, "AT+NO_RESPONSE"},
-             {:reply, :ok, :sender_placeholder2},
+             {:reply, {:ok, []}, :sender_placeholder2},
              {:send, "AT+NO_RESPONSE2"},
-             {:reply, :ok, :sender_placeholder3}
+             {:reply, {:ok, []}, :sender_placeholder3}
            ] = actions
 
     assert Core.pending_request_count(state) == 0

@@ -22,8 +22,8 @@ defmodule VintageNetMobile.ExChat.Core do
   @type result :: {State.t(), [action()]}
 
   @type send_options :: [
-          success: String.t(),
-          errors: [String.t()],
+          success: binary(),
+          errors: [binary()],
           timeout: non_neg_integer()
         ]
 
@@ -127,20 +127,32 @@ defmodule VintageNetMobile.ExChat.Core do
 
   defp handle_replies(message, %{request: request} = state) do
     cond do
+      message == "" ->
+        {state, []}
+
       message == request.success ->
-        actions = [:stop_timer, {:reply, :ok, request.id}]
-        {new_state, more_actions} = maybe_send_next_request(state)
-        {new_state, actions ++ more_actions}
+        responses = Enum.reverse(state.responses)
+        actions = [:stop_timer, {:reply, {:ok, responses}, request.id}]
+        new_state1 = %{state | responses: []}
+        {new_state2, more_actions} = maybe_send_next_request(new_state1)
+        {new_state2, actions ++ more_actions}
 
       message in request.errors ->
         actions = [:stop_timer, {:reply, {:error, message}, request.id}]
         {new_state, more_actions} = maybe_send_next_request(state)
         {new_state, actions ++ more_actions}
 
+      not notification?(message) ->
+        new_state = %{state | responses: [message | state.responses]}
+        {new_state, []}
+
       true ->
         {state, []}
     end
   end
+
+  defp notification?("+" <> _rest), do: true
+  defp notification?(_other), do: false
 
   defp maybe_send_next_request(state) do
     case :queue.out(state.queued_requests) do
@@ -157,7 +169,7 @@ defmodule VintageNetMobile.ExChat.Core do
   # Requests without responses
   defp send_request(state, %{timeout: timeout, success: success} = request)
        when timeout <= 0 or success == "" do
-    actions = [{:send, request.request}, {:reply, :ok, request.id}]
+    actions = [{:send, request.request}, {:reply, {:ok, []}, request.id}]
 
     # See if another request has been queued.
     {new_state, more_actions} = maybe_send_next_request(state)

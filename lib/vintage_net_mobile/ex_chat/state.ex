@@ -6,12 +6,14 @@ defmodule VintageNetMobile.ExChat.State do
   defstruct queued_requests: :queue.new(),
             request: nil,
             request_timer: nil,
+            responses: [],
             listeners: []
 
   @type t :: %__MODULE__{
           queued_requests: :queue.queue(Request.t()),
           request: Request.t() | nil,
           request_timer: reference() | nil,
-          listeners: [{String.t(), any()}]
+          responses: [binary()],
+          listeners: [{binary(), any()}]
         }
 end

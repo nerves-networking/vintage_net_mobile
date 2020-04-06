@@ -47,8 +47,10 @@ defmodule VintageNetMobile.ExChat do
 
   @doc """
   Send a command to the modem
+
+  On success, this returns a list of the lines received back from the modem.
   """
-  @spec send(binary(), iodata(), Core.send_options()) :: :ok | {:error, any()}
+  @spec send(binary(), iodata(), Core.send_options()) :: {:ok, [binary()]} | {:error, any()}
   def send(tty_name, command, options \\ []) do
     # Make sure we wait long enough for the command to be processed by the modem
     command_timeout = Keyword.get(options, :timeout, 10000) + 500
@@ -66,7 +68,7 @@ defmodule VintageNetMobile.ExChat do
   @spec send_best_effort(binary(), iodata(), Core.send_options()) :: :ok
   def send_best_effort(tty_name, command, options \\ []) do
     case send(tty_name, command, options) do
-      :ok ->
+      {:ok, _response} ->
         :ok
 
       error ->
@@ -78,7 +80,7 @@ defmodule VintageNetMobile.ExChat do
   @doc """
   Register a callback function for reports
   """
-  @spec register(binary(), String.t(), function()) :: :ok
+  @spec register(binary(), binary(), function()) :: :ok
   def register(tty_name, type, callback) do
     GenServer.call(server_name(tty_name), {:register, type, callback})
   end

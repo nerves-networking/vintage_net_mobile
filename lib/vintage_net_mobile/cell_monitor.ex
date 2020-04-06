@@ -99,8 +99,8 @@ defmodule VintageNetMobile.CellMonitor do
     new_state = %{state | up: true}
 
     # Set the CREG report format just in case it hasn't been set.
-    :ok = ExChat.send(new_state.tty, "AT+CREG=2", timeout: 1000)
-    :ok = ExChat.send(new_state.tty, "AT+QCCID", timeout: 500)
+    {:ok, _} = ExChat.send(new_state.tty, "AT+CREG=2", timeout: 1000)
+    {:ok, _} = ExChat.send(new_state.tty, "AT+QCCID", timeout: 500)
 
     poll(new_state)
 

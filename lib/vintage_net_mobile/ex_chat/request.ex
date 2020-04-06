@@ -17,13 +17,13 @@ defmodule VintageNetMobile.ExChat.Request do
 
   @type t :: %__MODULE__{
           id: any(),
-          request: String.t(),
-          success: String.t(),
-          errors: [String.t()],
+          request: binary(),
+          success: binary(),
+          errors: [binary()],
           timeout: non_neg_integer()
         }
 
-  @spec new(String.t(), any(), keyword()) :: t()
+  @spec new(binary(), any(), keyword()) :: t()
   def new(request, who, opts) do
     %__MODULE__{
       id: who,

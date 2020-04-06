@@ -15,7 +15,7 @@ defmodule VintageNetMobile.ExChatTest do
 
     us = self()
     :ok = ExChat.register(tty_name, "+CSQ:", fn message -> send(us, {:response, message}) end)
-    assert :ok == ExChat.send(tty_name, "AT+CSQ")
+    assert {:ok, []} == ExChat.send(tty_name, "AT+CSQ")
 
     assert_receive {:response, "+CSQ: 99,9"}
   end
@@ -66,7 +66,7 @@ defmodule VintageNetMobile.ExChatTest do
        [tty: tty_name, uart: VintageNetMobileTest.MockUART, uart_opts: [response_map: responses]]}
     )
 
-    assert capture_log(fn -> :ok = ExChat.send(tty_name, "AT+CSQ") end) =~
+    assert capture_log(fn -> {:ok, []} = ExChat.send(tty_name, "AT+CSQ") end) =~
              ~r/junk from a unit test/
   end
 
