@@ -84,7 +84,8 @@ defmodule VintageNetMobile.Modem.QuectelBG96Test do
          ]},
         {VintageNetMobile.ExChat, [tty: "ttyUSB2", speed: 9600]},
         {VintageNetMobile.SignalMonitor, [ifname: "ppp0", tty: "ttyUSB2"]},
-        {VintageNetMobile.CellMonitor, [ifname: "ppp0", tty: "ttyUSB2"]}
+        {VintageNetMobile.CellMonitor, [ifname: "ppp0", tty: "ttyUSB2"]},
+        {VintageNetMobile.ModemInfo, [ifname: "ppp0", tty: "ttyUSB2"]}
       ]
     }
 
@@ -160,7 +161,8 @@ defmodule VintageNetMobile.Modem.QuectelBG96Test do
          ]},
         {VintageNetMobile.ExChat, [tty: "ttyUSB2", speed: 9600]},
         {VintageNetMobile.SignalMonitor, [ifname: "ppp0", tty: "ttyUSB2"]},
-        {VintageNetMobile.CellMonitor, [ifname: "ppp0", tty: "ttyUSB2"]}
+        {VintageNetMobile.CellMonitor, [ifname: "ppp0", tty: "ttyUSB2"]},
+        {VintageNetMobile.ModemInfo, [ifname: "ppp0", tty: "ttyUSB2"]}
       ]
     }
 
