@@ -17,7 +17,7 @@ defmodule VintageNetMobile.ModemInfo do
   alias VintageNet.PropertyTable
   alias VintageNetMobile.{ExChat, ATParser}
 
-  @iccid_unknown "Not provided"
+  @unknown "Unknown"
 
   defmodule State do
     @moduledoc false
@@ -67,7 +67,7 @@ defmodule VintageNetMobile.ModemInfo do
 
   defp iccid_response_to_qccid(anything_else) do
     _ = Logger.warn("Unexpected AT+QCCID response: #{inspect(anything_else)}")
-    @iccid_unknown
+    @unknown
   end
 
   defp post_iccid(iccid, ifname) do
