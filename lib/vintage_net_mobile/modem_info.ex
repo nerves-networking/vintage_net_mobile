@@ -9,7 +9,8 @@ defmodule VintageNetMobile.ModemInfo do
 
   | Property      | Values         | Description                   |
   | ------------- | -------------- | ----------------------------- |
-  | `iccid `      | string         | The Integrated Circuit Card Identifier |
+  | `iccid`       | string         | The Integrated Circuit Card Identifier (ICCID) |
+  | `imsi`        | string         | The International Mobile Subscriber Identity (IMSI) |
 
   """
   use GenServer
@@ -45,8 +46,13 @@ defmodule VintageNetMobile.ModemInfo do
 
   @impl true
   def handle_info(:poll, state) do
-    {:ok, _} = ExChat.send(state.tty, "ATE0", timeout: 500)
-    {:ok, _} = ExChat.send(state.tty, "AT+QCCID", timeout: 500)
+    ExChat.send_best_effort(state.tty, "ATE0", timeout: 500)
+
+    ExChat.send(state.tty, "AT+CIMI", timeout: 500)
+    |> cimi_response_to_imsi()
+    |> post_imsi(state.ifname)
+
+    ExChat.send_best_effort(state.tty, "AT+QCCID", timeout: 500)
 
     {:noreply, state}
   end
@@ -72,5 +78,18 @@ defmodule VintageNetMobile.ModemInfo do
 
   defp post_iccid(iccid, ifname) do
     PropertyTable.put(VintageNet, ["interface", ifname, "mobile", "iccid"], iccid)
+  end
+
+  defp cimi_response_to_imsi({:ok, [imsi]}) do
+    imsi
+  end
+
+  defp cimi_response_to_imsi(anything_else) do
+    _ = Logger.warn("Unexpected AT+CIMI response: #{inspect(anything_else)}")
+    @unknown
+  end
+
+  defp post_imsi(imsi, ifname) do
+    PropertyTable.put(VintageNet, ["interface", ifname, "mobile", "imsi"], imsi)
   end
 end

@@ -96,8 +96,8 @@ technology reports one or more of the following:
 | `access_technology` | string   | The technology currently in use to connect to the network |
 | `band`        | string         | The frequency band in use |
 | `channel`     | integer        | An integer that indicates the channel that's in use |
-| `iccid `      | string          | The Integrated Circuit Card Identifier |
-
+| `iccid`       | string         | The Integrated Circuit Card Identifier (ICCID) |
+| `imsi`        | string         | The International Mobile Subscriber Identity (IMSI) |
 
 Please check your modem implementation for which properties it supports or run
 `VintageNet.get_by_prefix(["interface", "ppp0"])` and see what happens.
