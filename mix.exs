@@ -67,7 +67,8 @@ defmodule VintageNetMobile.MixProject do
       {:ex_doc, "~> 0.19", only: :docs, runtime: false},
       {:excoveralls, "~> 0.8", only: :test, runtime: false},
       {:dialyxir, "~> 1.0.0", only: [:dev, :test], runtime: false},
-      {:circuits_uart, "~> 1.4"}
+      {:circuits_uart, "~> 1.4"},
+      {:credo, "~> 1.2", only: [:dev, :test], runtime: false}
     ]
   end
 

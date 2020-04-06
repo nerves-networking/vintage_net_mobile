@@ -1,5 +1,6 @@
 defmodule VintageNetMobileTest.CustomModem do
   @behaviour VintageNetMobile.Modem
+  @moduledoc false
 
   alias VintageNet.Interface.RawConfig
 

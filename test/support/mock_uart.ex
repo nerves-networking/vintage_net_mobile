@@ -1,6 +1,8 @@
 defmodule VintageNetMobileTest.MockUART do
   use GenServer
 
+  @moduledoc false
+
   def start_link(opts \\ []) do
     GenServer.start_link(__MODULE__, [self()], opts)
   end
