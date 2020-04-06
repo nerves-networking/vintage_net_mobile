@@ -66,7 +66,7 @@ defmodule VintageNetMobile.MixProject do
       {:muontrap, "~> 0.5.0"},
       {:ex_doc, "~> 0.19", only: :docs, runtime: false},
       {:excoveralls, "~> 0.8", only: :test, runtime: false},
-      {:dialyxir, "~> 1.0.0-rc.6", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.0.0", only: [:dev, :test], runtime: false},
       {:circuits_uart, "~> 1.4"}
     ]
   end
