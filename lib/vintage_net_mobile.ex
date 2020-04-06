@@ -118,9 +118,8 @@ defmodule VintageNetMobile do
   @impl true
   def ioctl(_ifname, _command, _args), do: {:error, :unsupported}
 
-  # TODO: implement
   @impl true
-  def check_system(_), do: :ok
+  def check_system(_), do: {:error, "unimplemented"}
 
   defp add_start_commands(raw_config, modem) do
     # The modem.ready call checks whether the modem exists and can be started.
