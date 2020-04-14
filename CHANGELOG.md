@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.2.3
+
+* Updates
+  * Allow `muontrap` v0.6.0 to be used since the breaking change doesn't affect
+    `vintage_net_mobile`
+  * Force `vintage_net` v0.7.9 or later to pull in PPP IP address fix
+
 ## v0.2.2
 
 * New features
