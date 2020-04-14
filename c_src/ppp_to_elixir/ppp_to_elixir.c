@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <syslog.h>
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <unistd.h>
@@ -128,11 +129,17 @@ static int encode_args(ei_x_buff *buff, int argc, char *argv[])
     return ei_x_encode_empty_list(buff);
 }
 
+static void fatal_error(const char *message)
+{
+    syslog(LOG_USER | LOG_ERR, "vintage_net_mobile: couldn't process ppp message (%s). Check vintage_net_mobile OTP app", message);
+    exit(EXIT_FAILURE);
+}
+
 int main(int argc, char *argv[])
 {
     int fd = socket(AF_UNIX, SOCK_DGRAM, 0);
     if (fd < 0)
-        err(EXIT_FAILURE, "socket");
+        fatal_error("socket");
 
     struct sockaddr_un addr;
     memset(&addr, 0, sizeof(addr));
@@ -140,7 +147,7 @@ int main(int argc, char *argv[])
     strncpy(addr.sun_path, SOCKET_PATH, sizeof(addr.sun_path) - 1);
 
     if (connect(fd, (struct sockaddr *)&addr, sizeof(addr)) == -1)
-        err(EXIT_FAILURE, "connect");
+        fatal_error("connect");
 
     ei_x_buff buff;
     if (ei_x_new_with_version(&buff) == 0 &&
@@ -150,12 +157,12 @@ int main(int argc, char *argv[])
 
         ssize_t rc = write(fd, buff.buff, buff.index);
         if (rc < 0)
-            err(EXIT_FAILURE, "write");
+            fatal_error("write");
 
         if (rc != buff.index)
-             errx(EXIT_FAILURE, "write wasn't able to send %d chars all at once!", buff.index);
+            fatal_error("unexpected write overflow");
     } else {
-        errx(EXIT_FAILURE, "encoding failed");
+        fatal_error("encoding failed");
     }
 
     close(fd);
