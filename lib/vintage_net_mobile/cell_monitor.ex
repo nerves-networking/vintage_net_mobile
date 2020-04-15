@@ -97,9 +97,17 @@ defmodule VintageNetMobile.CellMonitor do
         {VintageNet, ["interface", ifname, "connection"], _old, _not_internet, _meta},
         %{ifname: ifname} = state
       ) do
-    # Clear out properties!
+    # NOTE: None of this should depend on whether there's an Internet connection. At
+    # one point, some trouble was seen when polling status and not connected. The easy
+    # solution was to not poll. This should be revisited since might be valuable to
+    # know that you're connected to a cell tower, but ppp isn't working.
 
-    {:noreply, %{state | up: false}}
+    new_state = %{state | up: false, stat: :unknown}
+
+    # Reset cell connection properties
+    post_registration(new_state, ifname)
+
+    {:noreply, new_state}
   end
 
   def handle_info(:poll, state) do
@@ -117,12 +125,16 @@ defmodule VintageNetMobile.CellMonitor do
 
   defp creg_response_to_registration({:ok, _header, [2, stat, lac, ci, act]})
        when is_integer(stat) and is_binary(lac) and is_binary(ci) and is_integer(act) do
-    %{stat: stat, lac: safe_hex_to_int(lac), ci: safe_hex_to_int(ci), act: act}
+    %{stat: decode_stat(stat), lac: safe_hex_to_int(lac), ci: safe_hex_to_int(ci), act: act}
+  end
+
+  defp creg_response_to_registration({:ok, _header, [2, stat]}) when is_integer(stat) do
+    %{stat: decode_stat(stat), lac: 0, ci: 0, act: 0}
   end
 
   defp creg_response_to_registration(malformed) do
     _ = Logger.warn("Unexpected AT+CREG? response: #{inspect(malformed)}")
-    %{stat: 0, lac: 0, ci: 0, act: 0}
+    %{stat: :invalid, lac: 0, ci: 0, act: 0}
   end
 
   defp qspn_response_to_network({:ok, _header, [fnn, snn, spn, alphabet, plmn]})
@@ -173,9 +185,30 @@ defmodule VintageNetMobile.CellMonitor do
     end
   end
 
-  defp post_registration(%{lac: lac, ci: ci}, ifname) do
+  defp decode_stat(0), do: :not_registered_not_looking
+  defp decode_stat(1), do: :registered_home_network
+  defp decode_stat(2), do: :not_registered_looking
+  defp decode_stat(3), do: :registration_denied
+  defp decode_stat(4), do: :unknown
+  defp decode_stat(5), do: :registered_roaming
+  defp decode_stat(_), do: :invalid
+
+  defp post_registration(%{stat: stat, lac: lac, ci: ci}, ifname)
+       when stat in [:registered_home_network, :registered_roaming] do
     PropertyTable.put(VintageNet, ["interface", ifname, "mobile", "lac"], lac)
     PropertyTable.put(VintageNet, ["interface", ifname, "mobile", "cid"], ci)
+  end
+
+  defp post_registration(%{stat: _stat}, ifname) do
+    # Disconnected case, so clear out properties reported by the cell monitor
+    PropertyTable.clear(VintageNet, ["interface", ifname, "mobile", "lac"])
+    PropertyTable.clear(VintageNet, ["interface", ifname, "mobile", "cid"])
+    PropertyTable.clear(VintageNet, ["interface", ifname, "mobile", "network"])
+    PropertyTable.clear(VintageNet, ["interface", ifname, "mobile", "mcc"])
+    PropertyTable.clear(VintageNet, ["interface", ifname, "mobile", "mnc"])
+    PropertyTable.clear(VintageNet, ["interface", ifname, "mobile", "access_technology"])
+    PropertyTable.clear(VintageNet, ["interface", ifname, "mobile", "band"])
+    PropertyTable.clear(VintageNet, ["interface", ifname, "mobile", "channel"])
   end
 
   defp post_network(%{network_name: name, mcc: mcc, mnc: mnc}, ifname) do
