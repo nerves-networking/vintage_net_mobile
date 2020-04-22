@@ -2,7 +2,7 @@ defmodule VintageNetMobileTest do
   use ExUnit.Case
 
   alias VintageNet.Interface.RawConfig
-  alias VintageNetMobileTest.{CustomModem, Utils}
+  alias VintageNetMobileTest.Utils
 
   test "normalizes configurations" do
     input = %{
@@ -42,9 +42,9 @@ defmodule VintageNetMobileTest do
       ifname: "ppp0",
       type: VintageNetMobile,
       source_config: input,
+      required_ifnames: ["wwan0"],
       files: [{"chatscript.ppp0", "The service providers are [%{apn: \"free_lte\"}]"}],
       up_cmds: [
-        {:fun, CustomModem, :ready, []},
         {:run_ignore_errors, "mknod", ["/dev/ppp", "c", "108", "0"]}
       ],
       down_cmds: [

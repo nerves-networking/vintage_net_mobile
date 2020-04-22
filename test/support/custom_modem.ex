@@ -25,7 +25,4 @@ defmodule VintageNetMobileTest.CustomModem do
         ]
     }
   end
-
-  @impl true
-  def ready(), do: :ok
 end

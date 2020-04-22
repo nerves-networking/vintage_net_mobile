@@ -22,9 +22,8 @@ defmodule VintageNetMobile.Modem.UbloxTOBYL2Test do
       ifname: "ppp0",
       type: VintageNetMobile,
       source_config: input,
-      require_interface: false,
+      required_ifnames: ["wwan0"],
       up_cmds: [
-        {:fun, VintageNetMobile.Modem.UbloxTOBYL2, :ready, []},
         {:run_ignore_errors, "mknod", ["/dev/ppp", "c", "108", "0"]}
       ],
       down_cmds: [

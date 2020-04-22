@@ -28,9 +28,4 @@ defmodule VintageNetMobile.Modem do
   errors in `normalize/1`.
   """
   @callback add_raw_config(RawConfig.t(), config :: map(), opts :: keyword()) :: RawConfig.t()
-
-  @doc """
-  Check to make sure the modem is ready to be used
-  """
-  @callback ready() :: :ok | {:error, :missing_modem}
 end

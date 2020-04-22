@@ -6,7 +6,13 @@ defmodule VintageNetMobile.PPPDConfigTest do
 
   test "updates the raw config to have the pppd child spec" do
     priv_dir = Application.app_dir(:vintage_net_mobile, "priv")
-    raw_config = %RawConfig{ifname: "ppp0", type: VintageNetMobile, source_config: %{}}
+
+    raw_config = %RawConfig{
+      ifname: "ppp0",
+      type: VintageNetMobile,
+      source_config: %{},
+      required_ifnames: ["wwan0"]
+    }
 
     updated_raw_config =
       PPPDConfig.add_child_spec(raw_config, "ttyUSB1", 9600, Utils.default_opts())

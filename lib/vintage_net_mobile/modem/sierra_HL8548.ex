@@ -53,18 +53,8 @@ defmodule VintageNetMobile.Modem.SierraHL8548 do
     %RawConfig{
       raw_config
       | files: files,
-        require_interface: false,
         child_specs: child_specs
     }
     |> PPPDConfig.add_child_spec("ttyACM4", 115_200, opts)
-  end
-
-  @impl true
-  def ready() do
-    if File.exists?("/dev/ttyACM4") do
-      :ok
-    else
-      {:error, :missing_modem}
-    end
   end
 end
