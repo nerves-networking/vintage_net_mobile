@@ -22,6 +22,12 @@ defmodule VintageNetMobile.ExChat do
 
   alias VintageNetMobile.ExChat.Core
 
+  # This limits the restart rate for this GenServer on tty errors.
+  # Errors usually mean the interface is going away and vintage_net
+  # will clean things up soon. If nothing else, the UART won't be
+  # pegged by restarts and the logs won't be filled with errors.
+  @error_delay 1000
+
   @typedoc """
   The options for the ATCommand server are:
 
@@ -101,16 +107,22 @@ defmodule VintageNetMobile.ExChat do
         rx_framing_timeout: 500
       ] ++ uart_opts
 
-    :ok = uart.open(uart_ref, tty_name, all_uart_opts)
-
     {:ok,
-     %{
-       uart: uart,
-       uart_ref: uart_ref,
-       tty_name: tty_name,
-       core: Core.init(),
-       timer_ref: nil
-     }}
+     %{uart: uart, uart_ref: uart_ref, tty_name: tty_name, core: Core.init(), timer_ref: nil},
+     {:continue, all_uart_opts}}
+  end
+
+  @impl true
+  def handle_continue(uart_opts, state) do
+    case state.uart.open(state.uart_ref, state.tty_name, uart_opts) do
+      :ok ->
+        {:noreply, state}
+
+      {:error, error} ->
+        _ = Logger.warn("vintage_net_mobile: can't open #{state.tty_name}: #{inspect(error)}")
+        Process.sleep(@error_delay)
+        {:stop, :tty_error, state}
+    end
   end
 
   @impl true
@@ -139,6 +151,12 @@ defmodule VintageNetMobile.ExChat do
   def handle_info({:circuits_uart, tty_name, {:partial, fragment}}, state) do
     _ = Logger.warn("vintage_net_mobile: dropping junk from #{tty_name}: #{inspect(fragment)}")
     {:noreply, state}
+  end
+
+  def handle_info({:circuits_uart, tty_name, {:error, error}}, state) do
+    _ = Logger.warn("vintage_net_mobile: error from #{tty_name}: #{inspect(error)}")
+    Process.sleep(@error_delay)
+    {:stop, :tty_error, state}
   end
 
   def handle_info({:circuits_uart, _tty_name, message}, state) do
