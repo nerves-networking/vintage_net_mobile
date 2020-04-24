@@ -102,10 +102,10 @@ defmodule VintageNetMobile.CellMonitor do
     # solution was to not poll. This should be revisited since might be valuable to
     # know that you're connected to a cell tower, but ppp isn't working.
 
-    new_state = %{state | up: false, stat: :unknown}
+    new_state = %{state | up: false}
 
     # Reset cell connection properties
-    post_registration(new_state, ifname)
+    post_registration(%{stat: :unknown}, ifname)
 
     {:noreply, new_state}
   end
