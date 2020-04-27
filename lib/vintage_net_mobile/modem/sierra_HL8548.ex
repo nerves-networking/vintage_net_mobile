@@ -8,6 +8,21 @@ defmodule VintageNetMobile.Modem.SierraHL8548 do
   that provides voice and data connectivity on GPRS, EDGE, WCDMA, HSDPA and
   HSUPA networks.
 
+  This modem supports dual sim selection. You can enable this feature by
+  passing `sim_select: mode` in the configuration.
+
+  Here are the possible options:
+
+  ```text
+  0 Disable SIM selection.
+  1 Force to select the first external SIM. The presence of a second external
+    SIM will be ignored.
+  2 Force to select the second external SIM. The presence of a first external
+    SIM will be ignored.
+  3 Select the first external SIM if present else select the second external SIM
+  4 Read the SIM presence status
+  ```
+
   Here's an example configuration:
 
   ```elixir
@@ -15,6 +30,7 @@ defmodule VintageNetMobile.Modem.SierraHL8548 do
     "ppp0",
     %{
       type: VintageNetMobile,
+      sim_select: 3,
       vintage_net_mobile: %{
         modem: VintageNetMobile.Modem.SierraHL8548,
         service_providers: [%{apn: "BROADBAND"}]
@@ -43,7 +59,7 @@ defmodule VintageNetMobile.Modem.SierraHL8548 do
   def add_raw_config(raw_config, %{vintage_net_mobile: mobile} = _config, opts) do
     ifname = raw_config.ifname
 
-    files = [{Chatscript.path(ifname, opts), Chatscript.default(mobile.service_providers)}]
+    files = [{Chatscript.path(ifname, opts), chatscript(mobile)}]
 
     child_specs = [
       {ExChat, [tty: "ttyACM3", speed: 115_200]},
@@ -67,4 +83,24 @@ defmodule VintageNetMobile.Modem.SierraHL8548 do
       {:error, :missing_modem}
     end
   end
+
+  defp chatscript(mobile) do
+    pdp_index = 1
+
+    [
+      Chatscript.prologue(),
+      sim_select(mobile),
+      Chatscript.set_pdp_context(pdp_index, hd(mobile.service_providers)),
+      Chatscript.connect(pdp_index)
+    ]
+    |> IO.iodata_to_binary()
+  end
+
+  defp sim_select(%{sim_select: sim_select}) do
+    """
+    OK AT+KSIMSEL=#{sim_select}
+    """
+  end
+
+  defp sim_select(_), do: ""
 end

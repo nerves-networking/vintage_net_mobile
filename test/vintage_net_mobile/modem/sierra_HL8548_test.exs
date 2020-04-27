@@ -10,6 +10,7 @@ defmodule VintageNetMobile.Modem.SierraHL8548Test do
     input = %{
       type: VintageNetMobile,
       vintage_net_mobile: %{
+        sim_select: 3,
         modem: SierraHL8548,
         service_providers: [%{apn: "choosethislteitissafe"}]
       }
@@ -44,6 +45,7 @@ defmodule VintageNetMobile.Modem.SierraHL8548Test do
          OK ATH
          OK ATZ
          OK ATQ0
+         OK AT+KSIMSEL=3
          OK AT+CGDCONT=1,"IP","choosethislteitissafe"
          OK ATDT*99***1#
          CONNECT ''
