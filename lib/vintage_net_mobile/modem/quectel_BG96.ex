@@ -144,23 +144,15 @@ defmodule VintageNetMobile.Modem.QuectelBG96 do
     end
   end
 
-  defp chatscript(mobile) do
-    pdp_index = 1
-
-    [
-      Chatscript.prologue(),
-      Chatscript.set_pdp_context(pdp_index, hd(mobile.service_providers)),
-      script_additions(mobile),
-      Chatscript.connect(pdp_index)
-    ]
-    |> IO.iodata_to_binary()
+  defp chatscript(mobile_config) do
+    Chatscript.default(mobile_config, script_additions(mobile_config))
   end
 
   defp script_additions(nil), do: []
 
-  defp script_additions(mobile) when is_map(mobile) do
+  defp script_additions(mobile_config) when is_map(mobile_config) do
     [
-      scan_additions(Map.get(mobile, :scan))
+      scan_additions(Map.get(mobile_config, :scan))
     ]
   end
 

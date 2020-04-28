@@ -80,7 +80,7 @@ defmodule VintageNetMobile.Modem.QuectelEC25 do
   def add_raw_config(raw_config, %{vintage_net_mobile: mobile} = _config, opts) do
     ifname = raw_config.ifname
 
-    files = [{Chatscript.path(ifname, opts), Chatscript.default(mobile.service_providers)}]
+    files = [{Chatscript.path(ifname, opts), Chatscript.default(mobile)}]
 
     child_specs = [
       {ExChat, [tty: "ttyUSB2", speed: 9600]},

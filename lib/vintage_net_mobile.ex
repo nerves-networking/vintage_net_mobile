@@ -14,17 +14,22 @@ defmodule VintageNetMobile do
     "ppp0",
     %{
       type: VintageNetMobile,
-      modem: your_modem,
-      modem_opts: %{},
-      service_providers: your_service_providers
+      vintage_net_mobile: %{
+        modem: VintageNetMobile.Modem.QuectelBG96,
+        service_providers: [%{apn: "super"}]
+      }
     }
   )
   ```
 
   The `:modem` key should be set to your modem implementation. Cellular modems
-  tend to be very similar. If `vintage_net_mobile` doesn't list your modem, see
-  the customizing section. It may just be a copy/paste away. See your module for
-  your modem for what options can be passed to `:modem_opts`.
+  tend to be very similar. If `vintage_net_mobile` doesn't support your modem, see
+  the customizing section. It may just be a copy/paste away. See your modem
+  module for modem-specific options. The following keys are supported by all modems:
+
+  * `:service_providers` - This is a list of service provider information
+  * `:chatscript_additions` - This is a string (technically iodata) for custom
+     modem initialization.
 
   The `:service_providers` key should be set to information provided by each of
   your service providers. It is common that this is a list of one item.
@@ -53,9 +58,12 @@ defmodule VintageNetMobile do
     %{
       type: VintageNetMobile,
       modem: your_modem,
-      service_providers: [
-        %{apn: "wireless.twilio.com"}
-      ]
+      vintage_net_mobile: %{
+        service_providers: [
+          %{apn: "wireless.twilio.com"}
+        ],
+        chatscript_additions: "OK AT"
+      }
     }
   ```
 
@@ -85,6 +93,18 @@ defmodule VintageNetMobile do
   @type service_provider_info :: %{
           required(:apn) => String.t(),
           optional(:usage) => :eps_bearer | :pdp
+        }
+
+  @typedoc """
+  The `:vintage_net_mobile` option in the configuration map
+
+  Only the `:service_providers` key must be specified. Modems may
+  add keys of their own.
+  """
+  @type mobile_options :: %{
+          required(:service_providers) => service_provider_info(),
+          optional(:chatscript_additions) => iodata(),
+          optional(any) => any
         }
 
   @typedoc """

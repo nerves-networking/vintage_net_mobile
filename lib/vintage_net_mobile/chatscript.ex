@@ -59,16 +59,29 @@ defmodule VintageNetMobile.Chatscript do
   @doc """
   Output a basic default chatscript which connects to the first provider
 
-  This is useful if all you need is a basic chatscript. If you have more
-  complex and custom needs you will not want to use this.
+  Modem implementations may provide additional chatscript additions. These
+  are run before user-provided ones so that the user ones can override
+  modem options.
+
+  This is useful if all you need for a modem implementation is a basic
+  chatscript. If you have more complex and custom needs you will not want
+  to use this.
   """
-  @spec default([VintageNetMobile.service_provider_info()]) :: String.t()
-  def default(service_providers) do
+  @spec default(VintageNetMobile.mobile_options(), iodata()) :: String.t()
+  def default(mobile_config, modem_chatscript_additions \\ []) do
+    service_providers = Map.fetch!(mobile_config, :service_providers)
+
+    chatscript_additions = [
+      modem_chatscript_additions,
+      Map.get(mobile_config, :chatscript_additions, [])
+    ]
+
     pdp_index = 1
 
     [
       prologue(),
       set_pdp_context(pdp_index, hd(service_providers)),
+      trim_additions(chatscript_additions),
       connect(pdp_index)
     ]
     |> IO.iodata_to_binary()
@@ -81,4 +94,14 @@ defmodule VintageNetMobile.Chatscript do
   def path(ifname, opts) do
     Path.join(Keyword.fetch!(opts, :tmpdir), "chatscript.#{ifname}")
   end
+
+  defp trim_additions(additions) do
+    additions
+    |> IO.iodata_to_binary()
+    |> String.trim()
+    |> newline_if_present()
+  end
+
+  defp newline_if_present(""), do: ""
+  defp newline_if_present(contents), do: [contents, "\n"]
 end
