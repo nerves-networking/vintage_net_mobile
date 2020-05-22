@@ -85,12 +85,10 @@ defmodule VintageNetMobile.ToElixir.Server do
   end
 
   defp dispatch({["ppp_to_elixir" | args], env}) do
-    _ = Logger.debug("ppp_to_elixir: Args=#{inspect(args)}, Env=#{inspect(env)}")
-    :ok
+    Logger.debug("ppp_to_elixir: Args=#{inspect(args)}, Env=#{inspect(env)}")
   end
 
   defp dispatch(unknown) do
-    _ = Logger.error("ppp_to_elixir: dropping unknown report '#{inspect(unknown)}''")
-    :ok
+    Logger.error("ppp_to_elixir: dropping unknown report '#{inspect(unknown)}''")
   end
 end
