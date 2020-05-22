@@ -133,7 +133,7 @@ defmodule VintageNetMobile.CellMonitor do
   end
 
   defp creg_response_to_registration(malformed) do
-    _ = Logger.warn("Unexpected AT+CREG? response: #{inspect(malformed)}")
+    Logger.warn("Unexpected AT+CREG? response: #{inspect(malformed)}")
     %{stat: :invalid, lac: 0, ci: 0, act: 0}
   end
 
@@ -145,7 +145,7 @@ defmodule VintageNetMobile.CellMonitor do
   end
 
   defp qspn_response_to_network(malformed) do
-    _ = Logger.warn("Unexpected AT+QSPN response: #{inspect(malformed)}")
+    Logger.warn("Unexpected AT+QSPN response: #{inspect(malformed)}")
     %{network_name: "", mcc: 0, mnc: 0}
   end
 
@@ -155,7 +155,7 @@ defmodule VintageNetMobile.CellMonitor do
   end
 
   defp qnwinfo_response_to_info(malformed) do
-    _ = Logger.warn("Unexpected AT+QNWINFO response: #{inspect(malformed)}")
+    Logger.warn("Unexpected AT+QNWINFO response: #{inspect(malformed)}")
     %{act: "UNKNOWN", band: "", channel: 0}
   end
 
