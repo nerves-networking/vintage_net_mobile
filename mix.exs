@@ -74,7 +74,7 @@ defmodule VintageNetMobile.MixProject do
       {:elixir_make, "~> 0.6", runtime: false},
       {:credo, "~> 1.2", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.0.0", only: [:dev, :test], runtime: false},
-      {:ex_doc, "~> 0.19", only: :docs, runtime: false},
+      {:ex_doc, "~> 0.22", only: :docs, runtime: false},
       {:excoveralls, "~> 0.8", only: :test, runtime: false}
     ]
   end
