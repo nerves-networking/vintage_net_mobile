@@ -1,5 +1,25 @@
 # Changelog
 
+## v0.8.0
+
+(Skipping version numbers to make the version match `vintage_net` for ease of
+remembering which versions are compatible.)
+
+* New features
+  * Add `:chatscript_additions` option to the modem configuration to support
+    arbitrary chatscript lines so that application-specific customizations don't
+    require you to make a custom modem. Of course, if you have an option of
+    general interest, please continue to make PRs.
+  * Support vintage_net v0.8.0's `required_ifnames` API update. This cleans up
+    some modem detection for non-usb_modswitch modems. If you have a fork of
+    this project, you'll need to update it. See commit 06456c3bc/PR #66 for how
+    the supported modems were changed.
+
+* Bug fixes
+  * Cleaned up handling of PPP disconnections. Amazingly, OTP supervision could
+    recover some of this, but the logs were really ugly and more work was done
+    than needed.
+
 ## v0.2.3
 
 * Updates

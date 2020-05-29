@@ -1,7 +1,7 @@
 defmodule VintageNetMobile.MixProject do
   use Mix.Project
 
-  @version "0.2.3"
+  @version "0.8.0"
   @source_url "https://github.com/nerves-networking/vintage_net_mobile"
 
   def project do
