@@ -20,7 +20,14 @@ defmodule VintageNetMobile.MixProject do
       dialyzer: dialyzer(),
       docs: docs(),
       package: package(),
-      description: description()
+      description: description(),
+      preferred_cli_env: %{
+        docs: :docs,
+        "hex.publish": :docs,
+        "hex.build": :docs,
+        credo: :test,
+        "coveralls.circle": :test
+      }
     ]
   end
 
