@@ -78,6 +78,7 @@ defmodule VintageNetMobile.SignalMonitor do
     message
     |> ATParser.parse()
     |> csq_response_to_rssi()
+    |> maybe_pet_power_control(state.ifname)
     |> post_signal_rssi(state.ifname)
 
     {:noreply, state}
@@ -101,4 +102,13 @@ defmodule VintageNetMobile.SignalMonitor do
   defp connected?(state) do
     VintageNet.get(["interface", state.ifname, "connection"]) == :internet
   end
+
+  # Report that the LTE modem is doing ok if it's connected to a tower
+  # with 1 or more bars. 0 means that there's no connection.
+  defp maybe_pet_power_control(%{bars: bars} = report, ifname) when bars > 0 do
+    VintageNet.PowerManager.PMControl.pet_watchdog(ifname)
+    report
+  end
+
+  defp maybe_pet_power_control(report, _ifname), do: report
 end
