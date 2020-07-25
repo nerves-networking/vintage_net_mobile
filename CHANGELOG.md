@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.9.0
+
+* New features
+  * Add initial support for using the `VintageNet.PowerManager`to manage the
+    power to cellular modems. This allows `VintageNet` to power on and off a
+    modem as needed and if it becomes unresponsive. To use this, you will need
+    to provide an implementation of `VintageNet.PowerManager` that can control
+    the GPIO (or whatever) connections that enable power and can send
+    appropriate UART commands to power off. This only has been tested with
+    Quectel BG96 and EC25 modems, but should be applicable to all modems.
+  * Synchronize with vintage_net v0.9.0's networking program path API update
+
 ## v0.8.0
 
 (Skipping version numbers to make the version match `vintage_net` for ease of
