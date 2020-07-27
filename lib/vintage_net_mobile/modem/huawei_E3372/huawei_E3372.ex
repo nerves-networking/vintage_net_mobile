@@ -9,21 +9,20 @@ defmodule VintageNetMobile.Modem.HuaweiE3372 do
   @moduledoc """
   Huawei E3372 support
 
-  This modem needs a usb modeswitch, the follwing can serve as an example
+  BEWARE:
+  This modem will need a mode switch before you can connect, this can be done using vintageNets power mangement functinnality like this:
 
   ```elixir
-  def modemswicth(product_id \\ "14fe") do
-      Toolshed.cmd("usb_modeswitch -v 12d1 -p #{product_id} -X")
-  end
+    config :vintage_net, power_managers: [{VintageNetMobile.Modem.HuaweiE3372.Modemeswitch, ifname: "ppp0"}]
   ```
 
-  After the mode switch you can connect like with any other modem
+  With this in your configuration you can now do the following to connect with the modem
 
   ```elixir
     VintageNet.configure("ppp0", %{
       type: VintageNetMobile,
       vintage_net_mobile: %{
-        modem: MyApp.Network.HuaweiE3372,
+        modem: VintageNetMobile.Modem.HuaweiE3372,
         service_providers: [%{apn: "some apn"}]
       }
     })
@@ -34,7 +33,7 @@ defmodule VintageNetMobile.Modem.HuaweiE3372 do
 
   @impl true
   def ready do
-    if File.exists?("/dev/ttyUSB0") do
+    if File.exists?("/dev/ttyUSB2") do
       :ok
     else
       {:error, :modem_not_connected}
@@ -85,4 +84,3 @@ defmodule VintageNetMobile.Modem.HuaweiE3372 do
     |> IO.iodata_to_binary()
   end
 end
-
