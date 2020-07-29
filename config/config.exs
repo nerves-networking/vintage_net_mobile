@@ -6,7 +6,8 @@ use Mix.Config
 # * persistence_dir: use the current directory
 config :vintage_net,
   resolvconf: "/dev/null",
-  persistence_dir: "./test_tmp/persistence"
+  persistence_dir: "./test_tmp/persistence",
+  path: "#{File.cwd!()}/test/fixtures/root/bin"
 
 config :vintage_net_mobile,
   pppd_handler: VintageNetMobile.CapturingPPPDHandler,
