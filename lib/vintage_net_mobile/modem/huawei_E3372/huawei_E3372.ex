@@ -5,7 +5,6 @@ defmodule VintageNetMobile.Modem.HuaweiE3372 do
   alias VintageNetMobile.{CellMonitor, Chatscript, ExChat, ModemInfo, PPPDConfig, SignalMonitor}
   alias VintageNetMobile.Modem.Utils
 
-
   @moduledoc """
   Huawei E3372 support
 

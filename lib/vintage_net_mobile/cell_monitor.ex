@@ -128,6 +128,11 @@ defmodule VintageNetMobile.CellMonitor do
     %{stat: decode_stat(stat), lac: safe_hex_to_int(lac), ci: safe_hex_to_int(ci), act: act}
   end
 
+  defp creg_response_to_registration({:ok, _header, [2, stat, lac, ci]})
+       when is_integer(stat) and is_binary(lac) and is_binary(ci) do
+    %{stat: decode_stat(stat), lac: safe_hex_to_int(lac), ci: safe_hex_to_int(ci), act: 0}
+  end
+
   defp creg_response_to_registration({:ok, _header, [2, stat]}) when is_integer(stat) do
     %{stat: decode_stat(stat), lac: 0, ci: 0, act: 0}
   end
