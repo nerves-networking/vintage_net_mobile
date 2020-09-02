@@ -1,4 +1,8 @@
 defmodule VintageNetMobile.Modem.HuaweiE3372.Modemswitch do
+  @moduledoc """
+    VintageNetMobile PowerManager to handle the HuaweiE3372 modem
+  """
+
   require Logger
   @behaviour VintageNet.PowerManager
 
