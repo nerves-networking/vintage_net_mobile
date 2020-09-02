@@ -1,6 +1,6 @@
 
-defmodule VintageNetMobile.Modem.HuaweiE3372.Modemeswitch do
-
+defmodule VintageNetMobile.Modem.HuaweiE3372.Modemswitch do
+  require Logger
   @behaviour VintageNet.PowerManager
 
   @impl VintageNet.PowerManager
@@ -11,8 +11,13 @@ defmodule VintageNetMobile.Modem.HuaweiE3372.Modemeswitch do
   @impl VintageNet.PowerManager
   def power_on(state) do
     # Do whatever is necessary to turn the network interface on
-    Toolshed.cmd("usb_modeswitch -v 12d1 -p 14fe -X")
-    {:ok, state, 5000}
+    try do
+      System.cmd("usb_modeswitch", ["-v 12d1", "-p 14fe", "-X"])
+    catch error ->
+      Logger.debug("Modemswicth failed with #{error} ")
+    after
+      {:ok, state, 5000}
+    end
   end
 
   @impl VintageNet.PowerManager
@@ -25,6 +30,17 @@ defmodule VintageNetMobile.Modem.HuaweiE3372.Modemeswitch do
   @impl VintageNet.PowerManager
   def power_off(state) do
     # Disable the network interface
-    Toolshed.cmd("usb_modeswitch -v 12d1 -p 155e -X")
-    {:ok, state, 0}
+    try do
+      System.cmd("usb_modeswitch", ["-v 12d1", "-p 155e", "-X"])
+    catch error ->
+      Logger.debug("Modemswicth failed with #{error} ")
+    after
+      {:ok, state, 0}
+    end
   end
+
+  @impl VintageNet.PowerManager
+  def handle_info(_msg, state) do
+    {:ok, state}
+  end
+end

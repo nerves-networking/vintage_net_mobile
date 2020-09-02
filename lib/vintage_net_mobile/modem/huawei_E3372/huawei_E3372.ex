@@ -13,7 +13,7 @@ defmodule VintageNetMobile.Modem.HuaweiE3372 do
   This modem will need a mode switch before you can connect, this can be done using vintageNets power mangement functinnality like this:
 
   ```elixir
-    config :vintage_net, power_managers: [{VintageNetMobile.Modem.HuaweiE3372.Modemeswitch, ifname: "ppp0"}]
+    config :vintage_net, power_managers: [{VintageNetMobile.Modem.HuaweiE3372.Modemswitch, ifname: "ppp0"}]
   ```
 
   With this in your configuration you can now do the following to connect with the modem
@@ -30,15 +30,6 @@ defmodule VintageNetMobile.Modem.HuaweiE3372 do
 
   BEWARE Currently none of the Signal, Cell and Modem monitors are working
   """
-
-  @impl true
-  def ready do
-    if File.exists?("/dev/ttyUSB2") do
-      :ok
-    else
-      {:error, :modem_not_connected}
-    end
-  end
 
   @impl true
   def normalize(config) do
@@ -66,7 +57,6 @@ defmodule VintageNetMobile.Modem.HuaweiE3372 do
     %RawConfig{
       raw_config
       | files: files,
-        require_interface: false,
         child_specs: child_specs
     }
     |> PPPDConfig.add_child_spec("ttyUSB0", 115_200, opts)
