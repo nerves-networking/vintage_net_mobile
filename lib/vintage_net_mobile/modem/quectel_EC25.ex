@@ -78,9 +78,9 @@ defmodule VintageNetMobile.Modem.QuectelEC25 do
   * CONFIG_USB_NET_QMI_WWAN=m
   """
 
-  alias VintageNetMobile.{ExChat, SignalMonitor, CellMonitor, PPPDConfig, Chatscript}
-  alias VintageNetMobile.Modem.Utils
   alias VintageNet.Interface.RawConfig
+  alias VintageNetMobile.{CellMonitor, Chatscript, ExChat, PPPDConfig, SignalMonitor}
+  alias VintageNetMobile.Modem.Utils
 
   @impl true
   def normalize(config) do
