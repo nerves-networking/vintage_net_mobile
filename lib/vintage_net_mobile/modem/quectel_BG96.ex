@@ -20,16 +20,24 @@ defmodule VintageNetMobile.Modem.QuectelBG96 do
   )
   ```
 
-  If multiple service providers are configured, this implementation only
-  attempts to connect to the first one.
+  Options:
 
-  The following modem-specific keys are also supported in the
-  `:vintage_net_mobile` map:
-
+  * `:modem` - `VintageNetMobile.Modem.QuectelBG96`
+  * `:service_providers` - A list of service provider information (only `:apn`
+    providers are supported)
+  * `:at_tty` - A tty for sending AT commands on. This defaults to `"ttyUSB2"`
+    which works unless other USB serial devices cause Linux to set it to
+    something different.
+  * `:ppp_tty` - A tty for the PPP connection. This defaults to `"ttyUSB2"`
+    which works unless other USB serial devices cause Linux to set it to
+    something different.
   * `:scan` - Set this to the order that radio access technologies should be
     attempted when trying to connect. For example, `[:lte_cat_m1, :gsm]`
     would prevent the modem from trying LTE Cat NB1 and potentially save some
     time if you're guaranteed to not have Cat NB1 service.
+
+  If multiple service providers are configured, this implementation only
+  attempts to connect to the first one.
 
   Example of supported properties:
 
@@ -113,17 +121,15 @@ defmodule VintageNetMobile.Modem.QuectelBG96 do
   def add_raw_config(raw_config, %{vintage_net_mobile: mobile} = _config, opts) do
     ifname = raw_config.ifname
 
-    files = [
-      {Chatscript.path(ifname, opts), chatscript(mobile)}
-    ]
-
-    tty = "ttyUSB2"
+    files = [{Chatscript.path(ifname, opts), chatscript(mobile)}]
+    at_tty = Map.get(mobile, :at_tty, "ttyUSB2")
+    ppp_tty = Map.get(mobile, :ppp_tty, "ttyUSB3")
 
     child_specs = [
-      {ExChat, [tty: tty, speed: 9600]},
-      {SignalMonitor, [ifname: ifname, tty: tty]},
-      {CellMonitor, [ifname: ifname, tty: tty]},
-      {ModemInfo, [ifname: ifname, tty: tty]}
+      {ExChat, [tty: at_tty, speed: 9600]},
+      {SignalMonitor, [ifname: ifname, tty: at_tty]},
+      {CellMonitor, [ifname: ifname, tty: at_tty]},
+      {ModemInfo, [ifname: ifname, tty: at_tty]}
     ]
 
     %RawConfig{
@@ -131,7 +137,7 @@ defmodule VintageNetMobile.Modem.QuectelBG96 do
       | files: files,
         child_specs: child_specs
     }
-    |> PPPDConfig.add_child_spec("ttyUSB3", 9600, opts)
+    |> PPPDConfig.add_child_spec(ppp_tty, 9600, opts)
   end
 
   defp chatscript(mobile_config) do
