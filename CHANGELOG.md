@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.9.1
+
+* New features
+  * Support non-default tty paths for Quectel modems
+
 ## v0.9.0
 
 * New features
