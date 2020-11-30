@@ -20,6 +20,18 @@ defmodule VintageNetMobile.Modem.QuectelEC25 do
   )
   ```
 
+  Options:
+
+  * `:modem` - `VintageNetMobile.Modem.QuectelEC25`
+  * `:service_providers` - A list of service provider information (only `:apn`
+    providers are supported)
+  * `:at_tty` - A tty for sending AT commands on. This defaults to `"ttyUSB2"`
+    which works unless other USB serial devices cause Linux to set it to
+    something different.
+  * `:ppp_tty` - A tty for the PPP connection. This defaults to `"ttyUSB2"`
+    which works unless other USB serial devices cause Linux to set it to
+    something different.
+
   If multiple service providers are configured, this implementation only
   attempts to connect to the first one.
 
@@ -81,11 +93,13 @@ defmodule VintageNetMobile.Modem.QuectelEC25 do
     ifname = raw_config.ifname
 
     files = [{Chatscript.path(ifname, opts), Chatscript.default(mobile)}]
+    at_tty = Map.get(mobile, :at_tty, "ttyUSB2")
+    ppp_tty = Map.get(mobile, :ppp_tty, "ttyUSB3")
 
     child_specs = [
-      {ExChat, [tty: "ttyUSB2", speed: 9600]},
-      {SignalMonitor, [ifname: ifname, tty: "ttyUSB2"]},
-      {CellMonitor, [ifname: ifname, tty: "ttyUSB2"]}
+      {ExChat, [tty: at_tty, speed: 9600]},
+      {SignalMonitor, [ifname: ifname, tty: at_tty]},
+      {CellMonitor, [ifname: ifname, tty: at_tty]}
     ]
 
     %RawConfig{
@@ -93,6 +107,6 @@ defmodule VintageNetMobile.Modem.QuectelEC25 do
       | files: files,
         child_specs: child_specs
     }
-    |> PPPDConfig.add_child_spec("ttyUSB3", 9600, opts)
+    |> PPPDConfig.add_child_spec(ppp_tty, 9600, opts)
   end
 end
