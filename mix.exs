@@ -52,7 +52,6 @@ defmodule VintageNetMobile.MixProject do
     %{
       files: [
         "lib",
-        "test",
         "mix.exs",
         "Makefile",
         "README.md",
