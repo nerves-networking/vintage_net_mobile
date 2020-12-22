@@ -132,6 +132,13 @@ defmodule VintageNetMobile.CellMonitor do
     %{stat: decode_stat(stat), lac: 0, ci: 0, act: 0}
   end
 
+  # Missing n? parameter where n == 2
+  defp creg_response_to_registration({:ok, _header, [stat, lac, ci, act]})
+       when is_integer(stat) and stat >= 1 and is_binary(lac) and is_binary(ci) and
+              is_integer(act) do
+    %{stat: decode_stat(stat), lac: safe_hex_to_int(lac), ci: safe_hex_to_int(ci), act: act}
+  end
+
   defp creg_response_to_registration(malformed) do
     Logger.warn("Unexpected AT+CREG? response: #{inspect(malformed)}")
     %{stat: :invalid, lac: 0, ci: 0, act: 0}
