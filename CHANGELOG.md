@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.9.2
+
+* New features
+  * Huawei E3372 support - Thanks to Hans Pagh for contributing his
+    implementation.
+
+* Bug fixes
+  * Handle more types of CREG responses. This should reduce warnings from the
+    CellMonitor code
+
 ## v0.9.1
 
 * New features
