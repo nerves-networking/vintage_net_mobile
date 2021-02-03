@@ -13,7 +13,7 @@ defmodule VintageNetMobile.Modem.HuaweiE3372 do
   using VintageNet's power management functionality like this:
 
   ```elixir
-    config :vintage_net, power_managers: [{VintageNetMobile.Modem.HuaweiE3372.Modemswitch, ifname: "ppp0"}]
+    config :vintage_net, power_managers: [{VintageNetMobile.Modem.HuaweiE3372.Modeswitch, ifname: "ppp0"}]
   ```
 
   With this in your configuration you can now do the following to connect with
