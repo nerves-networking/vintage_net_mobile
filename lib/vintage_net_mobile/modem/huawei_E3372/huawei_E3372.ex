@@ -9,13 +9,15 @@ defmodule VintageNetMobile.Modem.HuaweiE3372 do
   Huawei E3372 support
 
   BEWARE:
-  This modem will need a mode switch before you can connect, this can be done using vintageNets power mangement functinnality like this:
+  This modem will need a mode switch before you can connect, this can be done
+  using VintageNet's power management functionality like this:
 
   ```elixir
     config :vintage_net, power_managers: [{VintageNetMobile.Modem.HuaweiE3372.Modemswitch, ifname: "ppp0"}]
   ```
 
-  With this in your configuration you can now do the following to connect with the modem
+  With this in your configuration you can now do the following to connect with
+  the modem:
 
   ```elixir
     VintageNet.configure("ppp0", %{
@@ -27,7 +29,7 @@ defmodule VintageNetMobile.Modem.HuaweiE3372 do
     })
   ```
 
-  BEWARE Currently none of the Signal, Cell and Modem monitors are working
+  BEWARE Currently none of the Signal, Cell and Modem monitors are working.
   """
 
   @impl true

@@ -12,6 +12,7 @@ Currently, it supports the following modems:
 * Quectel EC25 - [`VintageNetMobile.Modem.QuectelEC25`](https://www.quectel.com/product/ec25.htm)
 * u-blox TOBY L2 - [`VintageNetMobile.Modem.UbloxTOBYL2`](https://www.u-blox.com/en/product/toby-l2-series)
 * Sierra Wireless HL8548 - [`VintageNetMobile.Modem.SierraHL8548`](https://source.sierrawireless.com/resources/airprime/hardware_specs_user_guides/airprime_hl8548_and_hl8548-g_product_technical_specification/)
+* Huawei E3372 - [`VintageNetMobile.Modem.HuaweiE3372](https://consumer.huawei.com/en/routers/e3372/)
 
 See the "Custom Modems" section for adding new modules.
 
