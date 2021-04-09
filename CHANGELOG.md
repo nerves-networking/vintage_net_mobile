@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.10.0
+
+This release contains no code changes. It only updates the `vintage_net`
+dependency to allow `vintage_net v0.10.0` to be used.
+
 ## v0.9.2
 
 * New features
