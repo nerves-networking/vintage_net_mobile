@@ -84,6 +84,8 @@ defmodule VintageNetMobile.Modem.QuectelEC25 do
 
   @impl true
   def normalize(config) do
+    VintageNetMobile.Modem.QuectelBG96.check_linux_version()
+
     config
     |> Utils.require_a_service_provider()
   end
