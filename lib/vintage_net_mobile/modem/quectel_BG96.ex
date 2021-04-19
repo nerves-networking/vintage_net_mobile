@@ -1,6 +1,8 @@
 defmodule VintageNetMobile.Modem.QuectelBG96 do
   @behaviour VintageNetMobile.Modem
 
+  require Logger
+
   @moduledoc """
   Quectel BG96 support
 
@@ -88,6 +90,8 @@ defmodule VintageNetMobile.Modem.QuectelBG96 do
 
   @impl true
   def normalize(config) do
+    check_linux_version()
+
     config
     |> Utils.require_a_service_provider()
     |> normalize_mobile_opts()
@@ -197,5 +201,21 @@ defmodule VintageNetMobile.Modem.QuectelBG96 do
       has_nb1 -> "1"
       true -> "0"
     end
+  end
+
+  @doc false
+  @spec check_linux_version :: :ok
+  def check_linux_version() do
+    case :os.version() do
+      {5, 4, patch} when patch > 52 -> linux_warning()
+      {5, minor, _patch} when minor > 4 -> linux_warning()
+      _ -> :ok
+    end
+  end
+
+  defp linux_warning() do
+    Logger.warn(
+      "VintageNetMobile is broken on Linux 5.4.53+ when using Quectel modems unless you revert https://github.com/torvalds/linux/commit/2bb70f0a4b238323e4e2f392fc3ddeb5b7208c9e"
+    )
   end
 end
