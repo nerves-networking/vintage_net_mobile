@@ -111,9 +111,7 @@ defmodule VintageNetMobile.Modem.QuectelBG96 do
 
     if ok_rat_list == [] do
       raise ArgumentError,
-            "Check your `:scan` list for technologies supported by the BG96: #{
-              inspect(supported_list)
-            } "
+            "Check your `:scan` list for technologies supported by the BG96: #{inspect(supported_list)} "
     end
 
     %{mobile | scan: ok_rat_list}
