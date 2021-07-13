@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.10.1
+
+* Bug fixes
+  * `vintage_net v0.10.4` had a fix to route setup to remove a DHCP renewal
+    hiccup and a routing API change that only affected this project. This
+    updates to the new API to remove a deprecation warning. That also means that
+    at least `vintage_net v0.10.4` is required now and the deps force this.
+
 ## v0.10.0
 
 This release contains no code changes. It only updates the `vintage_net`
