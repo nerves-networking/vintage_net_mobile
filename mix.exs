@@ -67,7 +67,7 @@ defmodule VintageNetMobile.MixProject do
 
   defp deps do
     [
-      {:vintage_net, "~> 0.9.1 or ~> 0.10.0"},
+      {:vintage_net, "~> 0.10.4"},
       {:circuits_uart, "~> 1.4"},
       {:muontrap, "~> 0.5.0 or ~> 0.6.0"},
       {:elixir_make, "~> 0.6", runtime: false},
