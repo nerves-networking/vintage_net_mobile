@@ -8,7 +8,7 @@ defmodule VintageNetMobile.MixProject do
     [
       app: :vintage_net_mobile,
       version: @version,
-      elixir: "~> 1.7",
+      elixir: "~> 1.9",
       elixirc_paths: elixirc_paths(Mix.env()),
       test_coverage: [tool: ExCoveralls],
       start_permanent: Mix.env() == :prod,
