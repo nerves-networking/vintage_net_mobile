@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.10.2
+
+* Changes
+  * Support `vintage_net v0.11.x` as well.
+
 ## v0.10.1
 
 * Bug fixes
