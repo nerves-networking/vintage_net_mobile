@@ -27,7 +27,7 @@ CFLAGS += -fPIC
 ifeq ($(CROSSCOMPILE),)
     # Not crosscompiling, so check that we're on Linux.
     ifneq ($(shell uname -s),Linux)
-        $(warning VintangeNetLTE only works on Nerves and Linux platforms.)
+        $(warning VintageNetMobile only works on Nerves and Linux platforms.)
         $(warning Skipping compilation.)
         SHIM :=
     endif
