@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.10.3
+
+* Changes
+  * Allow `muontrap v1.0.0` to be used
+
 ## v0.10.2
 
 * Changes
