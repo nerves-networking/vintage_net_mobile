@@ -3,8 +3,8 @@ defmodule VintageNetMobile.ExChat.Core do
 
   alias VintageNetMobile.ExChat.{Request, State}
 
-  @type what :: any()
-  @type who :: any()
+  @type what() :: any()
+  @type who() :: any()
 
   @typedoc """
   ExChat returns actions that the caller should do on its behalf
@@ -12,16 +12,16 @@ defmodule VintageNetMobile.ExChat.Core do
   Actions include anything that has side effects and are needed
   to keep the core functions pure.
   """
-  @type action ::
+  @type action() ::
           {:notify, what(), who()}
           | {:reply, what(), who()}
           | {:send, iodata()}
           | {:start_timer, non_neg_integer(), reference()}
           | :stop_timer
 
-  @type result :: {State.t(), [action()]}
+  @type result() :: {State.t(), [action()]}
 
-  @type send_options :: [
+  @type send_options() :: [
           success: binary(),
           errors: [binary()],
           timeout: non_neg_integer()

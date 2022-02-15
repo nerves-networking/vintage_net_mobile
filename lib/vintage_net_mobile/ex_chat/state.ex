@@ -9,7 +9,7 @@ defmodule VintageNetMobile.ExChat.State do
             responses: [],
             listeners: []
 
-  @type t :: %__MODULE__{
+  @type t() :: %__MODULE__{
           queued_requests: :queue.queue(Request.t()),
           request: Request.t() | nil,
           request_timer: reference() | nil,

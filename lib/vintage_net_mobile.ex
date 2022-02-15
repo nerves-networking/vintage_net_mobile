@@ -90,7 +90,7 @@ defmodule VintageNetMobile do
   * `:apn` (required) - e.g., `"access_point_name"`
   * `:usage` (optional) - `:eps_bearer` (LTE) or `:pdp` (UMTS/GPRS)
   """
-  @type service_provider_info :: %{
+  @type service_provider_info() :: %{
           required(:apn) => String.t(),
           optional(:usage) => :eps_bearer | :pdp
         }
@@ -101,7 +101,7 @@ defmodule VintageNetMobile do
   Only the `:service_providers` key must be specified. Modems may
   add keys of their own.
   """
-  @type mobile_options :: %{
+  @type mobile_options() :: %{
           required(:service_providers) => service_provider_info(),
           optional(:chatscript_additions) => iodata(),
           optional(any) => any
@@ -112,7 +112,7 @@ defmodule VintageNetMobile do
 
   These define how to connect to the cellular network.
   """
-  @type rat :: :gsm | :td_scdma | :wcdma | :lte | :cdma | :lte_cat_nb1 | :lte_cat_m1
+  @type rat() :: :gsm | :td_scdma | :wcdma | :lte | :cdma | :lte_cat_nb1 | :lte_cat_m1
 
   @impl VintageNet.Technology
   def normalize(%{type: __MODULE__, vintage_net_mobile: mobile} = config) do

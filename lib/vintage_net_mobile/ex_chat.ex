@@ -36,7 +36,7 @@ defmodule VintageNetMobile.ExChat do
   * `:uart` - use an alternative UART-provider (for testing)
   * `:uart_opts` - additional options to pass to UART.open
   """
-  @type opt ::
+  @type opt() ::
           {:speed, non_neg_integer()}
           | {:tty, String.t()}
           | {:uart, module()}

@@ -16,7 +16,7 @@ defmodule VintageNetMobile.ToElixir.PPPDHandler do
   # end
   # ```
 
-  @type update_data :: map()
+  @type update_data() :: map()
 
   @doc """
   This is called when pppd successfully establishes a connection.
