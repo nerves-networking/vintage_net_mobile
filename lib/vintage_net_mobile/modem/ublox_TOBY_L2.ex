@@ -54,7 +54,7 @@ defmodule VintageNetMobile.Modem.UbloxTOBYL2 do
   alias VintageNetMobile.{ExChat, SignalMonitor, PPPDConfig, Chatscript}
   alias VintageNet.Interface.RawConfig
 
-  @impl true
+  @impl VintageNetMobile.Modem
   def normalize(config) do
     config
     |> require_service_providers()
@@ -71,7 +71,7 @@ defmodule VintageNetMobile.Modem.UbloxTOBYL2 do
     config
   end
 
-  @impl true
+  @impl VintageNetMobile.Modem
   def add_raw_config(raw_config, %{vintage_net_mobile: mobile} = _config, opts) do
     ifname = raw_config.ifname
 

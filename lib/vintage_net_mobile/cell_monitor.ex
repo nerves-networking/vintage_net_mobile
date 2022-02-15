@@ -35,7 +35,7 @@ defmodule VintageNetMobile.CellMonitor do
     GenServer.start_link(__MODULE__, opts)
   end
 
-  @impl true
+  @impl GenServer
   def init(opts) do
     ifname = Keyword.fetch!(opts, :ifname)
     tty = Keyword.fetch!(opts, :tty)
@@ -51,7 +51,7 @@ defmodule VintageNetMobile.CellMonitor do
     {:ok, %State{ifname: ifname, tty: tty}}
   end
 
-  @impl true
+  @impl GenServer
   def handle_info({:handle_creg, message}, state) do
     message
     |> ATParser.parse()

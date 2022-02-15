@@ -44,7 +44,7 @@ defmodule VintageNetMobile.SignalMonitor do
     GenServer.start_link(__MODULE__, opts)
   end
 
-  @impl true
+  @impl GenServer
   def init(opts) do
     interval = Keyword.get(opts, :signal_check_interval, 5_000)
     ifname = Keyword.fetch!(opts, :ifname)
@@ -57,7 +57,7 @@ defmodule VintageNetMobile.SignalMonitor do
     {:ok, %State{signal_check_interval: interval, ifname: ifname, tty: tty}}
   end
 
-  @impl true
+  @impl GenServer
   def handle_info(:signal_check, state) do
     if connected?(state) do
       # Only poll if connected, since some modems don't like it when they're not connected
