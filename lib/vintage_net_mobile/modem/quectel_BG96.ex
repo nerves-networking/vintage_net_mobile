@@ -88,7 +88,7 @@ defmodule VintageNetMobile.Modem.QuectelBG96 do
   alias VintageNetMobile.{CellMonitor, Chatscript, ExChat, ModemInfo, PPPDConfig, SignalMonitor}
   alias VintageNetMobile.Modem.Utils
 
-  @impl true
+  @impl VintageNetMobile.Modem
   def normalize(config) do
     check_linux_version()
 
@@ -119,7 +119,7 @@ defmodule VintageNetMobile.Modem.QuectelBG96 do
 
   defp normalize_scan(mobile), do: mobile
 
-  @impl true
+  @impl VintageNetMobile.Modem
   def add_raw_config(raw_config, %{vintage_net_mobile: mobile} = _config, opts) do
     ifname = raw_config.ifname
 

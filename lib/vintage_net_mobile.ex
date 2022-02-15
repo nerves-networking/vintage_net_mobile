@@ -114,14 +114,14 @@ defmodule VintageNetMobile do
   """
   @type rat :: :gsm | :td_scdma | :wcdma | :lte | :cdma | :lte_cat_nb1 | :lte_cat_m1
 
-  @impl true
+  @impl VintageNet.Technology
   def normalize(%{type: __MODULE__, vintage_net_mobile: mobile} = config) do
     modem = Map.fetch!(mobile, :modem)
 
     modem.normalize(config)
   end
 
-  @impl true
+  @impl VintageNet.Technology
   def to_raw_config(ifname, %{type: __MODULE__, vintage_net_mobile: mobile} = config, opts) do
     modem = Map.fetch!(mobile, :modem)
 
@@ -136,10 +136,10 @@ defmodule VintageNetMobile do
     |> add_cleanup_command()
   end
 
-  @impl true
+  @impl VintageNet.Technology
   def ioctl(_ifname, _command, _args), do: {:error, :unsupported}
 
-  @impl true
+  @impl VintageNet.Technology
   def check_system(_), do: {:error, "unimplemented"}
 
   defp add_start_commands(raw_config, _modem) do

@@ -91,7 +91,7 @@ defmodule VintageNetMobile.ExChat do
     GenServer.call(server_name(tty_name), {:register, type, callback})
   end
 
-  @impl true
+  @impl GenServer
   def init(opts) do
     speed = Keyword.get(opts, :speed, 115_200)
     tty_name = Keyword.fetch!(opts, :tty)
@@ -112,7 +112,7 @@ defmodule VintageNetMobile.ExChat do
      {:continue, all_uart_opts}}
   end
 
-  @impl true
+  @impl GenServer
   def handle_continue(uart_opts, state) do
     case state.uart.open(state.uart_ref, state.tty_name, uart_opts) do
       :ok ->
@@ -125,7 +125,7 @@ defmodule VintageNetMobile.ExChat do
     end
   end
 
-  @impl true
+  @impl GenServer
   def handle_call({:send, command, options}, from, state) do
     {new_core_state, actions} = Core.send(state.core, command, from, options)
 
@@ -136,7 +136,7 @@ defmodule VintageNetMobile.ExChat do
     {:noreply, new_state}
   end
 
-  @impl true
+  @impl GenServer
   def handle_call({:register, type, callback}, _from, state) do
     {new_core_state, actions} = Core.register(state.core, type, callback)
 
@@ -147,7 +147,7 @@ defmodule VintageNetMobile.ExChat do
     {:reply, :ok, new_state}
   end
 
-  @impl true
+  @impl GenServer
   def handle_info({:circuits_uart, tty_name, {:partial, fragment}}, state) do
     Logger.warn("vintage_net_mobile: dropping junk from #{tty_name}: #{inspect(fragment)}")
     {:noreply, state}

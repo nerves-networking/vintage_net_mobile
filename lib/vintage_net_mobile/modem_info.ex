@@ -31,7 +31,7 @@ defmodule VintageNetMobile.ModemInfo do
     GenServer.start_link(__MODULE__, opts)
   end
 
-  @impl true
+  @impl GenServer
   def init(opts) do
     ifname = Keyword.fetch!(opts, :ifname)
     tty = Keyword.fetch!(opts, :tty)
@@ -44,7 +44,7 @@ defmodule VintageNetMobile.ModemInfo do
     {:ok, %State{ifname: ifname, tty: tty}}
   end
 
-  @impl true
+  @impl GenServer
   def handle_info(:poll, state) do
     ExChat.send_best_effort(state.tty, "ATE0", timeout: 500)
 

@@ -17,7 +17,7 @@ defmodule VintageNetMobile.PPPDNotifications do
   @doc """
   Handle renew reports from udhcpc
   """
-  @impl true
+  @impl VintageNetMobile.ToElixir.PPPDHandler
   def ip_up(ifname, info) do
     Logger.debug("pppd.ip_up(#{ifname}): #{inspect(info)}")
 
@@ -46,7 +46,7 @@ defmodule VintageNetMobile.PPPDNotifications do
   @doc """
   Handle when the pppd link goes down
   """
-  @impl true
+  @impl VintageNetMobile.ToElixir.PPPDHandler
   def ip_down(ifname, info) do
     Logger.debug("pppd.ip_down(#{ifname}): #{inspect(info)}")
 
@@ -60,7 +60,7 @@ defmodule VintageNetMobile.PPPDNotifications do
   @doc """
   Handle when the ppp connection is established with IPv6 enabled
   """
-  @impl true
+  @impl VintageNetMobile.ToElixir.PPPDHandler
   def ipv6_up(ifname, info) do
     Logger.debug("pppd.ipv6_up(#{ifname}): #{inspect(info)}")
   end
@@ -68,7 +68,7 @@ defmodule VintageNetMobile.PPPDNotifications do
   @doc """
   Handle when the ppp connection is lost with IPv6 enabled
   """
-  @impl true
+  @impl VintageNetMobile.ToElixir.PPPDHandler
   def ipv6_down(ifname, info) do
     Logger.debug("pppd.ipv6_down(#{ifname}): #{inspect(info)}")
   end
@@ -76,7 +76,7 @@ defmodule VintageNetMobile.PPPDNotifications do
   @doc """
   Handle when the interface is down but exists and has IP addresses
   """
-  @impl true
+  @impl VintageNetMobile.ToElixir.PPPDHandler
   def ip_pre_up(ifname, info) do
     Logger.debug("pppd.ip_pre_up(#{ifname}): #{inspect(info)}")
   end
@@ -84,7 +84,7 @@ defmodule VintageNetMobile.PPPDNotifications do
   @doc """
   Handle when the remote authenticates itself
   """
-  @impl true
+  @impl VintageNetMobile.ToElixir.PPPDHandler
   def auth_up(ifname, info) do
     Logger.debug("pppd.auth_up(#{ifname}): #{inspect(info)}")
   end
@@ -92,7 +92,7 @@ defmodule VintageNetMobile.PPPDNotifications do
   @doc """
   Handle auth when a connection goes down
   """
-  @impl true
+  @impl VintageNetMobile.ToElixir.PPPDHandler
   def auth_down(ifname, info) do
     Logger.debug("pppd.auth_down(#{ifname}): #{inspect(info)}")
   end

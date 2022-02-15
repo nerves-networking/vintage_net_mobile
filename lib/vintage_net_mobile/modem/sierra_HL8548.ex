@@ -33,13 +33,13 @@ defmodule VintageNetMobile.Modem.SierraHL8548 do
   alias VintageNetMobile.Modem.Utils
   alias VintageNet.Interface.RawConfig
 
-  @impl true
+  @impl VintageNetMobile.Modem
   def normalize(config) do
     config
     |> Utils.require_a_service_provider()
   end
 
-  @impl true
+  @impl VintageNetMobile.Modem
   def add_raw_config(raw_config, %{vintage_net_mobile: mobile} = _config, opts) do
     ifname = raw_config.ifname
 

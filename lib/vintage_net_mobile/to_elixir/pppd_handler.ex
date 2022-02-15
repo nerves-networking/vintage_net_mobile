@@ -9,7 +9,7 @@ defmodule VintageNetMobile.ToElixir.PPPDHandler do
   # defmodule MyApp.PPPDHandler do
   #   @behaviour VintageNetMobile.ToElixir.PPPDHandler
   #
-  #   @impl true
+  #   @impl VintageNetMobile.ToElixir.PPPDHandler
   #   def ip_up(ifname, data) do
   #     ...
   #   end
