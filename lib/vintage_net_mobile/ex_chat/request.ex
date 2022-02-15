@@ -15,7 +15,7 @@ defmodule VintageNetMobile.ExChat.Request do
             ],
             timeout: 10_000
 
-  @type t :: %__MODULE__{
+  @type t() :: %__MODULE__{
           id: any(),
           request: binary(),
           success: binary(),

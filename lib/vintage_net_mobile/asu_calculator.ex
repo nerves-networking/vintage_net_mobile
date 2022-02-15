@@ -14,26 +14,26 @@ defmodule VintageNetMobile.ASUCalculator do
   @typedoc """
   Number of bars out of 4 to show in a UI
   """
-  @type bars :: 0..4
+  @type bars() :: 0..4
 
   @typedoc """
   dBm
   """
-  @type dbm :: neg_integer()
+  @type dbm() :: neg_integer()
 
   @typedoc """
   GSM ASU values
 
   ASU values map to RSSI. 99 means unknown
   """
-  @type gsm_asu :: 0..31 | 99
+  @type gsm_asu() :: 0..31 | 99
 
   @typedoc """
   UMTS ASU values
 
   ASU values map to RSCP
   """
-  @type umts_asu :: 0..90 | 255
+  @type umts_asu() :: 0..90 | 255
 
   @typedoc """
   LTE ASU values
@@ -42,7 +42,7 @@ defmodule VintageNetMobile.ASUCalculator do
 
   https://arimas.com/78-rsrp-and-rsrq-measurement-in-lte/
   """
-  @type lte_asu :: 0..97
+  @type lte_asu() :: 0..97
 
   @doc """
   Compute signal level numbers from a GSM ASU

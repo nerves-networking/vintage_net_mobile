@@ -1,7 +1,7 @@
 defmodule VintageNetMobile.ATParser do
   @moduledoc false
 
-  @type args :: integer() | binary()
+  @type args() :: integer() | binary()
 
   @doc """
   Parse an AT notification
