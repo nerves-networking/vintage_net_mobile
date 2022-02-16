@@ -43,9 +43,11 @@ install: $(PREFIX) $(BUILD) $(SHIM)
 $(OBJ): $(HEADERS) Makefile
 
 $(BUILD)/%.o: %.c
+	@echo " CC $(notdir $@)"
 	$(CC) -c $(CFLAGS) -o $@ $<
 
 $(SHIM): $(OBJ)
+	@echo " LD $(notdir $@)"
 	$(CC) -o $@ $(LDFLAGS) $^
 
 $(PREFIX) $(BUILD):
@@ -55,3 +57,6 @@ clean:
 	$(RM) $(SHIM) $(OBJ)
 
 .PHONY: all clean install
+
+# Don't echo commands unless the caller exports "V=1"
+${V}.SILENT:

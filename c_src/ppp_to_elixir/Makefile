@@ -67,9 +67,11 @@ all: install
 install: $(BUILD) $(PREFIX) $(DEFAULT_TARGETS)
 
 $(BUILD)/%.o: %.c
+	@echo " CC $(notdir $@)"
 	$(CC) -c $(ERL_CFLAGS) $(CFLAGS) -o $@ $<
 
 $(PREFIX)/ppp_to_elixir: $(BUILD)/ppp_to_elixir.o
+	@echo " LD $(notdir $@)"
 	$(CC) $^ $(ERL_LDFLAGS) $(LDFLAGS) -o $@
 
 $(PREFIX) $(BUILD):
@@ -95,3 +97,6 @@ format:
 
 .PHONY: all clean calling_from_make install format
 
+
+# Don't echo commands unless the caller exports "V=1"
+${V}.SILENT:
