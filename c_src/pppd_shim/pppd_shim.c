@@ -57,6 +57,22 @@ static int fixup_path(const char *input, char *output)
 // those two library calls and modifies them to point to our priv
 // directory.
 
+#if __GLIBC_PREREQ(2, 33)
+#define OVERRIDE_STAT 1
+#else
+#define OVERRIDE_XSTAT 1
+#endif
+
+#ifdef OVERRIDE_STAT
+OVERRIDE(int, stat, (const char *pathname, struct stat *st))
+{
+    char new_path[PATH_MAX];
+    if (fixup_path(pathname, new_path) < 0)
+        return -1;
+
+    return ORIGINAL(stat)(new_path, st);
+}
+#else
 OVERRIDE(int, __xstat, (int ver, const char *pathname, struct stat *st))
 {
     char new_path[PATH_MAX];
@@ -65,6 +81,7 @@ OVERRIDE(int, __xstat, (int ver, const char *pathname, struct stat *st))
 
     return ORIGINAL(__xstat)(ver, new_path, st);
 }
+#endif
 
 OVERRIDE(int, execve, (const char *file, char *const argv[], char *const envp[]))
 {
