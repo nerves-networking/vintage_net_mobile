@@ -4,8 +4,9 @@
 
 ### Fixed
 
-* Regression for Nerves systems using `glibc v2.33` and later. This affects
-  toolchains with version numbers `v1.4.2` and later.
+* Fixed dropped `pppd` notifications to Elixir when using Nerves systems with
+  `glibc v2.33` and later. This affects Nerves toolchains with version numbers
+  `v1.4.2` and later.
 
 ## v0.10.3
 
