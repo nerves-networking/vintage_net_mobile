@@ -1,5 +1,12 @@
 # Changelog
 
+## [v0.10.4] - 2022-02-16
+
+### Fixed
+
+* Regression for Nerves systems using `glibc v2.33` and later. This affects
+  toolchains with version numbers `v1.4.2` and later.
+
 ## v0.10.3
 
 * Changes
@@ -123,4 +130,6 @@ configuration example that should look familiar.
 ## v0.1.0
 
 Initial `vintage_net_mobile` release.
+
+[v0.10.4]: https://github.com/nerves-networking/vintage_net_mobile/compare/v0.10.3...v0.10.4
 
