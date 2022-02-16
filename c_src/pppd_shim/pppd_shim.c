@@ -9,6 +9,7 @@
 #include <string.h>
 #include <fcntl.h>
 #include <stdarg.h>
+#include <features.h>
 
 #ifndef __APPLE__
 #define ORIGINAL(name) original_##name
@@ -56,11 +57,15 @@ static int fixup_path(const char *input, char *output)
 // and is executable. Then it calls execve. This shim only intercepts
 // those two library calls and modifies them to point to our priv
 // directory.
-
+#ifdef __GLIBC__
 #if __GLIBC_PREREQ(2, 33)
 #define OVERRIDE_STAT 1
 #else
 #define OVERRIDE_XSTAT 1
+#endif
+#else
+// If not using glibc, guess that stat should be overridden.
+#define OVERRIDE_STAT 1
 #endif
 
 #ifdef OVERRIDE_STAT
