@@ -19,7 +19,7 @@ BUILD  = $(MIX_APP_PATH)/obj/pppd_shim
 
 SHIM = $(PREFIX)/pppd_shim.so
 
-CFLAGS ?= -O2 -Wall -Wextra -Wno-unused-parameter -pedantic
+CFLAGS ?= -O2 -Wall -Wextra -Wno-unused-parameter
 LDFLAGS += -fPIC -shared -ldl
 CFLAGS += -fPIC
 
