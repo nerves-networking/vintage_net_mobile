@@ -79,6 +79,56 @@ Here's an example with a service provider list:
   }
 ```
 
+## Automatic modem detection
+
+If it is not known ahead of time what modem will be installed, the
+`VintageNetMobile.Modem.Automatic` implementation can detect and configure it
+for you. It works by waiting for the system to report a USB device with a known
+vendor and product ID. Once one is found, it calls `VintageNet.configure/3` to
+change the configuration from using the `Automatic` modem to the actual modem
+implementation. It tells `VintageNet.configure/3` to not persist the
+configuration so that the detection process runs again on the next boot.
+
+Here's an example:
+
+```elixir
+  %{
+    type: VintageNetMobile,
+    vintage_net_mobile: %{
+      modem: VintageNetMobile.Modem.Automatic,
+      service_providers: [
+        %{apn: "wireless.twilio.com"}
+      ]
+    }
+  }
+```
+
+See [VintageNetMobile.Modem.Automatic.Discovery](lib/vintage_net_mobile/modem/automatic/discovery.ex)
+for a list of modems that can be detected.
+
+To check if your modem has been detected correctly you can run
+`VintageNet.info()` and check the output configuration's `:modem` field:
+
+```elixir
+iex> VintageNet.info()
+Interface ppp0
+  Type: VintageNetMobile
+  Power: Starting up/on (248378 ms left)
+  Present: true
+  State: :configured (0:01:13)
+  Connection: :internet (21.8 s)
+  Addresses: 111.11.111.111/32
+  Configuration:
+    %{
+      type: VintageNetMobile,
+      vintage_net_mobile: %{
+        modem: VintageNetMobile.Modem.TelitLE910,
+        service_providers: [%{apn: "thebestapn"}]
+      }
+    }
+
+```
+
 ## VintageNet Properties
 
 In addition to the common `vintage_net` properties for all interface types, this
