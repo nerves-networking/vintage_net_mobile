@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.11.0] - 2022-02-25
+
+### Added
+
+* Support for the Telit LE910 modem (see `VintageNetMobile.Modem.TelitLE910`)
+* Support modem implementation selection at runtime. See
+  `VintageNetMobile.Modem.Automatic` for more details.
+
 ## [v0.10.4] - 2022-02-16
 
 ### Fixed
@@ -132,5 +140,6 @@ configuration example that should look familiar.
 
 Initial `vintage_net_mobile` release.
 
+[v0.11.0]: https://github.com/nerves-networking/vintage_net_mobile/compare/v0.10.4...v0.11.0
 [v0.10.4]: https://github.com/nerves-networking/vintage_net_mobile/compare/v0.10.3...v0.10.4
 
