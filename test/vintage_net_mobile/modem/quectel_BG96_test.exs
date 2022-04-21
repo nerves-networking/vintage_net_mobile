@@ -56,8 +56,7 @@ defmodule VintageNetMobile.Modem.QuectelBG96Test do
          OK ATZ
          OK ATQ0
          OK AT+CGDCONT=1,"IP","m1_service"
-         OK AT+QCFG=\"nwscanseq\",020301
-         OK AT+QCFG=\"nwscanmode\",0
+         OK AT+QCFG=\"nwscanmode\",00
          OK AT+QCFG=\"iotopmode\",2
          OK ATDT*99***1#
          CONNECT ''
@@ -133,8 +132,7 @@ defmodule VintageNetMobile.Modem.QuectelBG96Test do
          OK ATZ
          OK ATQ0
          OK AT+CGDCONT=1,"IP","m1_service"
-         OK AT+QCFG=\"nwscanseq\",020301
-         OK AT+QCFG=\"nwscanmode\",0
+         OK AT+QCFG=\"nwscanmode\",00
          OK AT+QCFG=\"iotopmode\",2
          OK ATDT*99***1#
          CONNECT ''
@@ -209,8 +207,7 @@ defmodule VintageNetMobile.Modem.QuectelBG96Test do
          OK ATZ
          OK ATQ0
          OK AT+CGDCONT=1,"IP","m1_service"
-         OK AT+QCFG="nwscanseq",02
-         OK AT+QCFG="nwscanmode",3
+         OK AT+QCFG="nwscanmode",00
          OK AT+QCFG="iotopmode",0
          OK ATDT*99***1#
          CONNECT ''
