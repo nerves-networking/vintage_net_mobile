@@ -21,7 +21,6 @@ defmodule VintageNetMobile.CellMonitor do
   """
   use GenServer
   require Logger
-  alias VintageNet.PropertyTable
   alias VintageNetMobile.{ExChat, ATParser}
 
   defmodule State do
@@ -207,31 +206,37 @@ defmodule VintageNetMobile.CellMonitor do
 
   defp post_registration(%{stat: stat, lac: lac, ci: ci}, ifname)
        when stat in [:registered_home_network, :registered_roaming] do
-    PropertyTable.put(VintageNet, ["interface", ifname, "mobile", "lac"], lac)
-    PropertyTable.put(VintageNet, ["interface", ifname, "mobile", "cid"], ci)
+    PropertyTable.put_many(VintageNet, [
+      {["interface", ifname, "mobile", "lac"], lac},
+      {["interface", ifname, "mobile", "cid"], ci}
+    ])
   end
 
   defp post_registration(%{stat: _stat}, ifname) do
     # Disconnected case, so clear out properties reported by the cell monitor
-    PropertyTable.clear(VintageNet, ["interface", ifname, "mobile", "lac"])
-    PropertyTable.clear(VintageNet, ["interface", ifname, "mobile", "cid"])
-    PropertyTable.clear(VintageNet, ["interface", ifname, "mobile", "network"])
-    PropertyTable.clear(VintageNet, ["interface", ifname, "mobile", "mcc"])
-    PropertyTable.clear(VintageNet, ["interface", ifname, "mobile", "mnc"])
-    PropertyTable.clear(VintageNet, ["interface", ifname, "mobile", "access_technology"])
-    PropertyTable.clear(VintageNet, ["interface", ifname, "mobile", "band"])
-    PropertyTable.clear(VintageNet, ["interface", ifname, "mobile", "channel"])
+    PropertyTable.delete(VintageNet, ["interface", ifname, "mobile", "lac"])
+    PropertyTable.delete(VintageNet, ["interface", ifname, "mobile", "cid"])
+    PropertyTable.delete(VintageNet, ["interface", ifname, "mobile", "network"])
+    PropertyTable.delete(VintageNet, ["interface", ifname, "mobile", "mcc"])
+    PropertyTable.delete(VintageNet, ["interface", ifname, "mobile", "mnc"])
+    PropertyTable.delete(VintageNet, ["interface", ifname, "mobile", "access_technology"])
+    PropertyTable.delete(VintageNet, ["interface", ifname, "mobile", "band"])
+    PropertyTable.delete(VintageNet, ["interface", ifname, "mobile", "channel"])
   end
 
   defp post_network(%{network_name: name, mcc: mcc, mnc: mnc}, ifname) do
-    PropertyTable.put(VintageNet, ["interface", ifname, "mobile", "network"], name)
-    PropertyTable.put(VintageNet, ["interface", ifname, "mobile", "mcc"], mcc)
-    PropertyTable.put(VintageNet, ["interface", ifname, "mobile", "mnc"], mnc)
+    PropertyTable.put_many(VintageNet, [
+      {["interface", ifname, "mobile", "network"], name},
+      {["interface", ifname, "mobile", "mcc"], mcc},
+      {["interface", ifname, "mobile", "mnc"], mnc}
+    ])
   end
 
   defp post_qnwinfo(%{act: act, band: band, channel: channel}, ifname) do
-    PropertyTable.put(VintageNet, ["interface", ifname, "mobile", "access_technology"], act)
-    PropertyTable.put(VintageNet, ["interface", ifname, "mobile", "band"], band)
-    PropertyTable.put(VintageNet, ["interface", ifname, "mobile", "channel"], channel)
+    PropertyTable.put_many(VintageNet, [
+      {["interface", ifname, "mobile", "access_technology"], act},
+      {["interface", ifname, "mobile", "band"], band},
+      {["interface", ifname, "mobile", "channel"], channel}
+    ])
   end
 end

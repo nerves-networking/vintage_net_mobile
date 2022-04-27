@@ -153,7 +153,7 @@ defmodule VintageNetMobile do
 
   defp add_cleanup_command(raw_config) do
     cmds = [
-      {:fun, VintageNet.PropertyTable, :clear_prefix,
+      {:fun, PropertyTable, :delete_matches,
        [VintageNet, ["interface", raw_config.ifname, "mobile"]]}
       | raw_config.down_cmds
     ]
