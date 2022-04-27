@@ -17,7 +17,6 @@ defmodule VintageNetMobile.SignalMonitor do
   use GenServer
   require Logger
 
-  alias VintageNet.PropertyTable
   alias VintageNetMobile.{ExChat, ATParser, ASUCalculator}
 
   @rssi_unknown ASUCalculator.from_gsm_asu(99)
@@ -94,9 +93,11 @@ defmodule VintageNetMobile.SignalMonitor do
   end
 
   defp post_signal_rssi(%{asu: asu, dbm: dbm, bars: bars}, ifname) do
-    PropertyTable.put(VintageNet, ["interface", ifname, "mobile", "signal_asu"], asu)
-    PropertyTable.put(VintageNet, ["interface", ifname, "mobile", "signal_dbm"], dbm)
-    PropertyTable.put(VintageNet, ["interface", ifname, "mobile", "signal_4bars"], bars)
+    PropertyTable.put_many(VintageNet, [
+      {["interface", ifname, "mobile", "signal_asu"], asu},
+      {["interface", ifname, "mobile", "signal_dbm"], dbm},
+      {["interface", ifname, "mobile", "signal_4bars"], bars}
+    ])
   end
 
   defp connected?(state) do

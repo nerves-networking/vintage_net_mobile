@@ -3,7 +3,7 @@ defmodule VintageNetMobile.PPPDNotifications do
 
   @moduledoc false
 
-  alias VintageNet.{NameResolver, PropertyTable, RouteManager}
+  alias VintageNet.{NameResolver, RouteManager}
 
   require Logger
 

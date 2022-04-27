@@ -48,8 +48,7 @@ defmodule VintageNetMobileTest do
         {:run_ignore_errors, "mknod", ["/dev/ppp", "c", "108", "0"]}
       ],
       down_cmds: [
-        {:fun, VintageNet.PropertyTable, :clear_prefix,
-         [VintageNet, ["interface", "ppp0", "mobile"]]}
+        {:fun, PropertyTable, :delete_matches, [VintageNet, ["interface", "ppp0", "mobile"]]}
       ]
     }
 
