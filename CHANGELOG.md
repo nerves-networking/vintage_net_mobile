@@ -1,5 +1,11 @@
 # Changelog
 
+## [v0.11.1] - 2022-05-02
+
+### Changed
+
+* `:vintage_net` `v0.12.0` or later is required
+
 ## [v0.11.0] - 2022-02-25
 
 ### Added

@@ -22,7 +22,7 @@ To use this library, first add it to your project's dependency list:
 ```elixir
 def deps do
   [
-    {:vintage_net_mobile, "~> 0.11.0"}
+    {:vintage_net_mobile, "~> 0.11.1"}
   ]
 end
 ```
