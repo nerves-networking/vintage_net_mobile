@@ -128,10 +128,10 @@ defmodule VintageNetMobile do
     %RawConfig{
       ifname: ifname,
       type: __MODULE__,
-      source_config: config,
-      required_ifnames: [ppp_to_wwan(ifname)]
+      source_config: config
     }
     |> modem.add_raw_config(config, opts)
+    |> add_required_ifnames()
     |> add_start_commands(modem)
     |> add_cleanup_command()
   end
@@ -141,6 +141,11 @@ defmodule VintageNetMobile do
 
   @impl VintageNet.Technology
   def check_system(_), do: {:error, "unimplemented"}
+
+  defp add_required_ifnames(raw_config) do
+    # Only add if the modem implementation didn't already add them.
+    Map.put_new(raw_config, :required_ifnames, [ppp_to_wwan(ifname)])
+  end
 
   defp add_start_commands(raw_config, _modem) do
     # The mknod creates `/dev/ppp` if it doesn't exist.
