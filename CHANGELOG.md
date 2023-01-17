@@ -1,5 +1,11 @@
 # Changelog
 
+## [v0.11.2] - 2023-01-16
+
+### Changed
+
+* Relax `muontrap` dependency requirement
+
 ## [v0.11.1] - 2022-05-02
 
 ### Changed
