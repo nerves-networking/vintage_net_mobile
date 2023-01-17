@@ -152,6 +152,8 @@ configuration example that should look familiar.
 
 Initial `vintage_net_mobile` release.
 
+[v0.11.2]: https://github.com/nerves-networking/vintage_net_mobile/compare/v0.11.1...v0.11.2
+[v0.11.1]: https://github.com/nerves-networking/vintage_net_mobile/compare/v0.11.0...v0.11.1
 [v0.11.0]: https://github.com/nerves-networking/vintage_net_mobile/compare/v0.10.4...v0.11.0
 [v0.10.4]: https://github.com/nerves-networking/vintage_net_mobile/compare/v0.10.3...v0.10.4
 
