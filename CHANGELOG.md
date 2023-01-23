@@ -1,5 +1,11 @@
 # Changelog
 
+## [v0.11.3] - 2023-01-23
+
+### Changed
+
+* Support `:vintage_net` `v0.13.0` as well.
+
 ## [v0.11.2] - 2023-01-16
 
 ### Changed
@@ -152,6 +158,7 @@ configuration example that should look familiar.
 
 Initial `vintage_net_mobile` release.
 
+[v0.11.3]: https://github.com/nerves-networking/vintage_net_mobile/compare/v0.11.2...v0.11.3
 [v0.11.2]: https://github.com/nerves-networking/vintage_net_mobile/compare/v0.11.1...v0.11.2
 [v0.11.1]: https://github.com/nerves-networking/vintage_net_mobile/compare/v0.11.0...v0.11.1
 [v0.11.0]: https://github.com/nerves-networking/vintage_net_mobile/compare/v0.10.4...v0.11.0
