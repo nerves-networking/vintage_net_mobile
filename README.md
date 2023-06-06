@@ -3,7 +3,6 @@
 [![Hex version](https://img.shields.io/hexpm/v/vintage_net_mobile.svg "Hex version")](https://hex.pm/packages/vintage_net_mobile)
 [![API docs](https://img.shields.io/hexpm/v/vintage_net_mobile.svg?label=hexdocs "API docs")](https://hexdocs.pm/vintage_net_mobile/VintageNetMobile.html)
 [![CircleCI](https://circleci.com/gh/nerves-networking/vintage_net_mobile.svg?style=svg)](https://circleci.com/gh/nerves-networking/vintage_net_mobile)
-[![Coverage Status](https://coveralls.io/repos/github/nerves-networking/vintage_net_mobile/badge.svg?branch=master)](https://coveralls.io/github/nerves-networking/vintage_net_mobile?branch=master)
 
 This library provides a `VintageNet` technology for using cellular modems.
 Currently, it supports the following modems:

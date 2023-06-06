@@ -10,7 +10,6 @@ defmodule VintageNetMobile.MixProject do
       version: @version,
       elixir: "~> 1.9",
       elixirc_paths: elixirc_paths(Mix.env()),
-      test_coverage: [tool: ExCoveralls],
       start_permanent: Mix.env() == :prod,
       compilers: [:elixir_make | Mix.compilers()],
       make_targets: ["all"],
@@ -25,8 +24,7 @@ defmodule VintageNetMobile.MixProject do
         docs: :docs,
         "hex.publish": :docs,
         "hex.build": :docs,
-        credo: :test,
-        "coveralls.circle": :test
+        credo: :test
       }
     ]
   end
@@ -73,8 +71,7 @@ defmodule VintageNetMobile.MixProject do
       {:elixir_make, "~> 0.6", runtime: false},
       {:credo, "~> 1.2", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.3.0", only: [:dev, :test], runtime: false},
-      {:ex_doc, "~> 0.22", only: :docs, runtime: false},
-      {:excoveralls, "~> 0.8", only: :test, runtime: false}
+      {:ex_doc, "~> 0.22", only: :docs, runtime: false}
     ]
   end
 
