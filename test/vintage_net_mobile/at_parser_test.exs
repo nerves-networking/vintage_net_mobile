@@ -52,7 +52,7 @@ defmodule VintageNetMobile.ATParserTest do
 
   test "errors on corrupt notifications" do
     # Missing colon
-    assert {:error, "Parse error {:illegal, '+CSQ '} for \"+CSQ 5,99\"}"} ==
+    assert {:error, "Parse error {:illegal, #{inspect(~c"+CSQ ")}} for \"+CSQ 5,99\"}"} ==
              ATParser.parse("+CSQ 5,99")
 
     # Missing header
@@ -63,15 +63,16 @@ defmodule VintageNetMobile.ATParserTest do
     assert {:error, "Expecting string to start with '+XYZ: ', but got \"\""} == ATParser.parse("")
 
     # Bad integer value
-    assert {:error, "Parse error {:illegal, 'A'} for \"+CSQ: 5A,99\"}"} ==
+    assert {:error, "Parse error {:illegal, #{inspect(~c"A")}} for \"+CSQ: 5A,99\"}"} ==
              ATParser.parse("+CSQ: 5A,99")
 
     # Bad hex value
-    assert {:error, "Parse error {:illegal, 'z'} for \"+CSQ: 0x12aAz,99\"}"} ==
+    assert {:error, "Parse error {:illegal, #{inspect(~c"z")}} for \"+CSQ: 0x12aAz,99\"}"} ==
              ATParser.parse("+CSQ: 0x12aAz,99")
 
     # Missing close quote
-    assert {:error, "Parse error {:illegal, '\"Missing quote'} for \"+CSQ: \\\"Missing quote\"}"} ==
+    assert {:error,
+            "Parse error {:illegal, #{inspect(~c"\"Missing quote")}} for \"+CSQ: \\\"Missing quote\"}"} ==
              ATParser.parse("+CSQ: \"Missing quote")
   end
 end
