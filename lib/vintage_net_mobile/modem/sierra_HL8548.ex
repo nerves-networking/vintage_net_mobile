@@ -29,9 +29,12 @@ defmodule VintageNetMobile.Modem.SierraHL8548 do
 
   @behaviour VintageNetMobile.Modem
 
-  alias VintageNetMobile.{ExChat, SignalMonitor, PPPDConfig, Chatscript}
-  alias VintageNetMobile.Modem.Utils
   alias VintageNet.Interface.RawConfig
+  alias VintageNetMobile.Chatscript
+  alias VintageNetMobile.ExChat
+  alias VintageNetMobile.Modem.Utils
+  alias VintageNetMobile.PPPDConfig
+  alias VintageNetMobile.SignalMonitor
 
   @impl VintageNetMobile.Modem
   def normalize(config) do

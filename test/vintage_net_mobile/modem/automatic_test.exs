@@ -1,9 +1,9 @@
 defmodule VintageNetMobile.Modem.AutomaticTest do
   use ExUnit.Case, async: true
 
+  alias VintageNet.Interface.RawConfig
   alias VintageNetMobile.Modem.Automatic
   alias VintageNetMobile.Modem.Automatic.Discovery
-  alias VintageNet.Interface.RawConfig
 
   test "create LTE configuration" do
     input = %{

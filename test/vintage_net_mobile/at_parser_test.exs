@@ -13,7 +13,7 @@ defmodule VintageNetMobile.ATParserTest do
               "",
               0,
               "310260"
-            ]} == ATParser.parse("+QSPN: \"Twilio\",\"Twilio\",\"\",0,\"310260\"")
+            ]} == ATParser.parse(~S[+QSPN: "Twilio","Twilio","",0,"310260"])
 
     assert {:ok, "+QNWINFO: ",
             [
@@ -21,7 +21,7 @@ defmodule VintageNetMobile.ATParserTest do
               "310260",
               "LTE BAND 4",
               2300
-            ]} == ATParser.parse("+QNWINFO: \"FDD LTE\",\"310260\",\"LTE BAND 4\",2300")
+            ]} == ATParser.parse(~S[+QNWINFO: "FDD LTE","310260","LTE BAND 4",2300])
 
     assert {:ok, "+QNWINFO: ",
             [
@@ -32,7 +32,7 @@ defmodule VintageNetMobile.ATParserTest do
             ]} == ATParser.parse("+QNWINFO: No Service")
 
     assert {:ok, "+QLTS: ", ["2020/03/13,13:21:36-16,1"]} ==
-             ATParser.parse("+QLTS: \"2020/03/13,13:21:36-16,1\"")
+             ATParser.parse(~S[+QLTS: "2020/03/13,13:21:36-16,1"])
 
     assert {:ok, "+QCFG: ",
             [
@@ -42,9 +42,9 @@ defmodule VintageNetMobile.ATParserTest do
               0
             ]} == ATParser.parse("+QCFG: \"band\",0x260,0x42000000000000381a,0x0")
 
-    assert {:ok, "+QIND: ", ["act", "LTE"]} == ATParser.parse("+QIND: \"act\",\"LTE\"")
+    assert {:ok, "+QIND: ", ["act", "LTE"]} == ATParser.parse(~S[+QIND: "act","LTE"])
 
-    assert {:ok, "+QIND: ", ["csq", 21, 99]} == ATParser.parse("+QIND: \"csq\",21,99")
+    assert {:ok, "+QIND: ", ["csq", 21, 99]} == ATParser.parse(~S[+QIND: "csq",21,99])
 
     assert {:ok, "+QCCID: ", ["8901260852290847433F"]} ==
              ATParser.parse("+QCCID: 8901260852290847433F")
