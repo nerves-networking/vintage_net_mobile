@@ -51,8 +51,11 @@ defmodule VintageNetMobile.Modem.UbloxTOBYL2 do
   # Useful references:
   #  * AT commands - https://www.u-blox.com/en/docs/UBX-13002752
 
-  alias VintageNetMobile.{ExChat, SignalMonitor, PPPDConfig, Chatscript}
   alias VintageNet.Interface.RawConfig
+  alias VintageNetMobile.Chatscript
+  alias VintageNetMobile.ExChat
+  alias VintageNetMobile.PPPDConfig
+  alias VintageNetMobile.SignalMonitor
 
   @impl VintageNetMobile.Modem
   def normalize(config) do

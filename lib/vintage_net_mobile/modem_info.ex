@@ -15,7 +15,8 @@ defmodule VintageNetMobile.ModemInfo do
   """
   use GenServer
   require Logger
-  alias VintageNetMobile.{ExChat, ATParser}
+  alias VintageNetMobile.ATParser
+  alias VintageNetMobile.ExChat
 
   @unknown "Unknown"
 

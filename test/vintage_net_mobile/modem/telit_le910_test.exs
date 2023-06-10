@@ -1,8 +1,8 @@
 defmodule VintageNetMobile.Modem.TelitLE910Test do
   use ExUnit.Case, async: true
 
-  alias VintageNetMobile.Modem.TelitLE910
   alias VintageNet.Interface.RawConfig
+  alias VintageNetMobile.Modem.TelitLE910
 
   test "generates LTE configuration" do
     priv_dir = Application.app_dir(:vintage_net_mobile, "priv")

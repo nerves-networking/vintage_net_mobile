@@ -1,8 +1,8 @@
 defmodule VintageNetMobile.PPPDConfig do
   @moduledoc false
 
-  alias VintageNetMobile.Chatscript
   alias VintageNet.Interface.RawConfig
+  alias VintageNetMobile.Chatscript
 
   @doc """
   Add the PPPD child specs to the `RawConfig.t()`

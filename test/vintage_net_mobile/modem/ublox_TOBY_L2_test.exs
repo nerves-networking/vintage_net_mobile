@@ -1,8 +1,8 @@
 defmodule VintageNetMobile.Modem.UbloxTOBYL2Test do
   use ExUnit.Case
 
-  alias VintageNetMobile.Modem.UbloxTOBYL2
   alias VintageNet.Interface.RawConfig
+  alias VintageNetMobile.Modem.UbloxTOBYL2
 
   test "creating a configuration" do
     priv_dir = Application.app_dir(:vintage_net_mobile, "priv")

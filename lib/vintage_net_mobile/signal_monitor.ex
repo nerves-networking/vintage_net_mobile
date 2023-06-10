@@ -17,7 +17,10 @@ defmodule VintageNetMobile.SignalMonitor do
   use GenServer
   require Logger
 
-  alias VintageNetMobile.{ExChat, ATParser, ASUCalculator}
+  alias VintageNet.PowerManager
+  alias VintageNetMobile.ASUCalculator
+  alias VintageNetMobile.ATParser
+  alias VintageNetMobile.ExChat
 
   @rssi_unknown ASUCalculator.from_gsm_asu(99)
 
@@ -107,7 +110,7 @@ defmodule VintageNetMobile.SignalMonitor do
   # Report that the LTE modem is doing ok if it's connected to a tower
   # with 1 or more bars. 0 means that there's no connection.
   defp maybe_pet_power_control(%{bars: bars} = report, ifname) when bars > 0 do
-    VintageNet.PowerManager.PMControl.pet_watchdog(ifname)
+    PowerManager.PMControl.pet_watchdog(ifname)
     report
   end
 

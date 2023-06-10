@@ -1,8 +1,8 @@
 defmodule VintageNetMobile.Modem.QuectelEC25Test do
   use ExUnit.Case
 
-  alias VintageNetMobile.Modem.QuectelEC25
   alias VintageNet.Interface.RawConfig
+  alias VintageNetMobile.Modem.QuectelEC25
 
   test "create an LTE configuration" do
     priv_dir = Application.app_dir(:vintage_net_mobile, "priv")

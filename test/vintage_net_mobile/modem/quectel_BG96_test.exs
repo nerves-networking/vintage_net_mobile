@@ -1,8 +1,8 @@
 defmodule VintageNetMobile.Modem.QuectelBG96Test do
   use ExUnit.Case
 
-  alias VintageNetMobile.Modem.QuectelBG96
   alias VintageNet.Interface.RawConfig
+  alias VintageNetMobile.Modem.QuectelBG96
 
   test "normalize works with minimal options" do
     input = %{

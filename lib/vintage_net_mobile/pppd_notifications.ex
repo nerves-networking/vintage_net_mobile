@@ -21,9 +21,14 @@ defmodule VintageNetMobile.PPPDNotifications do
   def ip_up(ifname, info) do
     Logger.debug("pppd.ip_up(#{ifname}): #{inspect(info)}")
 
-    #  2:52:27.514 [error] ppp_to_elixir: dropping unknown report '{["ip-up", "ppp0", "/dev/ttyUSB0", "115200", "162.175.202.224", "10.64.64.64"],
-    #  %{DEVICE: "/dev/ttyUSB0", DNS1: "10.177.0.34", DNS2: "10.177.0.210", IFNAME: "ppp0", IPLOCAL: "162.175.202.224", IPREMOTE: "10.64.64.64",
-    #  ORIG_UID: "0", PPPD_PID: "278", PPPLOGNAME: "root", SPEED: "115200", USEPEERDNS: "1"}}''
+    #  2:52:27.514 [error] ppp_to_elixir: dropping unknown report '{["ip-up",
+    #  "ppp0", "/dev/ttyUSB0", "115200", "162.175.202.224", "10.64.64.64"],
+
+    #  %{DEVICE: "/dev/ttyUSB0", DNS1: "10.177.0.34", DNS2: "10.177.0.210",
+    #  IFNAME: "ppp0", IPLOCAL: "162.175.202.224", IPREMOTE: "10.64.64.64",
+
+    #  ORIG_UID: "0", PPPD_PID: "278", PPPLOGNAME: "root", SPEED: "115200",
+    #  USEPEERDNS: "1"}}''
 
     local_ip_address = parse_address(Map.get(info, :IPLOCAL))
     remote_ip_address = parse_address(Map.get(info, :IPREMOTE))

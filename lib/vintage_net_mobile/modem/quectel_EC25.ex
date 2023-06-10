@@ -79,12 +79,17 @@ defmodule VintageNetMobile.Modem.QuectelEC25 do
   """
 
   alias VintageNet.Interface.RawConfig
-  alias VintageNetMobile.{CellMonitor, Chatscript, ExChat, PPPDConfig, SignalMonitor}
+  alias VintageNetMobile.CellMonitor
+  alias VintageNetMobile.Chatscript
+  alias VintageNetMobile.ExChat
+  alias VintageNetMobile.Modem
   alias VintageNetMobile.Modem.Utils
+  alias VintageNetMobile.PPPDConfig
+  alias VintageNetMobile.SignalMonitor
 
   @impl VintageNetMobile.Modem
   def normalize(config) do
-    VintageNetMobile.Modem.QuectelBG96.check_linux_version()
+    Modem.QuectelBG96.check_linux_version()
 
     config
     |> Utils.require_a_service_provider()

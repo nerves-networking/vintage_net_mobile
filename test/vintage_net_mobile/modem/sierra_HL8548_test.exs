@@ -1,8 +1,8 @@
 defmodule VintageNetMobile.Modem.SierraHL8548Test do
   use ExUnit.Case
 
-  alias VintageNetMobile.Modem.SierraHL8548
   alias VintageNet.Interface.RawConfig
+  alias VintageNetMobile.Modem.SierraHL8548
 
   test "creating a configuration" do
     priv_dir = Application.app_dir(:vintage_net_mobile, "priv")

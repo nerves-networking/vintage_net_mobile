@@ -184,6 +184,7 @@ defmodule VintageNetMobile.ExChat do
   end
 
   defp run_action(state, {:notify, what, who}) do
+    # credo:disable-for-next-line
     apply(who, [what])
     state
   end
