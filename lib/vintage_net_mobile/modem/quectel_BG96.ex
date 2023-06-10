@@ -212,7 +212,7 @@ defmodule VintageNetMobile.Modem.QuectelBG96 do
   end
 
   defp linux_warning() do
-    Logger.warn(
+    Logger.warning(
       "VintageNetMobile is broken on Linux 5.4.53+ when using Quectel modems unless you revert https://github.com/torvalds/linux/commit/2bb70f0a4b238323e4e2f392fc3ddeb5b7208c9e"
     )
   end

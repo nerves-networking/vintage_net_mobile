@@ -78,7 +78,7 @@ defmodule VintageNetMobile.ExChat do
         :ok
 
       error ->
-        Logger.warn("Send #{inspect(command)} failed: #{inspect(error)}. Ignoring...")
+        Logger.warning("Send #{inspect(command)} failed: #{inspect(error)}. Ignoring...")
         :ok
     end
   end
@@ -119,7 +119,7 @@ defmodule VintageNetMobile.ExChat do
         {:noreply, state}
 
       {:error, error} ->
-        Logger.warn("vintage_net_mobile: can't open #{state.tty_name}: #{inspect(error)}")
+        Logger.warning("vintage_net_mobile: can't open #{state.tty_name}: #{inspect(error)}")
         Process.sleep(@error_delay)
         {:stop, :tty_error, state}
     end
@@ -149,12 +149,12 @@ defmodule VintageNetMobile.ExChat do
 
   @impl GenServer
   def handle_info({:circuits_uart, tty_name, {:partial, fragment}}, state) do
-    Logger.warn("vintage_net_mobile: dropping junk from #{tty_name}: #{inspect(fragment)}")
+    Logger.warning("vintage_net_mobile: dropping junk from #{tty_name}: #{inspect(fragment)}")
     {:noreply, state}
   end
 
   def handle_info({:circuits_uart, tty_name, {:error, error}}, state) do
-    Logger.warn("vintage_net_mobile: error from #{tty_name}: #{inspect(error)}")
+    Logger.warning("vintage_net_mobile: error from #{tty_name}: #{inspect(error)}")
     Process.sleep(@error_delay)
     {:stop, :tty_error, state}
   end

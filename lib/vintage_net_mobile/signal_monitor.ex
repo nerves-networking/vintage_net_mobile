@@ -91,7 +91,7 @@ defmodule VintageNetMobile.SignalMonitor do
   end
 
   defp csq_response_to_rssi(anything_else) do
-    Logger.warn("Unexpected AT+CSQ response: #{inspect(anything_else)}")
+    Logger.warning("Unexpected AT+CSQ response: #{inspect(anything_else)}")
     @rssi_unknown
   end
 
