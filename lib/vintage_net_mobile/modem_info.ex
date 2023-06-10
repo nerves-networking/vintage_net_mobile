@@ -72,7 +72,7 @@ defmodule VintageNetMobile.ModemInfo do
   end
 
   defp iccid_response_to_qccid(anything_else) do
-    Logger.warn("Unexpected AT+QCCID response: #{inspect(anything_else)}")
+    Logger.warning("Unexpected AT+QCCID response: #{inspect(anything_else)}")
     @unknown
   end
 
@@ -85,7 +85,7 @@ defmodule VintageNetMobile.ModemInfo do
   end
 
   defp cimi_response_to_imsi(anything_else) do
-    Logger.warn("Unexpected AT+CIMI response: #{inspect(anything_else)}")
+    Logger.warning("Unexpected AT+CIMI response: #{inspect(anything_else)}")
     @unknown
   end
 
