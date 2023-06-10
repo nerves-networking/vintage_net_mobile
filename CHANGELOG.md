@@ -1,5 +1,11 @@
 # Changelog
 
+## [v0.11.4] - 2023-06-10
+
+### Changed
+
+* Fix deprecation warnings on Elixir 1.15
+
 ## [v0.11.3] - 2023-01-23
 
 ### Changed
@@ -158,6 +164,7 @@ configuration example that should look familiar.
 
 Initial `vintage_net_mobile` release.
 
+[v0.11.4]: https://github.com/nerves-networking/vintage_net_mobile/compare/v0.11.3...v0.11.4
 [v0.11.3]: https://github.com/nerves-networking/vintage_net_mobile/compare/v0.11.2...v0.11.3
 [v0.11.2]: https://github.com/nerves-networking/vintage_net_mobile/compare/v0.11.1...v0.11.2
 [v0.11.1]: https://github.com/nerves-networking/vintage_net_mobile/compare/v0.11.0...v0.11.1
