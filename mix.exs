@@ -70,7 +70,7 @@ defmodule VintageNetMobile.MixProject do
       {:muontrap, "~> 1.0 or ~> 0.6.0"},
       {:elixir_make, "~> 0.6", runtime: false},
       {:credo, "~> 1.2", only: [:dev, :test], runtime: false},
-      {:dialyxir, "~> 1.3.0", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.4.1", only: [:dev, :test], runtime: false},
       {:ex_doc, "~> 0.22", only: :docs, runtime: false}
     ]
   end
