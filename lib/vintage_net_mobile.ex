@@ -144,8 +144,10 @@ defmodule VintageNetMobile do
 
   defp add_start_commands(raw_config, _modem) do
     # The mknod creates `/dev/ppp` if it doesn't exist.
+    # The mkdir creates `/var/run/pppd/lock` if it doesn't exist.
     new_up_cmds = [
-      {:run_ignore_errors, "mknod", ["/dev/ppp", "c", "108", "0"]} | raw_config.up_cmds
+      {:run_ignore_errors, "mknod", ["/dev/ppp", "c", "108", "0"]},
+      {:run_ignore_errors, "mkdir", ["-p", "/var/run/pppd/lock"]} | raw_config.up_cmds
     ]
 
     %RawConfig{raw_config | up_cmds: new_up_cmds}
