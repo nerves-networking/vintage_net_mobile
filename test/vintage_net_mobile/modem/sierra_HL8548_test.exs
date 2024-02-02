@@ -21,7 +21,8 @@ defmodule VintageNetMobile.Modem.SierraHL8548Test do
       source_config: input,
       required_ifnames: ["wwan0"],
       up_cmds: [
-        {:run_ignore_errors, "mknod", ["/dev/ppp", "c", "108", "0"]}
+        {:run_ignore_errors, "mknod", ["/dev/ppp", "c", "108", "0"]},
+        {:run_ignore_errors, "mkdir", ["-p", "/var/run/pppd/lock"]}
       ],
       down_cmds: [
         {:fun, PropertyTable, :delete_matches, [VintageNet, ["interface", "ppp0", "mobile"]]}

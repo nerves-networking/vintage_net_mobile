@@ -45,7 +45,8 @@ defmodule VintageNetMobileTest do
       required_ifnames: ["wwan0"],
       files: [{"chatscript.ppp0", "The service providers are [%{apn: \"free_lte\"}]"}],
       up_cmds: [
-        {:run_ignore_errors, "mknod", ["/dev/ppp", "c", "108", "0"]}
+        {:run_ignore_errors, "mknod", ["/dev/ppp", "c", "108", "0"]},
+        {:run_ignore_errors, "mkdir", ["-p", "/var/run/pppd/lock"]}
       ],
       down_cmds: [
         {:fun, PropertyTable, :delete_matches, [VintageNet, ["interface", "ppp0", "mobile"]]}
