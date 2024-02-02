@@ -1,5 +1,12 @@
 # Changelog
 
+## [v0.11.5] - 2024-02-02
+
+### Changed
+
+* Create `/var/run/pppd/lock` directory if it doesn't exist to avoid some
+  versions of `pppd` exiting. Thanks to @ringlej for the fix.
+
 ## [v0.11.4] - 2023-06-10
 
 ### Changed
@@ -164,6 +171,7 @@ configuration example that should look familiar.
 
 Initial `vintage_net_mobile` release.
 
+[v0.11.5]: https://github.com/nerves-networking/vintage_net_mobile/compare/v0.11.4...v0.11.5
 [v0.11.4]: https://github.com/nerves-networking/vintage_net_mobile/compare/v0.11.3...v0.11.4
 [v0.11.3]: https://github.com/nerves-networking/vintage_net_mobile/compare/v0.11.2...v0.11.3
 [v0.11.2]: https://github.com/nerves-networking/vintage_net_mobile/compare/v0.11.1...v0.11.2
