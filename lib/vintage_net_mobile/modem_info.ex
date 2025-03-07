@@ -1,3 +1,9 @@
+# SPDX-FileCopyrightText: 2020 Frank Hunleth
+# SPDX-FileCopyrightText: 2022 Matt Ludwigs
+# SPDX-FileCopyrightText: 2023 Masatoshi Nishiguchi
+#
+# SPDX-License-Identifier: Apache-2.0
+#
 defmodule VintageNetMobile.ModemInfo do
   @moduledoc """
   Query the modem for device and SIM information

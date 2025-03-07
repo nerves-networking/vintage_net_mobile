@@ -1,3 +1,9 @@
+# SPDX-FileCopyrightText: 2020 Frank Hunleth
+# SPDX-FileCopyrightText: 2020 Matt Ludwigs
+# SPDX-FileCopyrightText: 2024 Jon Ringle
+#
+# SPDX-License-Identifier: Apache-2.0
+#
 defmodule VintageNetMobileTest do
   use ExUnit.Case
 

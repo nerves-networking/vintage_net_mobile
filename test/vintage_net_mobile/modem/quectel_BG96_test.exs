@@ -1,3 +1,10 @@
+# SPDX-FileCopyrightText: 2020 Frank Hunleth
+# SPDX-FileCopyrightText: 2020 Matt Ludwigs
+# SPDX-FileCopyrightText: 2023 Masatoshi Nishiguchi
+# SPDX-FileCopyrightText: 2024 Jon Ringle
+#
+# SPDX-License-Identifier: Apache-2.0
+#
 defmodule VintageNetMobile.Modem.QuectelBG96Test do
   use ExUnit.Case
 

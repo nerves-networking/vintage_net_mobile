@@ -1,3 +1,9 @@
+# SPDX-FileCopyrightText: 2020 Frank Hunleth
+# SPDX-FileCopyrightText: 2020 Matt Ludwigs
+# SPDX-FileCopyrightText: 2023 Masatoshi Nishiguchi
+#
+# SPDX-License-Identifier: Apache-2.0
+#
 defmodule VintageNetMobile.PPPDNotifications do
   @behaviour VintageNetMobile.ToElixir.PPPDHandler
 

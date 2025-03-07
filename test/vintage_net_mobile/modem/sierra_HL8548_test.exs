@@ -1,3 +1,10 @@
+# SPDX-FileCopyrightText: 2020 Frank Hunleth
+# SPDX-FileCopyrightText: 2020 Justin Schneck
+# SPDX-FileCopyrightText: 2023 Masatoshi Nishiguchi
+# SPDX-FileCopyrightText: 2024 Jon Ringle
+#
+# SPDX-License-Identifier: Apache-2.0
+#
 defmodule VintageNetMobile.Modem.SierraHL8548Test do
   use ExUnit.Case
 

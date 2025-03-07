@@ -49,17 +49,23 @@ defmodule VintageNetMobile.MixProject do
   defp package do
     %{
       files: [
-        "lib",
-        "mix.exs",
-        "Makefile",
-        "README.md",
+        "CHANGELOG.md",
         "c_src",
+        "lib",
         "src/at_lexer.xrl",
-        "LICENSE",
-        "CHANGELOG.md"
+        "LICENSES/*",
+        "Makefile",
+        "mix.exs",
+        "NOTICE",
+        "README.md",
+        "REUSE.toml"
       ],
       licenses: ["Apache-2.0"],
-      links: %{"GitHub" => @source_url}
+      links: %{
+        "GitHub" => @source_url,
+        "REUSE Compliance" =>
+          "https://api.reuse.software/info/github.com/nerves-networking/vintage_net_mobile"
+      }
     }
   end
 

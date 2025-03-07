@@ -1,3 +1,9 @@
+# SPDX-FileCopyrightText: 2020 Frank Hunleth
+# SPDX-FileCopyrightText: 2023 Masatoshi Nishiguchi
+# SPDX-FileCopyrightText: 2024 Jon Ringle
+#
+# SPDX-License-Identifier: Apache-2.0
+#
 defmodule VintageNetMobile.Modem.UbloxTOBYL2Test do
   use ExUnit.Case
 

@@ -1,3 +1,8 @@
+# SPDX-FileCopyrightText: 2020 Frank Hunleth
+# SPDX-FileCopyrightText: 2020 Matt Ludwigs
+#
+# SPDX-License-Identifier: Apache-2.0
+#
 defmodule VintageNetMobile.ChatscriptTest do
   use ExUnit.Case
 

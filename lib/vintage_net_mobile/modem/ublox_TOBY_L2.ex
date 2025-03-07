@@ -1,3 +1,10 @@
+# SPDX-FileCopyrightText: 2020 Frank Hunleth
+# SPDX-FileCopyrightText: 2020 Justin Schneck
+# SPDX-FileCopyrightText: 2022 Matt Ludwigs
+# SPDX-FileCopyrightText: 2023 Masatoshi Nishiguchi
+#
+# SPDX-License-Identifier: Apache-2.0
+#
 defmodule VintageNetMobile.Modem.UbloxTOBYL2 do
   @behaviour VintageNetMobile.Modem
 

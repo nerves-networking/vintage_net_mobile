@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2021 Frank Hunleth
+#
+# SPDX-License-Identifier: Apache-2.0
+#
 defmodule VintageNetMobile.Modem.HuaweiE3372.Modeswitch do
   @moduledoc """
   VintageNetMobile PowerManager to handle the HuaweiE3372 modem

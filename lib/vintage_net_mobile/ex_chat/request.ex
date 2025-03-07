@@ -1,3 +1,8 @@
+# SPDX-FileCopyrightText: 2020 Frank Hunleth
+# SPDX-FileCopyrightText: 2022 Matt Ludwigs
+#
+# SPDX-License-Identifier: Apache-2.0
+#
 defmodule VintageNetMobile.ExChat.Request do
   @moduledoc false
 

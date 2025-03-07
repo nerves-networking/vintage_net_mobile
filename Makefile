@@ -1,3 +1,8 @@
+# SPDX-FileCopyrightText: 2020 Frank Hunleth
+# SPDX-FileCopyrightText: 2020 Matt Ludwigs
+#
+# SPDX-License-Identifier: Apache-2.0
+#
 ifeq ($(MIX_APP_PATH),)
 calling_from_make:
 	mix compile

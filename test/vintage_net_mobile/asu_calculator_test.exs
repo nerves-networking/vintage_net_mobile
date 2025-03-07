@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2020 Frank Hunleth
+#
+# SPDX-License-Identifier: Apache-2.0
+#
 defmodule VintageNetMobile.ASUCalculatorTest do
   use ExUnit.Case
   alias VintageNetMobile.ASUCalculator

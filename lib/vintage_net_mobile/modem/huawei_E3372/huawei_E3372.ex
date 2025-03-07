@@ -1,3 +1,9 @@
+# SPDX-FileCopyrightText: 2020 Hans Pagh
+# SPDX-FileCopyrightText: 2021 Frank Hunleth
+# SPDX-FileCopyrightText: 2022 Matt Ludwigs
+#
+# SPDX-License-Identifier: Apache-2.0
+#
 defmodule VintageNetMobile.Modem.HuaweiE3372 do
   @behaviour VintageNetMobile.Modem
 

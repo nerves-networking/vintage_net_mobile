@@ -1,3 +1,10 @@
+# SPDX-FileCopyrightText: 2022 Frank Hunleth
+# SPDX-FileCopyrightText: 2022 Matt Ludwigs
+# SPDX-FileCopyrightText: 2023 Masatoshi Nishiguchi
+# SPDX-FileCopyrightText: 2024 Jon Ringle
+#
+# SPDX-License-Identifier: Apache-2.0
+#
 defmodule VintageNetMobile.Modem.AutomaticTest do
   use ExUnit.Case, async: true
 

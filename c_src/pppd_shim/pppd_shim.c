@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2020 Frank Hunleth
+//
+// SPDX-License-Identifier: Apache-2.0
+//
 #define _GNU_SOURCE // for RTLD_NEXT
 #include <stdio.h>
 #include <dlfcn.h>

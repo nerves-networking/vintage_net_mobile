@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2022 Matt Ludwigs
+#
+# SPDX-License-Identifier: Apache-2.0
+#
 defmodule VintageNetMobile.Modem.Automatic do
   @moduledoc """
   Modem for automatic detection and configuration of USB-based modems
