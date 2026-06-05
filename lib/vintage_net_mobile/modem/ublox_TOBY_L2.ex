@@ -82,7 +82,7 @@ defmodule VintageNetMobile.Modem.UbloxTOBYL2 do
   end
 
   @impl VintageNetMobile.Modem
-  def add_raw_config(raw_config, %{vintage_net_mobile: mobile} = _config, opts) do
+  def add_raw_config(%RawConfig{} = raw_config, %{vintage_net_mobile: mobile} = _config, opts) do
     ifname = raw_config.ifname
 
     files = [{Chatscript.path(ifname, opts), chatscript(mobile.service_providers)}]

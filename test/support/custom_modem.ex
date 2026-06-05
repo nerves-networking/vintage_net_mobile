@@ -19,7 +19,7 @@ defmodule VintageNetMobileTest.CustomModem do
   end
 
   @impl true
-  def add_raw_config(raw_config, config, _opts) do
+  def add_raw_config(%RawConfig{} = raw_config, config, _opts) do
     ifname = raw_config.ifname
 
     %RawConfig{

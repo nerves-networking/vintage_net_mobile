@@ -148,7 +148,7 @@ defmodule VintageNetMobile do
   @impl VintageNet.Technology
   def check_system(_), do: {:error, "unimplemented"}
 
-  defp add_start_commands(raw_config, _modem) do
+  defp add_start_commands(%RawConfig{} = raw_config, _modem) do
     # The mknod creates `/dev/ppp` if it doesn't exist.
     # The mkdir creates `/var/run/pppd/lock` if it doesn't exist.
     new_up_cmds = [
@@ -159,7 +159,7 @@ defmodule VintageNetMobile do
     %RawConfig{raw_config | up_cmds: new_up_cmds}
   end
 
-  defp add_cleanup_command(raw_config) do
+  defp add_cleanup_command(%RawConfig{} = raw_config) do
     cmds = [
       {:fun, PropertyTable, :delete_matches,
        [VintageNet, ["interface", raw_config.ifname, "mobile"]]}

@@ -8,10 +8,10 @@ defmodule VintageNetMobile.MixProject do
     [
       app: :vintage_net_mobile,
       version: @version,
-      elixir: "~> 1.9",
+      elixir: "~> 1.15",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
-      compilers: [:elixir_make | Mix.compilers()],
+      compilers: [:elixir_make, :leex | Mix.compilers()],
       make_targets: ["all"],
       make_clean: ["clean"],
       make_error_message: "",
@@ -19,8 +19,13 @@ defmodule VintageNetMobile.MixProject do
       dialyzer: dialyzer(),
       docs: docs(),
       package: package(),
-      description: description(),
-      preferred_cli_env: %{
+      description: description()
+    ]
+  end
+
+  def cli do
+    [
+      preferred_envs: %{
         docs: :docs,
         "hex.publish": :docs,
         "hex.build": :docs,

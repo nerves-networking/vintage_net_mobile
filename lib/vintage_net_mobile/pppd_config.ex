@@ -14,7 +14,7 @@ defmodule VintageNetMobile.PPPDConfig do
   Add the PPPD child specs to the `RawConfig.t()`
   """
   @spec add_child_spec(RawConfig.t(), binary(), non_neg_integer(), keyword()) :: RawConfig.t()
-  def add_child_spec(raw_config, serial_port, serial_speed, opts) do
+  def add_child_spec(%RawConfig{} = raw_config, serial_port, serial_speed, opts) do
     child_specs = raw_config.child_specs
     priv_dir = Application.app_dir(:vintage_net_mobile, "priv")
     pppd_shim_path = Path.join(priv_dir, "pppd_shim.so")

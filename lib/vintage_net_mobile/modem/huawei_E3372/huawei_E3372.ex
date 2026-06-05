@@ -45,7 +45,7 @@ defmodule VintageNetMobile.Modem.HuaweiE3372 do
   end
 
   @impl VintageNetMobile.Modem
-  def add_raw_config(raw_config, %{vintage_net_mobile: mobile} = _config, opts) do
+  def add_raw_config(%RawConfig{} = raw_config, %{vintage_net_mobile: mobile} = _config, opts) do
     ifname = raw_config.ifname
 
     files = [
