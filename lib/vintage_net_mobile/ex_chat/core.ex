@@ -6,10 +6,18 @@
 defmodule VintageNetMobile.ExChat.Core do
   @moduledoc false
 
-  alias VintageNetMobile.ExChat.{Request, State}
+  alias VintageNetMobile.ExChat.Request
 
   @type what() :: any()
   @type who() :: any()
+
+  @type state() :: %{
+          queued_requests: :queue.queue(Request.t()),
+          request: Request.t() | nil,
+          request_timer: reference() | nil,
+          responses: [binary()],
+          listeners: [{binary(), any()}]
+        }
 
   @typedoc """
   ExChat returns actions that the caller should do on its behalf
@@ -24,7 +32,7 @@ defmodule VintageNetMobile.ExChat.Core do
           | {:start_timer, non_neg_integer(), reference()}
           | :stop_timer
 
-  @type result() :: {State.t(), [action()]}
+  @type result() :: {state(), [action()]}
 
   @type send_options() :: [
           success: binary(),
@@ -35,9 +43,15 @@ defmodule VintageNetMobile.ExChat.Core do
   @doc """
   Initialize chat handling
   """
-  @spec init() :: State.t()
+  @spec init() :: state()
   def init() do
-    %State{}
+    %{
+      queued_requests: :queue.new(),
+      request: nil,
+      request_timer: nil,
+      responses: [],
+      listeners: []
+    }
   end
 
   @doc """
@@ -46,10 +60,10 @@ defmodule VintageNetMobile.ExChat.Core do
   The notification type sound be a string like "+CSQ:". Responses from the
   modem that start with that prefix will be posted to the `who`.
   """
-  @spec register(State.t(), String.t(), who()) :: result()
-  def register(%State{} = state, type, who) do
+  @spec register(state(), String.t(), who()) :: result()
+  def register(state, type, who) do
     listener = {type, who}
-    new_state = %State{state | listeners: [listener | state.listeners]}
+    new_state = %{state | listeners: [listener | state.listeners]}
 
     {new_state, []}
   end
@@ -62,8 +76,8 @@ defmodule VintageNetMobile.ExChat.Core do
   empty string, then no reply from the modem is expected. A `{:reply, what, who}`
   action will still be generated when the command is sent.
   """
-  @spec send(State.t(), iodata(), who(), send_options()) :: result()
-  def send(%State{} = state, message, who, opts \\ []) do
+  @spec send(state(), iodata(), who(), send_options()) :: result()
+  def send(state, message, who, opts \\ []) do
     request = Request.new(message, who, opts)
 
     case state.request do
@@ -79,8 +93,8 @@ defmodule VintageNetMobile.ExChat.Core do
   @doc """
   Notify that a previously set timer has expired
   """
-  @spec timeout(State.t(), reference()) :: result()
-  def timeout(%State{request_timer: timeout_ref} = state, timeout_ref) do
+  @spec timeout(state(), reference()) :: result()
+  def timeout(%{request_timer: timeout_ref} = state, timeout_ref) do
     action = {:reply, {:error, :timeout}, state.request.id}
     {new_state, more_actions} = maybe_send_next_request(state)
     {new_state, [action | more_actions]}
@@ -93,8 +107,8 @@ defmodule VintageNetMobile.ExChat.Core do
   @doc """
   Process a line received from the modem
   """
-  @spec process(State.t(), String.t()) :: result()
-  def process(%State{} = state, message) do
+  @spec process(state(), String.t()) :: result()
+  def process(state, message) do
     actions = handle_notifications(message, state)
 
     {new_state, more_actions} = handle_replies(message, state)
@@ -105,7 +119,7 @@ defmodule VintageNetMobile.ExChat.Core do
   @doc """
   Return the number of pending requests
   """
-  @spec pending_request_count(State.t()) :: non_neg_integer()
+  @spec pending_request_count(state()) :: non_neg_integer()
   def pending_request_count(state) do
     case state.request do
       nil -> 0
