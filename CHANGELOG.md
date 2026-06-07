@@ -1,5 +1,14 @@
 # Changelog
 
+## [v0.12.0] - 2026-06-07
+
+### Changed
+
+* Drop support for Elixir 1.14 and earlier
+* Various updates to fix new Elixir 1.20 and Dialyzer warnings
+* Added copyright and license headers throughout for REUSE compliance. No change
+  in licensing.
+
 ## [v0.11.5] - 2024-02-02
 
 ### Changed
@@ -171,6 +180,7 @@ configuration example that should look familiar.
 
 Initial `vintage_net_mobile` release.
 
+[v0.12.0]: https://github.com/nerves-networking/vintage_net_mobile/compare/v0.11.5...v0.12.0
 [v0.11.5]: https://github.com/nerves-networking/vintage_net_mobile/compare/v0.11.4...v0.11.5
 [v0.11.4]: https://github.com/nerves-networking/vintage_net_mobile/compare/v0.11.3...v0.11.4
 [v0.11.3]: https://github.com/nerves-networking/vintage_net_mobile/compare/v0.11.2...v0.11.3
