@@ -20,7 +20,7 @@ erl_crash.dump
 *.ez
 
 # Ignore package tarball (built via "mix hex.build").
-vintage_net_lte-*.tar
+vintage_net_mobile-*.tar
 
 /.elixir_ls/
 

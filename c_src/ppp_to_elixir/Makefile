@@ -40,7 +40,7 @@ CFLAGS ?= -O2 -Wall -Wextra -Wno-unused-parameter -pedantic
 ifeq ($(CROSSCOMPILE),)
     # Not crosscompiling, so check that we're on Linux.
     ifneq ($(shell uname -s),Linux)
-        $(warning vintage_net_lte only works on Linux, but crosscompilation)
+        $(warning vintage_net_mobile only works on Linux, but crosscompilation)
         $(warning is supported by defining $$CROSSCOMPILE, $$ERL_EI_INCLUDE_DIR,)
         $(warning and $$ERL_EI_LIBDIR. See Makefile for details. If using Nerves,)
         $(warning this should be done automatically.)
