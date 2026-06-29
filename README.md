@@ -5,8 +5,8 @@
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/nerves-networking/vintage_net_mobile/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/nerves-networking/vintage_net_mobile/tree/main)
 [![REUSE status](https://api.reuse.software/badge/github.com/nerves-networking/vintage_net_mobile)](https://api.reuse.software/info/github.com/nerves-networking/vintage_net_mobile)
 
-This library provides a `VintageNet` technology for using cellular modems.
-Currently, it supports the following modems:
+This library provides `VintageNet` support for cellular modems using AT commands
+and PPP for data. It supports the following modems:
 
 * Quectel BG96 - [`VintageNetMobile.Modem.QuectelBG96`](https://www.quectel.com/product/bg96.htm)
 * Quectel EC25 - [`VintageNetMobile.Modem.QuectelEC25`](https://www.quectel.com/product/ec25.htm)
@@ -16,6 +16,14 @@ Currently, it supports the following modems:
 * [ZTE MF833V] - does not need mobile driver, works with `VintageNetEthernet` when modem is configured to auto-connect
 
 See the "Custom Modems" section for adding new modules.
+
+Before choosing this library, review the other cellular modem libraries:
+
+| Library | Data interface | Protocol | Notes |
+| ------- | -------------- | -------  | ----  |
+| [`VintageNetMobile`](https://hex.pm/packages/vintage_net_mobile) | UART (direct or over USB) | AT/PPP | Pretty much ever modem supports this, but it can be hard to use due to the control and data links being shared and vendor-specific commands |
+| [`VintageNetQMI`](https://hex.pm/packages/vintage_net_qmi) | USB | QMI | Generic control protocol for modems with a separate data path. Modems generally just work if they support this protocol. |
+| [`VintageNetECM`](https://hex.pm/packages/vintage_net_ecm) | USB | AT/CDC-ECM | AT commands for the control path and USB CDC-ECM for data. Newer modems are starting to make this the default. |
 
 To use this library, first add it to your project's dependency list:
 
